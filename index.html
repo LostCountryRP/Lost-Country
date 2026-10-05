@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+
+<html lang="it">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Regolamento Lost Country</title>
+<style>
+/* ===== FONT WESTERN (Google Fonts) ===== */
+@import url('https://fonts.googleapis.com/css2?family=Rye&family=Special+Elite&family=Crimson+Text:ital,wght@0,400;0,700;1,400&display=swap');
+
+/* ===== RESET & BASE ===== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Crimson Text', Georgia, serif;
+    font-size: 20px;
+    line-height: 1.8;
+    color: #000000;
+    background-color: #3a2416;
+    background-image: 
+        radial-gradient(circle at 20% 30%, rgba(120, 70, 20, 0.3) 0%, transparent 50%),
+        radial-gradient(circle at 80% 70%, rgba(80, 40, 10, 0.4) 0%, transparent 50%),
+        url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="4"/></filter><rect width="200" height="200" filter="url(%23n)" opacity="0.06"/></svg>');
+    background-attachment: fixed;
+    padding: 20px;
+}
+
+/* ===== CONTENITORE PRINCIPALE (FOGLIO PERGAMENA) ===== */
+.container {
+    max-width: 1055px;
+    margin: 0 auto;
+    background-color: #f4e4c1;
+    background-image: url('sfondo.png');
+    background-size: 100% 100%;
+    background-position: center top;
+    background-repeat: no-repeat;
+    padding: 70px 90px 85px 90px;
+    box-shadow: 0 0 40px rgba(0, 0, 0, 0.65);
+    border: none;
+    border-radius: 0;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Overlay leggero per migliorare la leggibilità senza coprire lo sfondo */
+.container::before {
+    content: '';
+    position: absolute;
+    inset: 26px;
+    background: rgba(255, 244, 218, 0.20);
+    border-radius: 12px;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.container > * {
+    position: relative;
+    z-index: 1;
+}
+
+/* ===== TITOLI ===== */
+h1, h2, h3 {
+    font-family: 'Rye', 'Georgia', serif;
+    color: #321507;
+    text-shadow: 0 1px 0 rgba(255, 248, 235, 0.55);
+    letter-spacing: 1px;
+}
+
+h1 {
+    font-size: 2.5em;
+    text-align: center;
+    margin-bottom: 10px;
+    padding-bottom: 15px;
+    border-bottom: 3px double #783f04;
+    line-height: 1.2;
+}
+
+h2 {
+    font-size: 1.8em;
+    margin-top: 40px;
+    margin-bottom: 15px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #a0522d;
+    color: #5a2810;
+}
+
+h3 {
+    font-size: 1.3em;
+    margin-top: 25px;
+    margin-bottom: 10px;
+    color: #6b3410;
+}
+
+/* ===== PARAGRAFI ===== */
+p {
+    margin-bottom: 16px;
+    text-align: justify;
+    font-weight: 700;
+    font-size: 1.05em;
+    color: #000000;
+}
+
+/* ===== LISTE ===== */
+ul, ol {
+    margin-left: 30px;
+    margin-bottom: 15px;
+}
+
+li {
+    margin-bottom: 9px;
+    font-size: 1.08em;
+    font-weight: 700;
+    color: #000000;
+}
+
+/* ===== EVIDENZIAZIONI ===== */
+strong, b {
+    color: #5b1805;
+    font-weight: 700;
+}
+
+em, i {
+    color: #000000;
+    font-weight: 700;
+}
+
+/* ===== LINK ===== */
+a {
+    color: #8b4513;
+    text-decoration: none;
+    border-bottom: 1px dotted #8b4513;
+    transition: all 0.2s;
+}
+
+a:hover {
+    color: #cc0000;
+    border-bottom-color: #cc0000;
+}
+
+/* ===== MENU DI NAVIGAZIONE ===== */
+.nav-menu {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background: linear-gradient(180deg, #4a2810 0%, #2b1d0e 100%);
+    border-bottom: 3px solid #a0522d;
+    padding: 12px 20px;
+    margin: -70px -90px 35px -90px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+    text-align: center;
+}
+
+.nav-menu a {
+    font-family: 'Special Elite', monospace;
+    color: #fff4da;
+    font-size: 0.95em;
+    font-weight: 700;
+    margin: 0 8px;
+    padding: 6px 10px;
+    border: none;
+    border-bottom: 2px solid transparent;
+    display: inline-block;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.2s;
+}
+
+.nav-menu a:hover {
+    color: #ffd700;
+    border-bottom-color: #ffd700;
+    transform: translateY(-2px);
+}
+
+/* ===== EMOJI DECORATIVE ===== */
+.emoji {
+    font-size: 1.3em;
+    margin-right: 5px;
+}
+
+/* ===== CITAZIONI / BOX SPECIALI ===== */
+blockquote, .box {
+    background: rgba(160, 82, 45, 0.1);
+    border-left: 4px solid #a0522d;
+    padding: 15px 20px;
+    margin: 20px 0;
+    font-style: italic;
+    border-radius: 0 4px 4px 0;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+    body { padding: 10px; font-size: 18px; }
+    .container { padding: 50px 40px 55px 40px; }
+    .nav-menu { margin: -50px -40px 20px -40px; padding: 10px; }
+    .nav-menu a { font-size: 0.8em; margin: 3px; padding: 5px 7px; }
+    h1 { font-size: 2em; }
+    h2 { font-size: 1.5em; }
+    h3 { font-size: 1.18em; }
+}
+
+@media (max-width: 480px) {
+    .container { padding: 38px 24px 42px 24px; }
+    .nav-menu { margin: -38px -24px 16px -24px; }
+    .nav-menu a { font-size: 0.7em; padding: 4px 5px; }
+    h1 { font-size: 1.7em; }
+}
+
+/* ===== LOGO IN TRASPARENZA SULLA BARRA ===== */
+.nav-menu {
+    position: relative;
+    overflow: hidden;
+}
+.nav-menu::before,
+.nav-menu::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    width: 74px;
+    height: 74px;
+    transform: translateY(-50%);
+    background-image: url('logo.png');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    opacity: 0.12;
+    pointer-events: none;
+    filter: saturate(0.9);
+}
+.nav-menu::before { left: 12px; }
+.nav-menu::after { right: 12px; }
+
+/* Bottone Approfondimenti con colore differente */
+.nav-menu a.nav-special {
+    color: #ffe3a8;
+    background: rgba(139, 49, 23, 0.35);
+    border: 1px solid rgba(255, 203, 112, 0.28);
+    border-bottom: 2px solid #ffb347;
+    border-radius: 6px;
+}
+.nav-menu a.nav-special:hover {
+    color: #fff7e4;
+    background: rgba(165, 62, 25, 0.70);
+    border-bottom-color: #ffd700;
+}
+
+@media (max-width: 768px) {
+    .nav-menu::before,
+    .nav-menu::after {
+        width: 48px;
+        height: 48px;
+        opacity: 0.10;
+    }
+    .nav-menu::before { left: 6px; }
+    .nav-menu::after { right: 6px; }
+}
+</style>
+<style>
+.nav-menu a.nav-penale {
+    color:#ffd49b !important; background:rgba(85,36,15,.72);
+    border:1px solid rgba(218,160,95,.35); border-bottom:2px solid #c78447; border-radius:6px;
+}
+.nav-menu a.nav-penale:hover {
+    color:#fff4dc !important; background:rgba(110,45,17,.92); border-bottom-color:#ffd700;
+}
+</style><style>
+.page-switcher {
+    display:flex; justify-content:center; align-items:center; gap:10px; flex-wrap:wrap;
+    margin:26px auto 8px; padding:14px 12px; max-width:760px;
+    background:rgba(74,40,16,.92); border:2px solid #a0522d; border-radius:10px;
+    box-shadow:0 4px 12px rgba(0,0,0,.25);
+}
+.page-switcher a {
+    display:inline-block; padding:9px 14px; border-radius:7px;
+    border:1px solid rgba(255,255,255,.18); color:#f8ead0 !important;
+    background:rgba(255,255,255,.06); font-family:'Special Elite', monospace !important;
+    font-size:.85em !important; font-weight:700 !important; text-decoration:none !important;
+    text-transform:uppercase; letter-spacing:.6px; transition:all .2s ease;
+}
+.page-switcher a:hover { color:#ffd700 !important; background:rgba(255,255,255,.12); transform:translateY(-2px); }
+.page-switcher a.current-page { background:rgba(160,82,45,.75); color:#fff7e5 !important; border-color:#d9a066; }
+.page-switcher a.penale-page { background:rgba(85,36,15,.95); color:#ffd49b !important; border-color:#c78447; }
+@media (max-width:600px) {
+    .page-switcher { gap:6px; padding:10px 8px; }
+    .page-switcher a { font-size:.72em !important; padding:8px 10px; }
+}
+</style><link href="style.css" rel="stylesheet"/></head>
+<body><div aria-hidden="true" class="side-logo left"></div><div aria-hidden="true" class="side-logo right"></div>
+<!-- ===== MENU DI NAVIGAZIONE ===== -->
+<div class="container"><nav class="nav-menu"><a class="page-home active-page" href="index.html">Regolamento</a><a class="page-appro" href="approfondimenti.html">Approfondimenti</a><a class="page-penale" href="codice-penale.html">Codice Penale</a><a href="#parte1">Regole d'Oro</a><a href="#ingaggio">Ingaggio</a><a href="#numeri">Numeri</a><a href="#bande">Bande</a><a href="#bottino">Bottino</a><a href="#rapine">Rapine</a><a href="#nativi">Nativi</a><a href="#postale">Postale</a></nav>
+<!-- ===== INTESTAZIONE ===== -->
+<h1>🤠 IL MANUALE DEL VERO COWBOY<br/><span style="font-size: 0.7em;">REGOLAMENTO LOST COUNTRY</span></h1>
+<p style="text-align: center; font-size: 1.15em; font-style: italic; color: #000000; margin-top: 20px; font-weight: 700;">
+Benvenuto su Lost Country! Qui non conta chi ha il grilletto più veloce, ma chi sa ruolare la storia più leggendaria.<br/>
+Per far sì che tutti si divertano, ci sono delle regole da seguire.<br/>
+<strong>Mettiti comodo e ricorda: Fair Play!</strong>
+</p>
+<!-- ===== PARTE 1 ===== -->
+<h2 id="parte1">🚧 PARTE 1: LE REGOLE D'ORO DEL ROLEPLAY</h2>
+<p><em>Queste sono le fondamenta del RolePlay. Se le rispetti, sarai il benvenuto in ogni saloon.</em></p>
+<h3>🤝 1. Rispetto per il Player</h3>
+<p>La regola zero: dietro ogni pixel c'è un altro giocatore. Il tuo personaggio può essere un fuorilegge spietato (IC), ma fuori dal gioco (OOC) devi sempre mantenere un comportamento civile e rispettoso.</p>
+<p><strong>Tossicità zero:</strong> insulti reali, bullismo, razzismo, omofobia o sessismo ti costeranno un biglietto di sola andata per il Ban Permanente.</p>
+<p><strong>Cose vietatissime:</strong> no a violenze sessuali ruolate, e no a scene degradanti o disgustose come urinare o defecare su un altro player per umiliarlo. Chi ci prova viene cacciato all'istante.</p>
+<p>Le decisioni dello staff si rispettano dentro e fuori dal gioco. Se non sei d'accordo con una decisione, apri un Ticket: a mente fredda se ne può discutere con lo staff.</p>
+<h3>🧠 2. I Pilastri del Buon RP</h3>
+<p><strong>Full RP &amp; Coerenza:</strong> comportati come una vera persona del vecchio West. Niente robe moderne o strambe. Ogni tua azione ha delle conseguenze sulla vita del tuo personaggio.</p>
+<p><strong>Metagaming:</strong> è vietato usare informazioni scoperte fuori dal gioco (es. su Discord, o guardando lo streaming di un amico) per far agire il tuo personaggio. Se il tuo PG non lo sa in-game, tu non lo sai!</p>
+<p><strong>Powergame e Powerplay:</strong> non fare cose irrealistiche o impossibili nella realtà. Non puoi imporre un'azione a un altro giocatore senza dargli la possibilità di reagire (usa il buon senso!).</p>
+<p><strong>RDM &amp; HDM (Niente Deathmatch):</strong> vietato sparare o aggredire la gente a caso (RDM) solo perché ti annoi. Vietato anche usare il cavallo come un autoscontro per investire i player (HDM).</p>
+<p><strong>Fear RP &amp; Valore della Vita:</strong> il tuo personaggio non ha una barra della vita infinita e ha paura di morire! Se 2 banditi ti puntano i fucili alla testa e tu sei a mani vuote, non fare l'eroe: alza le mani e ruola il terrore.</p>
+<h3>🧪 3. Gestione Ferite, Svenimenti e "Vuoti di Memoria"</h3>
+<p>Se ti sparano o cadi da un dirupo, non rialzarti come se nulla fosse: ruola le ferite. Se vieni rianimato da un medico o da un altro player sul posto, continua a interpretarne le conseguenze. Se effettui il Respawn in Clinica, il tuo personaggio attraversa un vuoto di memoria e potrà ricordare quanto accaduto soltanto dopo 15 minuti reali. Non esistono item o ferite lievi che annullano questa regola.</p>
+<!-- ===== PARTE 2 ===== -->
+<h2 id="ingaggio">🎮 PARTE 2: LE REGOLE IN-GAME</h2>
+<h3>⚔️ 1. L'Ingaggio: Come si inizia una faida</h3>
+<p><strong>Il posizionamento non esiste:</strong> non puoi appostarti su una roccia a 300 metri e cecchinare un gruppo solo perché hai il vantaggio tattico.</p>
+<p><strong>Prima si parla, poi si spara:</strong> devi sempre fare un ingaggio verbale chiaro. La controparte deve comprendere chiaramente di essere in pericolo e deve avere il tempo necessario per reagire. Puoi minacciare apertamente e sparare un colpo di avvertimento in aria.</p>
+<p><strong>Niente "One-Tap" preventivi:</strong> è vietatissimo usare il primissimo colpo dello scontro per tirare un colpo alla testa deliberato (headshot) e uccidere all'istante il player. Vietato anche sparare subito al cavallo per farlo cadere. Vietato usare i cavalli durante una sparatoria.</p>
+<p>Durante una sparatoria non si usa il lazo. Non puoi usare il lazo su un player, né da cavallo né a piedi per bloccarla mentre volano i proiettili. Il lazo si usa solo se hai intimato la resa e la sparatoria NON è in corso.</p>
+<p><strong>Parla come un Cowboy:</strong> banditi i termini da nerd e da sparatutto moderno!</p>
+<p style="color: #cc0000;">❌ «Fermo, sei puntato!», «Pushiamo», «Left», «Right», «Fatto uno», «Back».</p>
+<p style="color: #38761d;">✅ «Fermi tutti, giù dai cavalli!», «Avanziamo!», «Andiamo a destra», «Ne abbiamo atterrato uno».</p>
+<h3 id="numeri">🔢 2. Numeri in azione</h3>
+<p>Nelle scene d'azione sono previsti limiti precisi al numero di partecipanti, che vanno rispettati dall'inizio alla fine (vietato chiamare i rinforzi a scontro iniziato):</p>
+<ul>
+<li>🤠 <strong>Bande / Civili:</strong> massimo 8 player per azione.</li>
+<li>⭐ <strong>Uomini di Legge:</strong> massimo 10 player per azione.</li>
+</ul>
+<h3>⚖️ La Regola del 50%</h3>
+<p>Se siete in svantaggio ma avete almeno la metà dei loro uomini (es. 8 contro 4), potete scegliere se combattere o arrendervi. Se gli avversari sono più del doppio di voi (es. 8 contro 3), siete obbligati ad arrendervi per Fear RP. Non adottate comportamenti suicidi!</p>
+<h3>🤝 Regola del bilanciamento numerico</h3>
+<p>Se nel server non sono presenti bande con un numero di componenti simile, è possibile applicare la regola del bilanciamento numerico. Questa regola si applica quando la fazione meno numerosa si è arresa in 2 scontri consecutivi a causa dello svantaggio numerico. Dal terzo scontro, i numeri devono essere bilanciati, consentendo alla fazione più numerosa un vantaggio massimo di 2 partecipanti.</p>
+<p><em>Esempio: se una fazione ha 8 persone e l'altra 3, possono restare nello scontro al massimo 5 persone della fazione più numerosa; gli altri devono allontanarsi.</em></p>
+<h3>📹 3. Clip Obbligatorie &amp; Sistema Convalide</h3>
+<p><strong>No Clip, No Ticket:</strong> registra sempre le tue sessioni di gioco. Se apri una segnalazione contro qualcuno ma non hai il video (clip personale, non tagliata, con il tuo microfono attivo), lo staff potrà rifiutare automaticamente il ticket.</p>
+<p><strong>Le azioni "Importanti" devono essere convalidate:</strong> per le scene che cambiano la storia del server, devi mandare la clip integrale allo staff entro 48 ore, altrimenti la scena non verrà presa in considerazione. Le scene a convalida obbligatoria sono:</p>
+<ul>
+<li>Morte definitiva (Permadeath) o mutilazioni (Permacut).</li>
+<li>Scoperta di nascondigli di bande, tesori o refurtive importanti.</li>
+<li>Scoperta dell'identità di un personaggio mascherato o sotto copertura.</li>
+<li>Grandi piani criminali (assalti a banche/treni) o maxi-operazioni dello sceriffo.</li>
+<li>Azioni che portano a richieste di permadeath/cut/jail.</li>
+</ul>
+<p><em>Nota tecnica: la clip deve mostrare anche i 2 minuti precedenti all'azione per verificare che non ci sia stato Metagaming o Powergaming.</em></p>
+<h3 id="bande">💼 4. Bande, vita da Criminale e Civile</h3>
+<p>Non puoi fondare un gruppo e iniziare a compiere rapine dopo appena due giorni. Devi scriverne la storia (Lore), fare un percorso in gioco e farti approvare lo status di Banda ufficiale dallo Staff tramite Ticket.</p>
+<p><strong>Orario del Crimine:</strong> le azioni illegali si fanno solo dalle 18:30 alle 02:30. Se un'azione è iniziata alle 02:20, può finire tranquillamente. Gli sceriffi non hanno limiti di orario per pattugliare.</p>
+<h3>⚕️ Neutralità e Regolamento Corruzione Medici</h3>
+<p>I Medici sono di norma neutrali: curano tutti e non fanno la spia. Non possono essere usati come informatori. Durante una sparatoria devono aspettare che i colpi finiscano prima di intervenire.</p>
+<p><strong>Divieto di Schieramento:</strong> ai medici è severamente vietato prendere parte attiva ad azioni di fuoco, faide tra bande o indagini dello Stato. Non possono utilizzare la loro posizione per raccogliere informazioni in servizio e rivenderle o usarle a scopi personali.</p>
+<p><strong>Richiesta di Corruzione:</strong> è concessa la possibilità per un medico di intraprendere un percorso di corruzione all'interno del proprio Roleplay. Tale percorso NON può essere accennato o iniziato in-game in autonomia. Per poter agire da medico corrotto, il player dovrà obbligatoriamente aprire un Ticket prima di compiere qualsiasi azione illecita. L'abuso di questa concessione per puro vantaggio personale (FailRP/Powergame) comporterà la revoca immediata del percorso e sanzioni disciplinari.</p>
+<h3>🏷️ Zone Safe e zone rosse</h3>
+<p>È vietato rapinare, sequestrare o aggredire i giocatori mentre lavorano nelle miniere o nei boschi, oppure mentre acquistano o vendono presso l'Import e il Mercato. Queste attività si svolgono in <strong style="color: #274e13;">zone Safe</strong>.</p>
+<p>Le città sono considerate <strong style="color: #7f6000;">semi-safe</strong>: è obbligatorio ruolare il fear, comportandosi come se il luogo fosse popolato da numerosi abitanti e presidiato dagli sceriffi. Azioni eclatanti, come irruzioni, assalti o rapimenti, sono vietate senza la preventiva autorizzazione dello staff. Chi decide di compierle senza autorizzazione si assume ogni rischio e le relative conseguenze, sia in RP sia a livello disciplinare.</p>
+<p>L'intera area di Rio Bravo è considerata <strong style="color: #990000;">zona rossa</strong> per chiunque non appartenga alla categoria dei banditi. Entrarvi significa accettare i rischi legati a questa zona e alle sue regole.</p>
+<h3 id="bottino">💰 5. Il Bottino</h3>
+<p><strong>Loot Standard:</strong> puoi derubare un player al termine della scena per un massimo del 50% del suo inventario (inclusi carri e bisacce del cavallo). Puoi sgraffignare una sola arma per player.</p>
+<p><strong>Loot speciale sulla Legge:</strong> agli Sceriffi/Marshal puoi sottrarre una sola arma, ma fino al 100% degli oggetti e delle munizioni.</p>
+<p><strong>I cavalli nei rapimenti:</strong> se rapisci qualcuno, il suo cavallo resta lì. Il rapito non può far sparire il cavallo con le meccaniche di gioco per nascondere il bottino.</p>
+<p><strong>Mutilazioni (Permacut):</strong> piccoli tagli estetici che guariscono in 2-3 giorni reali sono consentiti. Per rotture di arti permanenti o amputazioni, serve il consenso dello staff. Niente scherzi pesanti.</p>
+<h3 id="rapine">🏦 6. Rapine Organizzate &amp; Colpi Grossi</h3>
+<p><strong>Rapina in Banca:</strong> massimo 5 Banditi contro massimo 6 Sceriffi. Massimo 3 ostaggi, che devono essere player reali: niente amici complici e niente NPC. Si usano pistole e fucili. Vietato scappare in mongolfiera e vietato lootare gli sceriffi atterrati. Devi aspettare che la Legge arrivi prima di scappare.</p>
+<p><strong>Rapina all'Emporio:</strong> massimo 2 Banditi contro massimo 2 Sceriffi. Massimo 1 ostaggio reale. Si usano solo pistole o revolver singoli.</p>
+<p><strong>Depredazione delle Tombe:</strong> massimo 1 o 2 criminali contro massimo 2 Sceriffi. Si fa solo dalle 21:00 alle 02:00 in-game. Ingaggio verbale obbligatorio. Chi perde non torna fino al riavvio del server. Gli Sceriffi atterrati in questa scena non possono essere lootati (c'è troppa polizia in zona, Fear RP!).</p>
+<h3 id="nativi">🪶 7. Il Popolo dei Nativi</h3>
+<p>Chi gioca come Nativo non può creare o unirsi a bande criminali. Niente bandane da bandito.</p>
+<p>Nelle città dei bianchi se i Nativi non ruolano il fear, se provocano o fanno confusione senza motivo, rischiano l'arresto o la condanna a morte secondo le leggi dei coloni.</p>
+<h3 id="postale">✉️ 8. Il Servizio Postale</h3>
+<p>L'item Libretto Missive si può usare esclusivamente dentro gli uffici postali. Puoi sottrarlo temporaneamente a un player per leggerne il contenuto, ma devi poi restituirglielo. Non puoi trattenerlo.</p>
+<hr style="margin: 40px 0; border: none; border-top: 2px solid #a0522d;"/>
+<p style="text-align: center; font-size: 1.2em; font-style: italic; color: #000000; font-weight: 700;">
+<strong>Ora sai come muoverti nella frontiera di Lost Country.</strong><br/>
+Fai buon uso del tuo tempo, rispetta gli altri, usa il buon senso e crea scene leggendarie!
+</p>
+<div class="page-switcher"><a class="page-home active-page" href="index.html">← Regolamento</a><a class="page-appro" href="approfondimenti.html">Approfondimenti</a><a class="page-penale" href="codice-penale.html">Codice Penale →</a></div></div>
+</body>
+</html>

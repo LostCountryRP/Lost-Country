@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+
+<html lang="it">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Approfondimenti - Lost Country</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Rye&family=Special+Elite&family=Crimson+Text:ital,wght@0,400;0,700;1,400&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    background: #3a2416;
+}
+
+body {
+    font-family: 'Crimson Text', Georgia, serif;
+    font-size: 20px;
+    line-height: 1.8;
+    color: #000;
+    background-color: #3a2416;
+    background-image:
+        radial-gradient(circle at 20% 30%, rgba(120,70,20,.30) 0%, transparent 50%),
+        radial-gradient(circle at 80% 70%, rgba(80,40,10,.40) 0%, transparent 50%);
+    background-attachment: fixed;
+    padding: 20px;
+}
+
+.container {
+    width: 100%;
+    max-width: 1055px;
+    min-height: 1491px;
+    margin: 0 auto;
+    padding: 82px 92px 92px;
+    background-color: #f4e4c1;
+    background-image: url('sfondo.png');
+    background-size: 100% 100%;
+    background-position: center top;
+    background-repeat: no-repeat;
+    box-shadow: 0 0 40px rgba(0,0,0,.70);
+    position: relative;
+    text-align: center;
+}
+
+.container::before {
+    content: "";
+    position: absolute;
+    inset: 28px;
+    background: rgba(255,244,218,.16);
+    pointer-events: none;
+    z-index: 0;
+}
+
+.container > * {
+    position: relative;
+    z-index: 1;
+}
+
+h1, h2, h3 {
+    font-family: 'Rye', Georgia, serif;
+    color: #4a2810;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-align: center;
+    text-shadow: 0 1px 0 rgba(255,248,235,.55);
+}
+
+h2 {
+    font-size: 2.15em;
+    line-height: 1.25;
+    margin: 0 auto 12px;
+    padding: 10px 0 14px;
+    border-top: 2px solid #783f04;
+    border-bottom: 3px double #783f04;
+}
+
+h2 + h2 {
+    margin-top: 8px;
+    margin-bottom: 32px;
+}
+
+p {
+    margin: 0 auto 15px;
+    max-width: 850px;
+    color: #000;
+    font-family: 'Crimson Text', Georgia, serif;
+    font-size: 1.05em;
+    font-weight: 700;
+    line-height: 1.72;
+    text-align: center;
+}
+
+span {
+    color: inherit !important;
+    font-family: inherit !important;
+    font-size: inherit !important;
+    font-weight: inherit !important;
+    text-decoration: none !important;
+}
+
+strong, b {
+    color: #5b1805;
+    font-weight: 700;
+}
+
+ul, ol {
+    max-width: 800px;
+    margin: 10px auto 18px;
+    padding-left: 30px;
+    text-align: left;
+}
+
+li {
+    margin-bottom: 8px;
+    color: #000;
+    font-weight: 700;
+}
+
+br {
+    line-height: 1.6;
+}
+
+@media (max-width: 768px) {
+    body {
+        padding: 10px;
+        font-size: 18px;
+    }
+    .container {
+        padding: 58px 42px 64px;
+        background-size: cover;
+    }
+    h2 {
+        font-size: 1.65em;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 44px 26px 50px;
+    }
+    h2 {
+        font-size: 1.4em;
+    }
+    p {
+        font-size: 1em;
+    }
+}
+</style><style>
+html {
+    scroll-behavior: smooth;
+}
+
+.nav-menu {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background: linear-gradient(180deg, #4a2810 0%, #2b1d0e 100%);
+    border-bottom: 3px solid #a0522d;
+    padding: 12px 16px;
+    margin: -82px -92px 34px -92px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.50);
+    text-align: center;
+}
+
+.nav-menu a {
+    display: inline-block;
+    margin: 4px 5px;
+    padding: 7px 10px;
+    border: none;
+    border-bottom: 2px solid transparent;
+    border-radius: 3px;
+    color: #f4e4c1 !important;
+    font-family: 'Special Elite', monospace !important;
+    font-size: 0.78em !important;
+    font-weight: 700 !important;
+    line-height: 1.1;
+    letter-spacing: .6px;
+    text-decoration: none !important;
+    text-transform: uppercase;
+    transition: all .2s ease;
+}
+
+.nav-menu a:hover {
+    color: #ffd700 !important;
+    border-bottom-color: #ffd700;
+    background: rgba(255,255,255,.05);
+    transform: translateY(-2px);
+}
+
+p[id] {
+    scroll-margin-top: 90px;
+}
+
+@media (max-width: 768px) {
+    .nav-menu {
+        margin: -58px -42px 28px -42px;
+        padding: 10px 8px;
+    }
+
+    .nav-menu a {
+        margin: 3px 2px;
+        padding: 6px 7px;
+        font-size: 0.68em !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .nav-menu {
+        margin: -44px -26px 24px -26px;
+        padding: 8px 5px;
+    }
+
+    .nav-menu a {
+        font-size: 0.60em !important;
+        padding: 5px 6px;
+    }
+}
+</style><style>
+
+
+
+
+@media (max-width: 768px) {
+    
+}
+</style><style>
+.topic-title {
+    font-family: 'Rye', Georgia, serif !important;
+    color: #6b3410 !important;
+    font-weight: 700 !important;
+    font-size: 1.08em !important;
+    letter-spacing: 0.8px !important;
+    text-shadow: 0 1px 0 rgba(255, 240, 200, 0.55) !important;
+}
+</style><style>
+/* ===== BARRA MENU CON LOGO IN TRASPARENZA ===== */
+.nav-menu {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background: linear-gradient(180deg, #4a2810 0%, #2b1d0e 100%);
+    border-bottom: 3px solid #a0522d;
+    padding: 12px 16px;
+    margin: -82px -92px 34px -92px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.50);
+    text-align: center;
+    overflow: hidden;
+}
+.nav-menu::before,
+.nav-menu::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    width: 74px;
+    height: 74px;
+    transform: translateY(-50%);
+    background-image: url('logo.png');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    opacity: 0.12;
+    pointer-events: none;
+}
+.nav-menu::before { left: 12px; }
+.nav-menu::after { right: 12px; }
+
+.nav-menu a {
+    display: inline-block;
+    margin: 4px 5px;
+    padding: 7px 10px;
+    border: none;
+    border-bottom: 2px solid transparent;
+    border-radius: 3px;
+    color: #f4e4c1 !important;
+    font-family: 'Special Elite', monospace !important;
+    font-size: 0.78em !important;
+    font-weight: 700 !important;
+    line-height: 1.1;
+    letter-spacing: .6px;
+    text-decoration: none !important;
+    text-transform: uppercase;
+    transition: all .2s ease;
+    background: transparent;
+}
+.nav-menu a:hover {
+    color: #ffd700 !important;
+    border-bottom-color: #ffd700;
+    background: rgba(255,255,255,.05);
+    transform: translateY(-2px);
+}
+.nav-menu a.nav-home {
+    color: #fff7e2 !important;
+    background: rgba(31, 78, 121, 0.40);
+    border: 1px solid rgba(170, 214, 255, 0.24);
+    border-bottom: 2px solid #8ecbff;
+    border-radius: 6px;
+}
+.nav-menu a.nav-home:hover {
+    color: #ffffff !important;
+    background: rgba(31, 78, 121, 0.75);
+    border-bottom-color: #d8efff;
+}
+
+@media (max-width: 768px) {
+    .nav-menu {
+        margin: -58px -42px 28px -42px;
+        padding: 10px 8px;
+    }
+    .nav-menu a {
+        margin: 3px 2px;
+        padding: 6px 7px;
+        font-size: 0.68em !important;
+    }
+    .nav-menu::before,
+    .nav-menu::after {
+        width: 48px;
+        height: 48px;
+        opacity: 0.10;
+    }
+    .nav-menu::before { left: 6px; }
+    .nav-menu::after { right: 6px; }
+}
+@media (max-width: 480px) {
+    .nav-menu {
+        margin: -44px -26px 24px -26px;
+        padding: 8px 5px;
+    }
+    .nav-menu a {
+        font-size: 0.60em !important;
+        padding: 5px 6px;
+    }
+}
+</style><style>
+.nav-menu a.nav-penale {
+    color:#ffd49b !important; background:rgba(85,36,15,.72);
+    border:1px solid rgba(218,160,95,.35); border-bottom:2px solid #c78447; border-radius:6px;
+}
+.nav-menu a.nav-penale:hover {
+    color:#fff4dc !important; background:rgba(110,45,17,.92); border-bottom-color:#ffd700;
+}
+</style><style>
+.page-switcher {
+    display:flex; justify-content:center; align-items:center; gap:10px; flex-wrap:wrap;
+    margin:26px auto 8px; padding:14px 12px; max-width:760px;
+    background:rgba(74,40,16,.92); border:2px solid #a0522d; border-radius:10px;
+    box-shadow:0 4px 12px rgba(0,0,0,.25);
+}
+.page-switcher a {
+    display:inline-block; padding:9px 14px; border-radius:7px;
+    border:1px solid rgba(255,255,255,.18); color:#f8ead0 !important;
+    background:rgba(255,255,255,.06); font-family:'Special Elite', monospace !important;
+    font-size:.85em !important; font-weight:700 !important; text-decoration:none !important;
+    text-transform:uppercase; letter-spacing:.6px; transition:all .2s ease;
+}
+.page-switcher a:hover { color:#ffd700 !important; background:rgba(255,255,255,.12); transform:translateY(-2px); }
+.page-switcher a.current-page { background:rgba(160,82,45,.75); color:#fff7e5 !important; border-color:#d9a066; }
+.page-switcher a.penale-page { background:rgba(85,36,15,.95); color:#ffd49b !important; border-color:#c78447; }
+@media (max-width:600px) {
+    .page-switcher { gap:6px; padding:10px 8px; }
+    .page-switcher a { font-size:.72em !important; padding:8px 10px; }
+}
+</style><link href="style.css" rel="stylesheet"/></head>
+<body><div aria-hidden="true" class="side-logo left"></div><div aria-hidden="true" class="side-logo right"></div>
+<div class="container"><nav class="nav-menu"><a class="page-home" href="index.html">Regolamento</a><a class="page-appro active-page" href="approfondimenti.html">Approfondimenti</a><a class="page-penale" href="codice-penale.html">Codice Penale</a><a href="#bolla">Bolla &amp; Bug</a><a href="#proprieta">Proprietà</a><a href="#legge">Legge &amp; Civili</a><a href="#fairplay">Fair Play</a><a href="#sceriffi">Uomini di Legge</a><a href="#attivita">Attività</a><a href="#rapine">Rapine</a><a href="#cavalli">Cavalli</a><a href="#riconoscimento">Riconoscimento</a><a href="#permadeath">Permadeath</a><a href="#integrita">File &amp; Bug</a><a href="#assistenza">Assistenza</a></nav><div><p><span></span></p></div><h2><span>REGOLAMENTO LOST COUNTRY RP</span></h2><h2><span>APPROFONDIMENTI</span></h2><p id="bolla"><span><br/></span><span><br/></span><span>⭕</span><span> </span><span class="topic-title">Azioni in bolla</span><span><br/> Divieto di iniziare azioni illegali mentre si è in bolla o di usarla per impedire la reazione altrui.<br/><br/></span><span>🖥️ </span><span class="topic-title">Malfunzionamenti</span></p><p id="proprieta"><span>Con Desync e problemi tecnici c’è l’obbligo di andare in assistenza e avere una clip; divieto di sfruttare il desync.<br/><br/></span><span>🏘️</span><span> </span><span class="topic-title">Difesa della Proprietà privata</span></p><p><span>I proprietari hanno il diritto di proteggere il proprio terreno e proprietà privata.</span></p><p id="legge"><span>In caso di intrusione con comportamento ostile palese, si può aprire il fuoco. L'aggressore abbattuto rischia il Permadeath immediato (dopo valutazione dello Staff).<br/><br/></span><span>🚔</span><span class="topic-title">  Collaborazione Legge-Criminalità- Civili</span></p><p><span>Vietata qualsiasi alleanza tra uomini di legge e criminali.</span></p><p><span>No spionaggio/favoritismi: un criminale non può favorire la legge (e viceversa).<br/>Le due realtà devono restare distinte e contrapposte.<br/></span><span>Quando scoppia un'azione criminale o senti spari:</span></p><p><span>Devi metterti al riparo o allontanarti in modo realistico.</span></p><p><span>vietato intervenire armati, tranne su ordine esplicito degli sceriffi. Una volta che i responsabili si allontanano, i civili non possono inseguirli.<br/></span></p><p id="fairplay"><span>⚔️</span><span class="topic-title">Scontri tra banditi e legge</span><span><br/>Dopo la vittoria di una parte, si procede con l’ arresto, interrogatorio o allontanamento veloce dalla scena.<br/><br/></span><span>🫶</span><span> </span><span class="topic-title">Fair Play</span><span><br/>Divieto esplicito di insultare o provocare chi è atterrato o svenuto; divieto di mosse finali non autorizzate.<br/><br/></span><span>🔺</span><span> </span><span class="topic-title">Intervento di terze parti negli scontri</span><span><br/> Divieto assoluto a civili, bande e gruppi estranei di intervenire in uno scontro già iniziato.<br/></span></p><p id="sceriffi"><span>⛺</span><span> </span><span class="topic-title">Camperaggio<br/></span><span>Sono vietate le Ronde e gli Appostamenti alle porte delle città: divieto di camperaggio e distanza minima di 500 metri dalle città.<br/></span><span>👮</span><span class="topic-title"> Uomini di legge<br/></span><span>Gli sceriffi non possono infrangere la legge senza autorizzazione dello Staff/Team Lore. Qualsiasi reato comportail  licenziamento immediato.</span></p><p><span>Durante il servizio è obbligatorio essere identificabili con distintivo e divisa.</span></p><p><span>Dopo le dimissioni vige l’obbligo di riconsegnare la dotazione. Vietato unirsi a bande criminali senza Ticket Lore (rischio patibolo).</span></p><p><span>La parola di un uomo di legge ha valore di prova.</span></p><p><span>Ogni operazione sotto copertura deve essere autorizzata preventivamente dallo staff.</span></p><p><span>Piena autorità nella propria città. Fuori giurisdizione sono subordinati all'autorità locale e devono rendere conto all'ufficio di competenza.</span></p><p><span>Ogni città deve garantire almeno 5 sceriffi attivi.<br/></span></p><p id="attivita"><span>🏪</span><span> </span><span class="topic-title">Attività commerciali</span></p><p><span>Il titolare è responsabile dell'operato dei dipendenti.</span></p><p><span>Le assunzioni devono avvenire in RP e i dipendenti devono essere identificati.</span></p><p><span>Inattività e assenze prolungate del titolare portano alla riassegnazione dell'attività.<br/> Se direttore o vicedirettore commette reati gravi, l'attività può essere confiscata dalla legge e riassegnata dallo staff.<br/>L’uso sconsiderato dello strillone sarà punito: è tollerato un messaggio ogni 20 minuti.</span></p><p id="rapine"><span>Il mancato rispetto del regolamento da parte dei dipendenti può comportare provvedimenti verso l'intera attività.<br/><br/> </span><span>💰</span><span class="topic-title"> Rapine</span></p><p><span>Senza ostaggi: gli sceriffi possono irrompere dopo una sola e chiara dichiarazione di intenti.</span></p><p><span>Con ostaggi: La protezione vale solo per i banditi dentro l'edificio.<br/>Un bandito catturato all'esterno deve essere usato come merce di scambio per liberare l’ostaggio.</span></p><p><span>La sosta vicino alle porte è permessa solo per trattare; se esci possono catturarti</span></p><p><span>La fuga con l’ostaggio è assolutamente vietata.</span></p><p><span>Lo sceriffo deve sempre privilegiare la vita del prigioniero. Omicidio volontario di un ostaggio equivale alla Pena Capitale (Permadeath).</span></p><p><span>Se l'ostaggio non è più visibile e sotto controllo, gli sceriffi possono irrompere dopo un avviso.</span></p><p><span>Scambio con denaro: l'ostaggio va liberato prima che i banditi inizino la fuga. Vietato fuggire portandolo con sé dopo il riscatto.</span></p><p><span>Vietato depositare il loot in bisacce di cavalli non coinvolti o allontanarli.</span></p><p><span>Vietato usare meccaniche per rendere il bottino irraggiungibile.</span></p><p><span>In caso di arresto, il loot deve essere sempre recuperabile dagli uomini di legge.</span></p><p id="cavalli"><span>Aggirare questa regola è un abuso di meccanica, punito severamente.<br/><br/><br/></span><span>🐴</span><span class="topic-title"> Cavalli</span></p><p><span>Puoi controllare il cavallo altrui, ma solo se presente in scena.</span></p><p><span>Non mandare via il cavallo per evitare i controlli.</span></p><p><span> Non puoi riconoscere i player dal cavallo.</span></p><p><span>Non puoi lootare più del 50% del contenuto e una sola arma.<br/></span></p><p id="riconoscimento"><span>🎭</span><span class="topic-title"> Riconoscimento</span></p><p><span>Maschera/bandana: nessuno ti riconosce.</span></p><p><span>Se porti sempre gli stessi colori/vestiti soprattutto in gruppo, è lecito sospettare.</span></p><p><span> Se qualcuno ti vede in faccia, puoi metterti una maschera ma se nn cambi vestiti, verrai comunque riconosciuto.</span></p><p><span>Dopo un crimine, se ti presenti con gli stessi vestiti, lo sceriffo può sospettare di te e agire di conseguenza.</span></p><p><span>Puoi cambiare voce con programmi esterni solo se lo staff te lo autorizza tramite ticket.<br/><br/></span><span>🪦</span><span class="topic-title"> Sciacallaggio</span><span> </span></p><p><span>Vietato il loot di giocatori a terra non coinvolti nella tua azione.</span></p><p><span>Puoi sottrarre oggetti solo a chi è stato abbattuto dai partecipanti all'azione.</span></p><p id="permadeath"><span>Altrimenti puoi solo soccorrerlo o abbandonarlo.<br/><br/></span><span>💀</span><span class="topic-title"> Permadeath<br/></span><span>Va richiesto tramite ticket. Servono almeno 5 motivazioni valide con prove video obbligatorie.</span></p><p><span>Può essere richiesto per sé o verso altri. Una volta approvato, va eseguito entro 7 giorni.</span></p><p><span>Il richiedente deve partecipare fisicamente all'azione.</span></p><p><span>Chiunque venga abbattuto durante un permadeath approvato potrebbe incorrere a morte definitiva (a discrezione dello Staff).</span></p><p><span>L'azione può essere tentata 2 volte per le motivazioni iniziali.</span></p><p><span>In caso di fallimento, si può chiedere un altro tentativo solo con motivazioni diverse.</span></p><p><span>Vietato usare info OOC su una richiesta di perma.</span></p><p><span>Vietati comportamenti come testamenti prematuri, nascondersi sistematicamente o evitare il login.</span></p><p><span>Dopo un permadeath, puoi creare un nuovo PG.</span></p><p><span>Il rientro in fazione sarà possibile solo dopo 1 settimana di roleplay effettivo con il nuovo PG.</span></p><p><span>Il nuovo PG deve avere un background diverso.</span></p><p><span>Divieto di parentela col PG morto. Qualsiasi legame col passato sarà rifiutato.</span></p><p><span>Divieto di Eredità e Regali.Vietato regalare beni a terzi perché si prevede la morte del personaggio.<br/></span><span><br/></span><span>🚫</span><span class="topic-title">Bait, Revenge Kill e Bug</span></p><p><span>Bait: non provocare gli sceriffi solo per farti inseguire.</span></p><p><span>Revenge Kill: se muori, non puoi tornare subito sul posto per vendicarti.</span></p><p id="integrita"><span>Bug: se trovi un bug che ti dà vantaggio, non usarlo. Segnalalo allo staff.<br/><br/></span><span>📁</span><span class="topic-title"> Integrità File</span></p><p id="assistenza"><span>È vietato modificare i file contenuti nella cartella Citizen/ o nei file .rpf. Questi file influenzano il gameplay, quindi toccarli significa alterare il gioco in modo non consentito.<br/>È vietato usare: Macro Wallhack Aimbot ReShade modificata.<br/> Combat logging, bug ed exploit.<br/><br/></span><span>    </span><span>🎟️</span><span class="topic-title"> Regole durante l'Assistenza</span></p><p><span>Vietato registrare/streammare le conversazioni con lo staff.</span></p><p><span>Vietato diffondere la voce dello staff senza permesso.</span></p><p><span>Rispetto obbligatorio!<br/> Chi alza i toni o manca di rispetto viene disconnesso e sanzionato.</span></p><p><span></span></p><div class="page-switcher"><a class="page-home" href="index.html">← Regolamento</a><a class="page-appro active-page" href="approfondimenti.html">Approfondimenti</a><a class="page-penale" href="codice-penale.html">Codice Penale →</a></div></div>
+</body>
+</html>
