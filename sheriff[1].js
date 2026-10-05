@@ -1,0 +1,75 @@
+(()=>{"use strict";
+const $=s=>document.querySelector(s),$$=s=>Array.from(document.querySelectorAll(s));
+const state={db:null,session:null,citizens:[],cases:[],rows:[],selectedOffenses:[]};
+const configured=()=>window.LC_SUPABASE_URL&&window.LC_SUPABASE_KEY&&!window.LC_SUPABASE_URL.includes("INSERISCI")&&!window.LC_SUPABASE_KEY.includes("INSERISCI");
+const money=n=>"$"+Number(n||0).toLocaleString("it-IT",{maximumFractionDigits:0});
+const fmtDate=v=>v?new Date(v).toLocaleString("it-IT"):"—";
+function bountyStatus(a){const n=Number(a||0);if(n<200)return{label:"Cittadino Libero",cls:"status-free"};if(n<350)return{label:"🔴 RICERCATO: VIVO",cls:"status-wanted"};if(n<500)return{label:"🔥 FEDERALE: VIVO",cls:"status-federal"};if(n<=1000)return{label:"☠️ FEDERALE: MORTO",cls:"status-dead"};return{label:"👑 NEMICO PUBBLICO №1",cls:"status-enemy"}}
+function notice(m,t=""){const b=$("#notice");b.textContent=m||"";b.className="notice"+(t?" "+t:"");b.classList.toggle("hidden",!m)}
+function esc(v){return String(v??"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;")}
+function showAuth(ok){$("#resetPasswordPanel").classList.add("hidden");$("#loginPanel").classList.toggle("hidden",ok);$("#appPanel").classList.toggle("hidden",!ok);if(ok&&state.session?.user){$("#sessionUser").textContent=state.session.user.email||"Utente autenticato";const n=localStorage.getItem("lc_officer_name");if(n&&!$("#officerName").value)$("#officerName").value=n}}
+function bind(){
+ $("#loginForm").addEventListener("submit",login);$("#forgotPasswordBtn").addEventListener("click",sendPasswordReset);$("#resetPasswordForm").addEventListener("submit",saveNewPassword);$("#logoutBtn").addEventListener("click",()=>state.db.auth.signOut());
+ $("#addOffenseBtn").addEventListener("click",addOffense);$("#saveCaseBtn").addEventListener("click",saveCase);$("#refreshBtn").addEventListener("click",loadAll);
+ $("#fedinaCitizen").addEventListener("change",renderFedinaFromSearch);$("#fedinaSearchBtn").addEventListener("click",renderFedinaFromSearch);$("#wantedSearch").addEventListener("input",renderWanted);
+ $("#officerName").addEventListener("change",()=>localStorage.setItem("lc_officer_name",$("#officerName").value.trim()));
+ $$(".tab-btn").forEach(b=>b.addEventListener("click",()=>{$$(".tab-btn").forEach(x=>x.classList.remove("active"));b.classList.add("active");$$(".tab-panel").forEach(p=>p.classList.add("hidden"));$("#"+b.dataset.tab).classList.remove("hidden");if(b.dataset.tab==="wantedTab")renderWanted();if(b.dataset.tab==="fedinaTab")renderFedinaFromSearch()}));
+}
+async function init(){
+ populateOffenseSelect();bind();
+ if(!configured()){$("#configWarning").classList.remove("hidden");$("#loginPanel").classList.add("hidden");return}
+ state.db=window.supabase.createClient(window.LC_SUPABASE_URL,window.LC_SUPABASE_KEY,{auth:{persistSession:true,autoRefreshToken:true}});
+ const{data}=await state.db.auth.getSession();state.session=data.session;showAuth(!!state.session);
+ state.db.auth.onAuthStateChange(async(event,s)=>{state.session=s;if(event==="PASSWORD_RECOVERY"){showResetPassword();return}showAuth(!!s);if(s)await loadAll()});
+ if(state.session)await loadAll();
+}
+
+function showResetPassword(){
+ $("#loginPanel").classList.add("hidden");
+ $("#appPanel").classList.add("hidden");
+ $("#resetPasswordPanel").classList.remove("hidden");
+ notice("");
+}
+async function sendPasswordReset(){
+ if(!state.db)return;
+ const email=$("#loginEmail").value.trim();
+ if(!email){notice("Inserisci prima l'email dello sceriffo, poi premi «Password dimenticata?».","error");return}
+ const redirectTo=window.location.origin+window.location.pathname;
+ const{error}=await state.db.auth.resetPasswordForEmail(email,{redirectTo});
+ if(error){notice("Impossibile inviare l'email di recupero: "+error.message,"error");return}
+ notice("Email di recupero inviata. Apri il messaggio ricevuto e usa il link per impostare una nuova password.","success");
+}
+async function saveNewPassword(e){
+ e.preventDefault();
+ const p=$("#newPassword").value;
+ const c=$("#confirmPassword").value;
+ if(p.length<8){notice("La nuova password deve contenere almeno 8 caratteri.","error");return}
+ if(p!==c){notice("Le due password non coincidono.","error");return}
+ const{error}=await state.db.auth.updateUser({password:p});
+ if(error){notice("Impossibile aggiornare la password: "+error.message,"error");return}
+ $("#newPassword").value="";
+ $("#confirmPassword").value="";
+ $("#resetPasswordPanel").classList.add("hidden");
+ showAuth(true);
+ await loadAll();
+ notice("Password aggiornata correttamente. Ora puoi continuare a usare il gestionale.","success");
+}
+
+async function login(e){e.preventDefault();notice("");const{error}=await state.db.auth.signInWithPassword({email:$("#loginEmail").value.trim(),password:$("#loginPassword").value});if(error)notice("Accesso non riuscito: "+error.message,"error")}
+function populateOffenseSelect(){const s=$("#offenseSelect");s.innerHTML='<option value="">Seleziona un reato...</option>';const g={};(window.LC_OFFENSES||[]).forEach(o=>(g[o.category]??=[]).push(o));Object.entries(g).forEach(([cat,items])=>{const og=document.createElement("optgroup");og.label=cat;items.forEach(o=>{const op=document.createElement("option");op.value=o.code;op.textContent=`${o.code} — ${o.name} • ${money(o.fine)} • ${o.jail_minutes} min${o.capital_punishment?" • PENA CAPITALE":""}`;og.appendChild(op)});s.appendChild(og)})}
+function addOffense(){const o=(window.LC_OFFENSES||[]).find(x=>x.code===$("#offenseSelect").value);if(!o)return;state.selectedOffenses.push({...o,tempId:crypto.randomUUID()});renderSelected()}
+function renderSelected(){const tb=$("#selectedOffensesBody");tb.innerHTML="";let f=0,j=0,c=false;state.selectedOffenses.forEach(o=>{f+=+o.fine;j+=+o.jail_minutes;c||=!!o.capital_punishment;const tr=document.createElement("tr");tr.innerHTML=`<td><strong>${esc(o.code)}</strong><br>${esc(o.name)}</td><td class="money">${money(o.fine)}</td><td>${o.jail_minutes} min${o.capital_punishment?'<span class="capital-flag">PENA CAPITALE</span>':""}</td><td class="center"><button class="btn-danger btn-small" data-r="${o.tempId}">Rimuovi</button></td>`;tb.appendChild(tr)});tb.querySelectorAll("[data-r]").forEach(b=>b.onclick=()=>{state.selectedOffenses=state.selectedOffenses.filter(o=>o.tempId!==b.dataset.r);renderSelected()});$("#totalFine").textContent=money(f);$("#totalJail").textContent=j+" min";$("#capitalWarning").classList.toggle("hidden",!c);$("#selectedEmpty").classList.toggle("hidden",state.selectedOffenses.length>0)}
+async function loadAll(){notice("Aggiornamento archivio...");const[a,b,c]=await Promise.all([state.db.from("citizens").select("*").order("full_name"),state.db.from("cases").select("*").order("occurred_at",{ascending:false}),state.db.from("case_offenses").select("*").order("created_at",{ascending:false})]);const e=a.error||b.error||c.error;if(e){notice("Errore database: "+e.message,"error");return}state.citizens=a.data||[];state.cases=b.data||[];state.rows=c.data||[];populateCitizens();renderWanted();renderFedinaFromSearch();notice("")}
+function populateCitizens(){const dl=$("#citizensList");dl.innerHTML="";state.citizens.forEach(c=>{const o=document.createElement("option");o.value=c.full_name;o.label=c.registry_code?`${c.full_name} (${c.registry_code})`:c.full_name;dl.appendChild(o)});const s=$("#fedinaCitizen"),cur=s.value;s.innerHTML='<option value="">Seleziona un cittadino...</option>';state.citizens.forEach(c=>{const o=document.createElement("option");o.value=c.id;o.textContent=c.registry_code?`${c.full_name} — ${c.registry_code}`:c.full_name;s.appendChild(o)});if([...s.options].some(o=>o.value===cur))s.value=cur}
+async function getCitizen(){const name=$("#citizenName").value.trim();if(!name)throw Error("Inserisci il nome del cittadino.");const ex=state.citizens.find(c=>c.full_name.toLocaleLowerCase("it")===name.toLocaleLowerCase("it"));if(ex)return ex;const{data,error}=await state.db.from("citizens").insert({full_name:name,registry_code:$("#registryCode").value.trim()||null,alias:$("#citizenAlias").value.trim()||null}).select().single();if(error)throw error;return data}
+async function saveCase(){try{notice("");if(!state.selectedOffenses.length)throw Error("Aggiungi almeno un reato.");const officer=$("#officerName").value.trim();if(!officer)throw Error("Inserisci il nome dello sceriffo.");localStorage.setItem("lc_officer_name",officer);const citizen=await getCitizen();const when=$("#occurredAt").value?new Date($("#occurredAt").value).toISOString():new Date().toISOString();const{data:cas,error}=await state.db.from("cases").insert({citizen_id:citizen.id,officer_name:officer,occurred_at:when,notes:$("#caseNotes").value.trim()||null}).select().single();if(error)throw error;const rows=state.selectedOffenses.map(o=>({case_id:cas.id,offense_code:o.code,offense_name:o.name,category:o.category,description:o.description,fine:o.fine,jail_minutes:o.jail_minutes,capital_punishment:o.capital_punishment,is_paid:false}));const r=await state.db.from("case_offenses").insert(rows);if(r.error)throw r.error;state.selectedOffenses=[];renderSelected();["citizenName","registryCode","citizenAlias","caseNotes"].forEach(id=>$("#"+id).value="");$("#offenseSelect").value="";await loadAll();notice("Verbale registrato correttamente.","success")}catch(e){notice(e.message||String(e),"error")}}
+const caseRows=id=>state.rows.filter(r=>r.case_id===id),citizenCases=id=>state.cases.filter(c=>c.citizen_id===id);
+function stats(id){const cases=citizenCases(id),ids=new Set(cases.map(c=>c.id)),rows=state.rows.filter(r=>ids.has(r.case_id));return{cases,rows,pendingFine:rows.filter(r=>!r.is_paid).reduce((s,r)=>s+Number(r.fine||0),0),totalFine:rows.reduce((s,r)=>s+Number(r.fine||0),0),totalJail:rows.reduce((s,r)=>s+Number(r.jail_minutes||0),0),capital:rows.some(r=>r.capital_punishment)}}
+function renderWanted(){const b=$("#wantedGrid"),q=($("#wantedSearch")?.value||"").trim().toLocaleLowerCase("it");b.innerHTML="";const rec=state.citizens.map(c=>({citizen:c,...stats(c.id)})).filter(x=>!q||x.citizen.full_name.toLocaleLowerCase("it").includes(q)).sort((a,b)=>b.pendingFine-a.pendingFine);if(!rec.length){b.innerHTML='<div class="empty-state">Nessun cittadino presente in archivio.</div>';return}rec.forEach(x=>{const s=bountyStatus(x.pendingFine),d=document.createElement("div");d.className="wanted-card";d.innerHTML=`<h3>${esc(x.citizen.full_name)}</h3><span class="wanted-status ${s.cls}">${s.label}</span><p><strong>Multe pendenti:</strong> ${money(x.pendingFine)}</p><p><strong>Multe complessive:</strong> ${money(x.totalFine)}</p><p><strong>Prigione registrata:</strong> ${x.totalJail} min</p><p><strong>Verbali:</strong> ${x.cases.length}${x.capital?' <span class="capital-flag">• PENA CAPITALE PRESENTE</span>':""}</p><button class="btn-secondary btn-small" data-f="${x.citizen.id}">Apri fedina</button>${x.pendingFine>0?` <button class="btn-success btn-small" data-p="${x.citizen.id}">Segna tutto pagato</button>`:""}`;b.appendChild(d)});b.querySelectorAll("[data-f]").forEach(x=>x.onclick=()=>openFedina(x.dataset.f));b.querySelectorAll("[data-p]").forEach(x=>x.onclick=()=>payAll(x.dataset.p))}
+function openFedina(id){$("#fedinaCitizen").value=id;$$(".tab-btn").forEach(b=>b.classList.toggle("active",b.dataset.tab==="fedinaTab"));$$(".tab-panel").forEach(p=>p.classList.toggle("hidden",p.id!=="fedinaTab"));renderFedina(id);window.scrollTo({top:document.querySelector(".tabs").offsetTop-20,behavior:"smooth"})}
+function renderFedinaFromSearch(){renderFedina($("#fedinaCitizen").value)}
+function renderFedina(id){const b=$("#fedinaResults");b.innerHTML="";if(!id){b.innerHTML='<div class="empty-state">Seleziona un cittadino per visualizzare la fedina.</div>';return}const c=state.citizens.find(x=>x.id===id);if(!c)return;const st=stats(id),bs=bountyStatus(st.pendingFine),sum=document.createElement("div");sum.className="app-card";sum.innerHTML=`<h3>${esc(c.full_name)}</h3><p><span class="wanted-status ${bs.cls}">${bs.label}</span></p><div class="totals"><div class="total-box">Pendenti<strong>${money(st.pendingFine)}</strong></div><div class="total-box">Totale storico<strong>${money(st.totalFine)}</strong></div><div class="total-box">Prigione<strong>${st.totalJail} min</strong></div></div>`;b.appendChild(sum);st.cases.forEach(ca=>{const d=document.createElement("div");d.className="case-card";d.innerHTML=`<div class="case-head"><strong>${fmtDate(ca.occurred_at)}</strong><span>Sceriffo: ${esc(ca.officer_name)}</span></div>${ca.notes?`<p>${esc(ca.notes)}</p>`:""}${caseRows(ca.id).map(r=>`<div class="offense-row ${r.is_paid?"paid":""}"><div class="offense-meta"><strong>${esc(r.offense_code)} — ${esc(r.offense_name)}</strong><br>${money(r.fine)} • ${r.jail_minutes} min${r.capital_punishment?'<span class="capital-flag"> • PENA CAPITALE</span>':""} • <strong>${r.is_paid?"PAGATO":"PENDENTE"}</strong></div><button class="${r.is_paid?"btn-secondary":"btn-success"} btn-small" data-t="${r.id}" data-paid="${r.is_paid?1:0}">${r.is_paid?"Rendi pendente":"Segna pagato"}</button></div>`).join("")}`;b.appendChild(d)});b.querySelectorAll("[data-t]").forEach(x=>x.onclick=()=>togglePaid(x.dataset.t,x.dataset.paid==="1"))}
+async function togglePaid(id,paid){const payload=paid?{is_paid:false,paid_at:null,paid_by:null}:{is_paid:true,paid_at:new Date().toISOString(),paid_by:state.session.user.id};const{error}=await state.db.from("case_offenses").update(payload).eq("id",id);if(error){notice("Errore aggiornamento: "+error.message,"error");return}await loadAll()}
+async function payAll(id){const st=stats(id),ids=st.rows.filter(r=>!r.is_paid&&Number(r.fine)>0).map(r=>r.id);if(!ids.length||!confirm(`Segnare come pagate tutte le multe pendenti (${money(st.pendingFine)})?`))return;const{error}=await state.db.from("case_offenses").update({is_paid:true,paid_at:new Date().toISOString(),paid_by:state.session.user.id}).in("id",ids);if(error){notice("Errore pagamento: "+error.message,"error");return}await loadAll();notice("Multe segnate come pagate.","success")}
+document.addEventListener("DOMContentLoaded",()=>{const d=new Date();d.setMinutes(d.getMinutes()-d.getTimezoneOffset());$("#occurredAt").value=d.toISOString().slice(0,16);renderSelected();init()});
+})();
