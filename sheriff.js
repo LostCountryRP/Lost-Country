@@ -7,7 +7,25 @@ const fmtDate=v=>v?new Date(v).toLocaleString("it-IT"):"—";
 function bountyStatus(a){const n=Number(a||0);if(n<200)return{label:"Cittadino Libero",cls:"status-free"};if(n<350)return{label:"🔴 RICERCATO: VIVO",cls:"status-wanted"};if(n<500)return{label:"🔥 FEDERALE: VIVO",cls:"status-federal"};if(n<=1000)return{label:"☠️ FEDERALE: MORTO",cls:"status-dead"};return{label:"👑 NEMICO PUBBLICO №1",cls:"status-enemy"}}
 function notice(m,t=""){const b=$("#notice");b.textContent=m||"";b.className="notice"+(t?" "+t:"");b.classList.toggle("hidden",!m)}
 function esc(v){return String(v??"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;")}
-function showAuth(ok){$("#resetPasswordPanel").classList.add("hidden");$("#loginPanel").classList.toggle("hidden",ok);$("#appPanel").classList.toggle("hidden",!ok);if(ok&&state.session?.user){$("#sessionUser").textContent=state.session.user.email||"Utente autenticato";const n=localStorage.getItem("lc_officer_name");if(n&&!$("#officerName").value)$("#officerName").value=n}}
+function showAuth(ok){
+    $("#loginPanel").classList.toggle("hidden", ok);
+    $("#appPanel").classList.toggle("hidden", !ok);
+
+    if(ok && state.session?.user){
+
+        const user = state.session.user;
+
+        const officerName =
+            user.user_metadata?.display_name ||
+            user.email ||
+            "Sceriffo";
+
+        $("#sessionUser").textContent = officerName;
+
+        $("#officerName").value = officerName;
+        $("#officerName").readOnly = true;
+    }
+}
 function bind(){
  $("#loginForm").addEventListener("submit",login);$("#forgotPasswordBtn").addEventListener("click",sendPasswordReset);$("#resetPasswordForm").addEventListener("submit",saveNewPassword);$("#logoutBtn").addEventListener("click",()=>state.db.auth.signOut());
  $("#addOffenseBtn").addEventListener("click",addOffense);$("#saveCaseBtn").addEventListener("click",saveCase);$("#refreshBtn").addEventListener("click",loadAll);
