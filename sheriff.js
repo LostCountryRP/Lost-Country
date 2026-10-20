@@ -97,6 +97,52 @@ function bind(){
   });
  });
 }
+
+async function init(){
+ populateOffenseSelect();
+ bind();
+
+ if(!configured()){
+  $("#configWarning").classList.remove("hidden");
+  setPanelVisible("#loginPanel",false);
+  return;
+ }
+
+ state.db=window.supabase.createClient(
+  window.LC_SUPABASE_URL,
+  window.LC_SUPABASE_KEY,
+  {auth:{persistSession:true,autoRefreshToken:true}}
+ );
+
+ state.db.auth.onAuthStateChange((event,s)=>{
+  state.session=s;
+
+  if(event==="PASSWORD_RECOVERY"){
+   showResetPassword();
+   return;
+  }
+
+  if(passwordRecoveryMode)return;
+
+  showAuth(!!s);
+
+  if(s){
+   setTimeout(()=>loadAll(),0);
+  }
+ });
+
+ const{data}=await state.db.auth.getSession();
+ state.session=data.session;
+
+ if(!passwordRecoveryMode){
+  showAuth(!!state.session);
+ }
+
+ if(state.session&&!passwordRecoveryMode){
+  await loadAll();
+ }
+}
+
 function showResetPassword(){
  passwordRecoveryMode=true;
  setPanelVisible("#loginPanel",false);
