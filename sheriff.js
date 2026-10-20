@@ -37,6 +37,12 @@ function showAuth(ok){
   $("#sessionUser").textContent=officerName;
   $("#officerName").value=officerName;
   $("#officerName").readOnly=true;
+
+  const adminBtn=$("#adminBtn");
+  if(adminBtn){
+   const isAdmin=user.app_metadata?.role==="admin";
+   adminBtn.classList.toggle("hidden",!isAdmin);
+  }
  }
 }
 function bind(){
@@ -48,6 +54,7 @@ function bind(){
  const addOffenseBtn = $("#addOffenseBtn");
  const saveCaseBtn = $("#saveCaseBtn");
  const refreshBtn = $("#refreshBtn");
+ const adminBtn = $("#adminBtn");
  const fedinaCitizen = $("#fedinaCitizen");
  const fedinaSearchBtn = $("#fedinaSearchBtn");
  const wantedSearch = $("#wantedSearch");
@@ -72,6 +79,9 @@ function bind(){
 
  if(refreshBtn)
   refreshBtn.addEventListener("click", loadAll);
+
+ if(adminBtn)
+  adminBtn.addEventListener("click", ()=>window.location.href="admin-sceriffi.html");
 
  if(fedinaCitizen)
   fedinaCitizen.addEventListener("change", renderFedinaFromSearch);
