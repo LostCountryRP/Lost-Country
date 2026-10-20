@@ -4,152 +4,119 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Gestione Sceriffi - Lost Country</title>
-
-<link rel="stylesheet" href="style.css">
-<link rel="stylesheet" href="sheriff.css?v=20261020-2">
-
+<link rel="stylesheet" href="style.css?v=20261020-western-1">
+<link rel="stylesheet" href="sheriff.css?v=20261020-western-1">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="supabase-config.js"></script>
 <script src="offenses-data.js"></script>
 <script defer src="sheriff.js?v=20261020-12"></script>
+<script defer>document.addEventListener("DOMContentLoaded",()=>{const m={"#newCaseTab":"newCaseTab","#fedinaTab":"fedinaTab","#wantedTab":"wantedTab"};document.querySelectorAll(".side-nav a").forEach(a=>{const tab=m[a.getAttribute("href")];if(!tab)return;a.addEventListener("click",e=>{const b=document.querySelector(`.tab-btn[data-tab="${tab}"]`);if(b){e.preventDefault();b.click();document.getElementById(tab)?.scrollIntoView({behavior:"smooth",block:"start"});}});});});</script>
 </head>
-
-<body>
-<div class="side-logo left" aria-hidden="true"></div>
-<div class="side-logo right" aria-hidden="true"></div>
-
-<div class="container">
-
-<nav class="nav-menu">
-<a class="page-home" href="index.html">Regolamento</a>
-<a class="page-appro" href="approfondimenti.html">Approfondimenti</a>
-<a class="page-penale" href="codice-penale.html">Codice Penale</a>
-<a class="active-page sheriff-link" href="sceriffi.html">⭐ Gestione Sceriffi</a>
-</nav>
-
+<body class="page-sceriffi">
+<div class="site-shell">
+<aside class="western-sidebar">
+<a class="sidebar-brand" href="index.html"><img src="logo.png" alt="Lost Country Roleplay"><span>Lost Country Roleplay</span></a>
+<nav class="side-nav" aria-label="Indice della pagina"><a href="#loginPanel"><span class="side-icon">★</span><span>Accesso</span></a><a href="#newCaseTab"><span class="side-icon">+</span><span>Nuovo Verbale</span></a><a href="#fedinaTab"><span class="side-icon">▤</span><span>Fedine Penali</span></a><a href="#wantedTab"><span class="side-icon">☠</span><span>Ricercati</span></a><a href="codice-penale.html"><span class="side-icon">§</span><span>Codice Penale</span></a></nav>
+</aside>
+<main class="site-main">
+<nav class="top-nav" aria-label="Navigazione principale"><a href="index.html">Regolamento</a><a href="approfondimenti.html">Approfondimenti</a><a href="codice-penale.html">Codice Penale</a><a class="active-page" href="sceriffi.html">Gestione Sceriffi</a></nav>
+<section class="parchment-page"><div class="parchment-content">
 <div class="sheriff-shell">
-
 <h1 class="app-title">⭐ UFFICIO DELLO SCERIFFO</h1>
 <p class="app-subtitle">Fedine penali, multe, pene e taglie condivise tra tutti gli sceriffi autorizzati.</p>
-
-<div id="configWarning" class="notice error hidden">
+<div class="notice error hidden" id="configWarning">
 Il database non è ancora configurato. Inserisci URL e Publishable/Anon Key in <strong>supabase-config.js</strong>.
 </div>
-
-<section id="loginPanel" class="auth-card">
+<section class="auth-card" id="loginPanel">
 <h2>Accesso riservato</h2>
-
-<form id="loginForm" class="form-grid">
+<form class="form-grid" id="loginForm">
 <div class="full">
 <label>Email dello sceriffo</label>
-<input id="loginEmail" type="email" autocomplete="username" required>
+<input autocomplete="username" id="loginEmail" required="" type="email"/>
 </div>
-
 <div class="full">
 <label>Password</label>
-<input id="loginPassword" type="password" autocomplete="current-password" required>
+<input autocomplete="current-password" id="loginPassword" required="" type="password"/>
 </div>
-
 <div class="full center">
 <button class="btn-primary" type="submit">Accedi</button>
-<button id="forgotPasswordBtn" class="btn-link" type="button">Password dimenticata?</button>
+<button class="btn-link" id="forgotPasswordBtn" type="button">Password dimenticata?</button>
 </div>
 </form>
 </section>
-
-<section id="resetPasswordPanel" class="auth-card hidden">
+<section class="auth-card hidden" id="resetPasswordPanel">
 <h2>Imposta nuova password</h2>
 <p>Inserisci una nuova password per il tuo account sceriffo.</p>
-
-<form id="resetPasswordForm" class="form-grid">
+<form class="form-grid" id="resetPasswordForm">
 <div class="full">
 <label>Nuova password</label>
-<input id="newPassword" type="password" autocomplete="new-password" minlength="8" required>
+<input autocomplete="new-password" id="newPassword" minlength="8" required="" type="password"/>
 </div>
-
 <div class="full">
 <label>Conferma nuova password</label>
-<input id="confirmPassword" type="password" autocomplete="new-password" minlength="8" required>
+<input autocomplete="new-password" id="confirmPassword" minlength="8" required="" type="password"/>
 </div>
-
 <div class="full center">
 <button class="btn-primary" type="submit">Salva nuova password</button>
 </div>
 </form>
 </section>
-
-<section id="appPanel" class="hidden">
-
+<section class="hidden" id="appPanel">
 <div class="toolbar">
 <div class="session-info">
 Connesso come: <strong id="sessionUser"></strong>
 </div>
-
 <div>
-<button id="adminBtn" class="btn-secondary btn-small hidden" type="button">⚙️ Pannello Admin</button>
-<button id="refreshBtn" class="btn-secondary btn-small" type="button">Aggiorna</button>
-<button id="logoutBtn" class="btn-danger btn-small" type="button">Esci</button>
+<button class="btn-secondary btn-small hidden" id="adminBtn" type="button">⚙️ Pannello Admin</button>
+<button class="btn-secondary btn-small" id="refreshBtn" type="button">Aggiorna</button>
+<button class="btn-danger btn-small" id="logoutBtn" type="button">Esci</button>
 </div>
 </div>
-
-<div id="notice" class="notice hidden"></div>
-
+<div class="notice hidden" id="notice"></div>
 <div class="tabs">
 <button class="tab-btn active" data-tab="newCaseTab" type="button">Nuovo Verbale</button>
 <button class="tab-btn" data-tab="fedinaTab" type="button">Fedine Penali</button>
 <button class="tab-btn" data-tab="wantedTab" type="button">Bacheca Ricercati</button>
 </div>
-
-<section id="newCaseTab" class="tab-panel">
+<section class="tab-panel" id="newCaseTab">
 <div class="app-card">
-
 <h2>Nuovo Verbale</h2>
-
 <div class="form-grid">
 <div>
 <label>Nome dello sceriffo</label>
-<input id="officerName" type="text" placeholder="Es. John Smith">
+<input id="officerName" placeholder="Es. John Smith" type="text"/>
 </div>
-
 <div>
 <label>Data e ora</label>
-<input id="occurredAt" type="datetime-local">
+<input id="occurredAt" type="datetime-local"/>
 </div>
-
 <div>
 <label>Cittadino</label>
-<input id="citizenName" type="text" list="citizensList" placeholder="Nome e cognome">
+<input id="citizenName" list="citizensList" placeholder="Nome e cognome" type="text"/>
 <datalist id="citizensList"></datalist>
 </div>
-
 <div>
 <label>Codice cittadino / ID RP (opzionale)</label>
-<input id="registryCode" type="text" placeholder="Es. LC-1042">
+<input id="registryCode" placeholder="Es. LC-1042" type="text"/>
 </div>
-
 <div class="full">
 <label>Alias / soprannome (opzionale)</label>
-<input id="citizenAlias" type="text">
+<input id="citizenAlias" type="text"/>
 </div>
-
 <div class="full">
 <label>Note del verbale (opzionale)</label>
 <textarea id="caseNotes" placeholder="Circostanze, prove, oggetti sequestrati..."></textarea>
 </div>
 </div>
-
 <h3>Reati contestati</h3>
-
 <div class="offense-picker">
 <div>
 <label>Codice Penale</label>
 <select id="offenseSelect"></select>
 </div>
-<button id="addOffenseBtn" class="btn-primary" type="button">+ Aggiungi</button>
+<button class="btn-primary" id="addOffenseBtn" type="button">+ Aggiungi</button>
 </div>
-
-<div id="selectedEmpty" class="empty-state">Nessun reato aggiunto.</div>
-
+<div class="empty-state" id="selectedEmpty">Nessun reato aggiunto.</div>
 <table class="selected-offenses">
 <thead>
 <tr>
@@ -161,68 +128,50 @@ Connesso come: <strong id="sessionUser"></strong>
 </thead>
 <tbody id="selectedOffensesBody"></tbody>
 </table>
-
 <div class="totals">
 <div class="total-box">Multa totale<strong id="totalFine">$0</strong></div>
 <div class="total-box">Prigione totale<strong id="totalJail">0 min</strong></div>
 </div>
-
-<div id="capitalWarning" class="notice error hidden">
+<div class="notice error hidden" id="capitalWarning">
 ⚖️ Il verbale contiene almeno un reato con <strong>PENA CAPITALE</strong>.
 </div>
-
 <div class="center">
-<button id="saveCaseBtn" class="btn-primary" type="button">Registra nella Fedina</button>
+<button class="btn-primary" id="saveCaseBtn" type="button">Registra nella Fedina</button>
 </div>
-
 </div>
 </section>
-
-<section id="fedinaTab" class="tab-panel hidden">
+<section class="tab-panel hidden" id="fedinaTab">
 <div class="app-card">
 <h2>Fedina Penale</h2>
-
 <div class="search-row">
 <select id="fedinaCitizen">
 <option value="">Seleziona un cittadino...</option>
 </select>
-<button id="fedinaSearchBtn" class="btn-secondary" type="button">Apri Fedina</button>
+<button class="btn-secondary" id="fedinaSearchBtn" type="button">Apri Fedina</button>
 </div>
-
 <div id="fedinaResults"></div>
 </div>
 </section>
-
-<section id="wantedTab" class="tab-panel hidden">
+<section class="tab-panel hidden" id="wantedTab">
 <div class="app-card">
 <h2>Bacheca Ricercati</h2>
-
 <p class="center">
 La taglia è calcolata automaticamente sul totale delle <strong>multe ancora pendenti</strong>.
 </p>
-
 <div class="search-row">
-<input id="wantedSearch" type="search" placeholder="Cerca cittadino...">
-<button class="btn-secondary" type="button"
-onclick="document.getElementById('wantedSearch').value='';document.getElementById('wantedSearch').dispatchEvent(new Event('input'));">
+<input id="wantedSearch" placeholder="Cerca cittadino..." type="search"/>
+<button class="btn-secondary" onclick="document.getElementById('wantedSearch').value='';document.getElementById('wantedSearch').dispatchEvent(new Event('input'));" type="button">
 Mostra tutti
 </button>
 </div>
-
-<div id="wantedGrid" class="wanted-grid"></div>
+<div class="wanted-grid" id="wantedGrid"></div>
 </div>
 </section>
-
 </section>
 
-<div class="page-switcher">
-<a class="page-home" href="index.html">← Regolamento</a>
-<a class="page-appro" href="approfondimenti.html">Approfondimenti</a>
-<a class="page-penale" href="codice-penale.html">Codice Penale</a>
-<a class="active-page sheriff-link" href="sceriffi.html">Gestione Sceriffi</a>
 </div>
-
-</div>
+</div></section>
+</main>
 </div>
 </body>
 </html>
