@@ -71,28 +71,7 @@ async function sendPasswordReset(){
         return;
     }
 
-    alert("Email di recupero inviata. Controlla anche lo spam.");
-}
-    const email = $("#loginEmail").value.trim();
-
-    if(!email){
-        alert("Inserisci prima l'email dello sceriffo.");
-        return;
-    }
-
-    const redirectTo =
-        window.location.origin + window.location.pathname;
-
-    const { error } = await state.db.auth.resetPasswordForEmail(
-        email,
-        { redirectTo }
-    );
-
-    if(error){
-        alert("Impossibile inviare l'email di recupero: " + error.message);
-        return;
-    }
-
+   
     alert(
         "Email di recupero inviata. Controlla la posta e anche la cartella spam."
     );
