@@ -9,19 +9,9 @@
 
 *{box-sizing:border-box}
 html{scroll-behavior:smooth;background:#321306}
-body{
-  margin:0;
-  min-height:100vh;
-  color:var(--ink);
-  font-family:'Crimson Text',Georgia,serif;
-  font-size:18px;
-  font-weight:700;
-  line-height:1.52;
-  background:
-    linear-gradient(rgba(44,14,3,.38),rgba(44,14,3,.38)),
-    url('sfondo-deserto.png') center/620px auto repeat;
-  background-attachment:fixed;
-}
+background:
+  linear-gradient(rgba(44,14,3,.28),rgba(44,14,3,.28)),
+  url('sfondo-deserto.png') center center / cover no-repeat fixed;
 a{color:inherit}
 svg{display:block;width:100%;height:100%}
 
