@@ -40,60 +40,62 @@ function showAuth(ok){
  }
 }
 function bind(){
- $("#loginForm").addEventListener("submit",login);$("#forgotPasswordBtn").addEventListener("click",sendPasswordReset);$("#resetPasswordForm").addEventListener("submit",saveNewPassword);$("#logoutBtn").addEventListener("click",()=>state.db.auth.signOut());
- $("#addOffenseBtn").addEventListener("click",addOffense);$("#saveCaseBtn").addEventListener("click",saveCase);$("#refreshBtn").addEventListener("click",loadAll);
- $("#fedinaCitizen").addEventListener("change",renderFedinaFromSearch);$("#fedinaSearchBtn").addEventListener("click",renderFedinaFromSearch);$("#wantedSearch").addEventListener("input",renderWanted);
- $$(".tab-btn").forEach(b=>b.addEventListener("click",()=>{$$(".tab-btn").forEach(x=>x.classList.remove("active"));b.classList.add("active");$$(".tab-panel").forEach(p=>p.classList.add("hidden"));$("#"+b.dataset.tab).classList.remove("hidden");if(b.dataset.tab==="wantedTab")renderWanted();if(b.dataset.tab==="fedinaTab")renderFedinaFromSearch()}));
-}
-async function init(){
- populateOffenseSelect();
- bind();
 
- if(!configured()){
-  $("#configWarning").classList.remove("hidden");
-  setPanelVisible("#loginPanel",false);
-  return;
- }
+ const loginForm = $("#loginForm");
+ const forgotPasswordBtn = $("#forgotPasswordBtn");
+ const resetPasswordForm = $("#resetPasswordForm");
+ const logoutBtn = $("#logoutBtn");
+ const addOffenseBtn = $("#addOffenseBtn");
+ const saveCaseBtn = $("#saveCaseBtn");
+ const refreshBtn = $("#refreshBtn");
+ const fedinaCitizen = $("#fedinaCitizen");
+ const fedinaSearchBtn = $("#fedinaSearchBtn");
+ const wantedSearch = $("#wantedSearch");
 
- const hashParams=new URLSearchParams(window.location.hash.replace(/^#/,""));
- const searchParams=new URLSearchParams(window.location.search);
- if(hashParams.get("type")==="recovery"||searchParams.get("type")==="recovery"){
-  passwordRecoveryMode=true;
-  setPanelVisible("#loginPanel",false);
-  setPanelVisible("#appPanel",false);
-  setPanelVisible("#resetPasswordPanel",true);
- }
+ if(loginForm)
+  loginForm.addEventListener("submit", login);
 
- state.db=window.supabase.createClient(
-  window.LC_SUPABASE_URL,
-  window.LC_SUPABASE_KEY,
-  {auth:{persistSession:true,autoRefreshToken:true}}
- );
+ if(forgotPasswordBtn)
+  forgotPasswordBtn.addEventListener("click", sendPasswordReset);
 
- const{data}=await state.db.auth.getSession();
- state.session=data.session;
+ if(resetPasswordForm)
+  resetPasswordForm.addEventListener("submit", saveNewPassword);
 
- if(!passwordRecoveryMode){
-  showAuth(!!state.session);
- }
+ if(logoutBtn)
+  logoutBtn.addEventListener("click", ()=>state.db.auth.signOut());
 
- state.db.auth.onAuthStateChange((event,s)=>{
-  state.session=s;
+ if(addOffenseBtn)
+  addOffenseBtn.addEventListener("click", addOffense);
 
-  if(event==="PASSWORD_RECOVERY"){
-   showResetPassword();
-   return;
-  }
+ if(saveCaseBtn)
+  saveCaseBtn.addEventListener("click", saveCase);
 
-  if(passwordRecoveryMode)return;
+ if(refreshBtn)
+  refreshBtn.addEventListener("click", loadAll);
 
-  showAuth(!!s);
-  if(s)setTimeout(()=>loadAll(),0);
+ if(fedinaCitizen)
+  fedinaCitizen.addEventListener("change", renderFedinaFromSearch);
+
+ if(fedinaSearchBtn)
+  fedinaSearchBtn.addEventListener("click", renderFedinaFromSearch);
+
+ if(wantedSearch)
+  wantedSearch.addEventListener("input", renderWanted);
+
+ $$(".tab-btn").forEach(b=>{
+  b.addEventListener("click",()=>{
+   $$(".tab-btn").forEach(x=>x.classList.remove("active"));
+   b.classList.add("active");
+
+   $$(".tab-panel").forEach(p=>p.classList.add("hidden"));
+
+   const panel = $("#"+b.dataset.tab);
+   if(panel) panel.classList.remove("hidden");
+
+   if(b.dataset.tab==="wantedTab") renderWanted();
+   if(b.dataset.tab==="fedinaTab") renderFedinaFromSearch();
+  });
  });
-
- if(state.session&&!passwordRecoveryMode){
-  await loadAll();
- }
 }
 function showResetPassword(){
  passwordRecoveryMode=true;
