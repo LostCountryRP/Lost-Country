@@ -9,23 +9,43 @@ function bountyStatus(a){const n=Number(a||0);if(n<200)return{label:"Cittadino L
 function notice(m,t=""){const b=$("#notice");b.textContent=m||"";b.className="notice"+(t?" "+t:"");b.classList.toggle("hidden",!m)}
 function esc(v){return String(v??"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;")}
 function showAuth(ok){
- if(passwordRecoveryMode){
-  $("#loginPanel").classList.add("hidden");
-  $("#appPanel").classList.add("hidden");
-  return;
- }
 
- $("#resetPasswordPanel")?.classList.add("hidden");
- $("#loginPanel").classList.toggle("hidden",ok);
- $("#appPanel").classList.toggle("hidden",!ok);
+    if(passwordRecoveryMode){
+        $("#loginPanel").classList.add("hidden");
+        $("#loginPanel").style.display = "none";
 
- if(ok&&state.session?.user){
-  const user=state.session.user;
-  const officerName=user.user_metadata?.display_name||user.email||"Sceriffo";
-  $("#sessionUser").textContent=officerName;
-  $("#officerName").value=officerName;
-  $("#officerName").readOnly=true;
- }
+        $("#appPanel").classList.add("hidden");
+        $("#appPanel").style.display = "none";
+
+        $("#resetPasswordPanel").classList.remove("hidden");
+        $("#resetPasswordPanel").style.display = "block";
+
+        return;
+    }
+
+    $("#resetPasswordPanel").classList.add("hidden");
+    $("#resetPasswordPanel").style.display = "none";
+
+    $("#loginPanel").classList.toggle("hidden", ok);
+    $("#loginPanel").style.display = ok ? "none" : "block";
+
+    $("#appPanel").classList.toggle("hidden", !ok);
+    $("#appPanel").style.display = ok ? "block" : "none";
+
+    if(ok && state.session?.user){
+
+        const user = state.session.user;
+
+        const officerName =
+            user.user_metadata?.display_name ||
+            user.email ||
+            "Sceriffo";
+
+        $("#sessionUser").textContent = officerName;
+        $("#officerName").value = officerName;
+        $("#officerName").readOnly = true;
+    }
+
 }
 function bind(){
  $("#loginForm").addEventListener("submit",login);$("#forgotPasswordBtn").addEventListener("click",sendPasswordReset);$("#resetPasswordForm").addEventListener("submit",saveNewPassword);$("#logoutBtn").addEventListener("click",()=>state.db.auth.signOut());
