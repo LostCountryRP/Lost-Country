@@ -52,11 +52,19 @@ async function init(){
 }
 
 function showResetPassword(){
- passwordRecoveryMode=true;
- $("#loginPanel").classList.add("hidden");
- $("#appPanel").classList.add("hidden");
- $("#resetPasswordPanel").classList.remove("hidden");
- notice("");
+    passwordRecoveryMode = true;
+
+    $("#loginPanel").classList.add("hidden");
+    $("#loginPanel").style.display = "none";
+
+    $("#appPanel").classList.add("hidden");
+    $("#appPanel").style.display = "none";
+
+    $("#resetPasswordPanel").classList.remove("hidden");
+    $("#resetPasswordPanel").style.display = "block";
+
+    notice("");
+
 }
 async function sendPasswordReset(){
  if(!state.db) return;
