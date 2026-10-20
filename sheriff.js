@@ -48,13 +48,32 @@ function showResetPassword(){
  notice("");
 }
 async function sendPasswordReset(){
- if(!state.db)return;
- const email=$("#loginEmail").value.trim();
- if(!email){notice("Inserisci prima l'email dello sceriffo, poi premi «Password dimenticata?».","error");return}
- const redirectTo=window.location.origin+window.location.pathname;
- const{error}=await state.db.auth.resetPasswordForEmail(email,{redirectTo});
- if(error){notice("Impossibile inviare l'email di recupero: "+error.message,"error");return}
- notice("Email di recupero inviata. Apri il messaggio ricevuto e usa il link per impostare una nuova password.","success");
+    if(!state.db) return;
+
+    const email = $("#loginEmail").value.trim();
+
+    if(!email){
+        alert("Inserisci prima l'email dello sceriffo.");
+        return;
+    }
+
+    const redirectTo =
+        window.location.origin + window.location.pathname;
+
+    const { error } = await state.db.auth.resetPasswordForEmail(
+        email,
+        { redirectTo }
+    );
+
+    if(error){
+        alert("Impossibile inviare l'email di recupero: " + error.message);
+        return;
+    }
+
+    alert(
+        "Email di recupero inviata. Controlla la posta e anche la cartella spam."
+    );
+}
 }
 async function saveNewPassword(e){
  e.preventDefault();
