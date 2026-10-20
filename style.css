@@ -1537,3 +1537,125 @@ body.page-codice-penale .side-nav{
     max-height:none !important;
   }
 }
+
+
+/* =========================================================
+   LOST COUNTRY — V7
+   FIX:
+   1. Barra superiore più chiara
+   2. Fondo sidebar senza "Servizio Postale"
+   ========================================================= */
+
+/* TOPBAR: usa una versione schiarita del legno.
+   La Home NON viene toccata perché usa style-home-test.css. */
+.top-nav{
+  background-color:#5b2a0d !important;
+  background-image:url('barra-legno-unica-chiara.png') !important;
+  background-position:center center !important;
+  background-size:100% 100% !important;
+  background-repeat:no-repeat !important;
+}
+
+/* Mantiene i bottoni pergamena sopra la barra */
+.top-nav a,
+.top-nav a.active-page{
+  background-image:url('bottone-pergamena-home-match.png') !important;
+}
+
+/* SIDEBAR: solo il paesaggio, senza il vecchio bottone Servizio Postale */
+.western-sidebar::after{
+  background-image:url('sidebar-fondo-home-esatto-v2.png') !important;
+  background-position:center bottom !important;
+  background-size:100% 100% !important;
+  background-repeat:no-repeat !important;
+}
+
+/* Evita qualsiasi immagine del vecchio pannello che possa riapparire
+   nella zona vuota tra menu e paesaggio */
+.western-sidebar{
+  background-color:#351306 !important;
+  background-image:url('sidebar-legno-home-esatto.png') !important;
+  background-position:center center !important;
+  background-size:100% 100% !important;
+  background-repeat:no-repeat !important;
+}
+
+/* Il fondo deve stare sopra al legno ma sotto al menu */
+.western-sidebar::after{
+  z-index:2 !important;
+}
+
+.side-nav{
+  z-index:3 !important;
+}
+
+.sidebar-brand{
+  z-index:4 !important;
+}
+
+@media(max-width:820px){
+  .top-nav{
+    background-image:url('barra-legno-unica-chiara.png') !important;
+    background-size:cover !important;
+  }
+
+  .western-sidebar::after{
+    display:none !important;
+  }
+}
+
+
+/* =========================================================
+   LOST COUNTRY — V8 VERIFICATO
+   Correzioni finali dopo controllo file/selector.
+   ========================================================= */
+
+/* Codice Penale usa body.page-penale, non page-codice-penale */
+body.page-penale .side-nav{
+  padding-top:10px !important;
+}
+
+/* Fondo sidebar ricavato SOLO dal paesaggio,
+   dopo la fine del bottone Servizio Postale */
+.western-sidebar::after{
+  background-image:url('sidebar-fondo-home-esatto-v3.png') !important;
+  background-position:center bottom !important;
+  background-size:100% 100% !important;
+  background-repeat:no-repeat !important;
+}
+
+/* Conferma finale barra superiore chiara */
+.top-nav{
+  background-color:#5b2a0d !important;
+  background-image:url('barra-legno-unica-chiara.png') !important;
+  background-position:center center !important;
+  background-size:100% 100% !important;
+  background-repeat:no-repeat !important;
+}
+
+/* Conferma finale bottoni */
+.top-nav a,
+.top-nav a.active-page,
+.side-nav a{
+  background-image:url('bottone-pergamena-home-match.png') !important;
+}
+
+/* Conferma finale testata e legno sidebar */
+.sidebar-brand{
+  background-image:url('sidebar-header-home-esatto.png') !important;
+}
+
+.western-sidebar{
+  background-image:url('sidebar-legno-home-esatto.png') !important;
+}
+
+/* Mobile */
+@media(max-width:820px){
+  .western-sidebar::after{
+    display:none !important;
+  }
+
+  .top-nav{
+    background-image:url('barra-legno-unica-chiara.png') !important;
+  }
+}
