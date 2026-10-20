@@ -72,3 +72,6 @@ button{border:none;border-radius:7px;padding:10px 14px;cursor:pointer;font-famil
         margin:10px auto 0;
     }
 }
+.hidden {
+    display: none !important;
+}
