@@ -1088,14 +1088,14 @@ i{
 
 /* Titolo principale: IL MANUALE DEL VERO COWBOY */
 .hero h1{
-  font-size:3.60rem !important;
+  font-size:5rem !important;
   line-height:1.02 !important;
   font-weight:700 !important;
 }
 
 /* Sottotitolo: REGOLAMENTO LOST COUNTRY */
 .hero-subtitle{
-  font-size:2.00rem !important;
+  font-size:3.00rem !important;
   line-height:1.08 !important;
   font-weight:700 !important;
 }
@@ -1109,14 +1109,14 @@ i{
 
 /* Tutti i titoli interni: Rispetto per il Player, Pilastri del Buon RP, ecc. */
 .rule-section h3{
-  font-size:1.55rem !important;
+  font-size:2rem !important;
   line-height:1.25 !important;
   font-weight:700 !important;
 }
 
 /* Testo introduttivo sotto il titolo */
 .welcome p{
-  font-size:1.30rem !important;
+  font-size:1.60rem !important;
   line-height:1.48 !important;
   font-weight:700 !important;
 }
