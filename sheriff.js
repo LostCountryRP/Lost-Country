@@ -1,6 +1,7 @@
 (()=>{"use strict";
 const $=s=>document.querySelector(s),$$=s=>Array.from(document.querySelectorAll(s));
 const state={db:null,session:null,citizens:[],cases:[],rows:[],selectedOffenses:[]};
+let passwordRecoveryMode=false;
 const configured=()=>window.LC_SUPABASE_URL&&window.LC_SUPABASE_KEY&&!window.LC_SUPABASE_URL.includes("INSERISCI")&&!window.LC_SUPABASE_KEY.includes("INSERISCI");
 const money=n=>"$"+Number(n||0).toLocaleString("it-IT",{maximumFractionDigits:0});
 const fmtDate=v=>v?new Date(v).toLocaleString("it-IT"):"—";
@@ -8,23 +9,23 @@ function bountyStatus(a){const n=Number(a||0);if(n<200)return{label:"Cittadino L
 function notice(m,t=""){const b=$("#notice");b.textContent=m||"";b.className="notice"+(t?" "+t:"");b.classList.toggle("hidden",!m)}
 function esc(v){return String(v??"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;")}
 function showAuth(ok){
-    $("#loginPanel").classList.toggle("hidden", ok);
-    $("#appPanel").classList.toggle("hidden", !ok);
+ if(passwordRecoveryMode){
+  $("#loginPanel").classList.add("hidden");
+  $("#appPanel").classList.add("hidden");
+  return;
+ }
 
-    if(ok && state.session?.user){
+ $("#resetPasswordPanel")?.classList.add("hidden");
+ $("#loginPanel").classList.toggle("hidden",ok);
+ $("#appPanel").classList.toggle("hidden",!ok);
 
-        const user = state.session.user;
-
-        const officerName =
-            user.user_metadata?.display_name ||
-            user.email ||
-            "Sceriffo";
-
-        $("#sessionUser").textContent = officerName;
-
-        $("#officerName").value = officerName;
-        $("#officerName").readOnly = true;
-    }
+ if(ok&&state.session?.user){
+  const user=state.session.user;
+  const officerName=user.user_metadata?.display_name||user.email||"Sceriffo";
+  $("#sessionUser").textContent=officerName;
+  $("#officerName").value=officerName;
+  $("#officerName").readOnly=true;
+ }
 }
 function bind(){
  $("#loginForm").addEventListener("submit",login);$("#forgotPasswordBtn").addEventListener("click",sendPasswordReset);$("#resetPasswordForm").addEventListener("submit",saveNewPassword);$("#logoutBtn").addEventListener("click",()=>state.db.auth.signOut());
@@ -37,62 +38,78 @@ async function init(){
  if(!configured()){$("#configWarning").classList.remove("hidden");$("#loginPanel").classList.add("hidden");return}
  state.db=window.supabase.createClient(window.LC_SUPABASE_URL,window.LC_SUPABASE_KEY,{auth:{persistSession:true,autoRefreshToken:true}});
  const{data}=await state.db.auth.getSession();state.session=data.session;showAuth(!!state.session);
- state.db.auth.onAuthStateChange(async(event,s)=>{state.session=s;if(event==="PASSWORD_RECOVERY"){showResetPassword();return}showAuth(!!s);if(s)await loadAll()});
- if(state.session)await loadAll();
+ state.db.auth.onAuthStateChange((event,s)=>{
+  state.session=s;
+  if(event==="PASSWORD_RECOVERY"){
+   showResetPassword();
+   return;
+  }
+  if(passwordRecoveryMode) return;
+  showAuth(!!s);
+  if(s) setTimeout(()=>loadAll(),0);
+ });
+ if(state.session&&!passwordRecoveryMode)await loadAll();
 }
 
 function showResetPassword(){
+ passwordRecoveryMode=true;
  $("#loginPanel").classList.add("hidden");
  $("#appPanel").classList.add("hidden");
  $("#resetPasswordPanel").classList.remove("hidden");
  notice("");
 }
 async function sendPasswordReset(){
-    alert("PULSANTE PASSWORD FUNZIONA");
+ if(!state.db) return;
 
-    if(!state.db) return;
+ const email=$("#loginEmail").value.trim();
 
-    const email=$("#loginEmail").value.trim();
+ if(!email){
+  alert("Inserisci prima l'email dello sceriffo.");
+  return;
+ }
 
-    if(!email){
-        alert("Inserisci prima l'email dello sceriffo.");
-        return;
-    }
+ const redirectTo=window.location.origin+window.location.pathname;
+ const{error}=await state.db.auth.resetPasswordForEmail(email,{redirectTo});
 
-    const redirectTo=window.location.origin+window.location.pathname;
+ if(error){
+  alert("Impossibile inviare l'email di recupero: "+error.message);
+  return;
+ }
 
-    const {error}=await state.db.auth.resetPasswordForEmail(
-        email,
-        {redirectTo}
-    );
-
-    if(error){
-        alert("Errore: "+error.message);
-        return;
-    }
-
-   
-    alert(
-        "Email di recupero inviata. Controlla la posta e anche la cartella spam."
-    );
-}
+ alert("Email di recupero inviata. Controlla la posta e anche la cartella spam.");
 }
 async function saveNewPassword(e){
  e.preventDefault();
+
  const p=$("#newPassword").value;
  const c=$("#confirmPassword").value;
- if(p.length<8){notice("La nuova password deve contenere almeno 8 caratteri.","error");return}
- if(p!==c){notice("Le due password non coincidono.","error");return}
+
+ if(p.length<8){
+  alert("La nuova password deve contenere almeno 8 caratteri.");
+  return;
+ }
+
+ if(p!==c){
+  alert("Le due password non coincidono.");
+  return;
+ }
+
  const{error}=await state.db.auth.updateUser({password:p});
- if(error){notice("Impossibile aggiornare la password: "+error.message,"error");return}
+
+ if(error){
+  alert("Impossibile aggiornare la password: "+error.message);
+  return;
+ }
+
  $("#newPassword").value="";
  $("#confirmPassword").value="";
- $("#resetPasswordPanel").classList.add("hidden");
- showAuth(true);
- await loadAll();
- notice("Password aggiornata correttamente. Ora puoi continuare a usare il gestionale.","success");
-}
+ passwordRecoveryMode=false;
 
+ await state.db.auth.signOut();
+
+ alert("Password aggiornata correttamente. Ora puoi accedere con la nuova password.");
+ window.location.href="sceriffi.html";
+}
 async function login(e){e.preventDefault();notice("");const{error}=await state.db.auth.signInWithPassword({email:$("#loginEmail").value.trim(),password:$("#loginPassword").value});if(error)notice("Accesso non riuscito: "+error.message,"error")}
 function populateOffenseSelect(){const s=$("#offenseSelect");s.innerHTML='<option value="">Seleziona un reato...</option>';const g={};(window.LC_OFFENSES||[]).forEach(o=>(g[o.category]??=[]).push(o));Object.entries(g).forEach(([cat,items])=>{const og=document.createElement("optgroup");og.label=cat;items.forEach(o=>{const op=document.createElement("option");op.value=o.code;op.textContent=`${o.code} — ${o.name} • ${money(o.fine)} • ${o.jail_minutes} min${o.capital_punishment?" • PENA CAPITALE":""}`;og.appendChild(op)});s.appendChild(og)})}
 function addOffense(){const o=(window.LC_OFFENSES||[]).find(x=>x.code===$("#offenseSelect").value);if(!o)return;state.selectedOffenses.push({...o,tempId:crypto.randomUUID()});renderSelected()}
