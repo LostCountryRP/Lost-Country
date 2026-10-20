@@ -846,3 +846,300 @@ h1,.main-title,.app-title{color:#2d0a01!important;font-family:'Rye',Georgia,seri
 .parchment-content p,.parchment-content li,.law-card p{color:#000!important;font-size:1.28rem!important;font-weight:900!important;line-height:1.38!important;}.parchment-content strong,.parchment-content b,.parchment-content em,.parchment-content i{color:#000!important;font-weight:900!important;}.page-kicker,.subtitle,.app-subtitle{color:#2d0a01!important;font-weight:900!important;}.topic-block,.law-card,.note,blockquote,.box{background:rgba(245,216,166,.34)!important;border-color:rgba(100,48,15,.38)!important;}
 @media(max-width:1120px){.site-shell{grid-template-columns:210px minmax(0,1fr)!important}.top-nav{height:auto!important;min-height:104px!important;padding:14px!important;gap:10px!important;flex-wrap:wrap!important}.top-nav a{width:180px!important;min-width:180px!important;height:58px!important;min-height:58px!important;font-size:.86rem!important}.parchment-page{padding:42px 38px 64px!important}}
 @media(max-width:820px){.site-shell{display:block!important;width:100%!important}.western-sidebar{position:relative!important;min-height:0!important;padding:10px!important;border-right:0!important;border-bottom:3px solid #170601!important}.sidebar-brand{display:none!important}.side-nav{display:flex!important;overflow-x:auto!important;gap:7px!important}.side-nav a{flex:0 0 170px!important;min-height:52px!important;font-size:.72rem!important}.top-nav{min-height:auto!important;height:auto!important;padding:10px!important;gap:8px!important}.top-nav a{flex:1 1 calc(50% - 8px)!important;width:auto!important;min-width:0!important;height:54px!important;min-height:54px!important;padding:0 8px!important;font-size:.74rem!important}.parchment-page{padding:34px 22px 52px!important}h1,.main-title,.app-title{font-size:2.45rem!important}h2{font-size:1.40rem!important}h3,.topic-title{font-size:1.25rem!important}.parchment-content p,.parchment-content li,.law-card p{font-size:1.08rem!important;line-height:1.45!important}}
+
+
+/* =========================================================
+   LOST COUNTRY — V3 SIDEBAR INTERNE COME LA HOME
+   Usa sidebar-menu.png solo per:
+   - testata/logo superiore
+   - decorazione deserto inferiore
+   Il menu centrale resta dinamico per ogni pagina.
+   ========================================================= */
+
+:root{
+  --lc-sidebar-brand-h: clamp(185px, 23vh, 215px);
+  --lc-sidebar-bottom-h: clamp(118px, 16vh, 150px);
+}
+
+/* Colonna laterale */
+.western-sidebar{
+  position:sticky !important;
+  top:0 !important;
+  width:var(--lc-sidebar) !important;
+  height:100vh !important;
+  min-height:100vh !important;
+
+  padding:
+    var(--lc-sidebar-brand-h)
+    10px
+    var(--lc-sidebar-bottom-h) !important;
+
+  overflow:hidden !important;
+
+  background:
+    linear-gradient(90deg,
+      rgba(12,3,0,.72) 0%,
+      rgba(67,25,7,.97) 8%,
+      rgba(48,15,4,.98) 50%,
+      rgba(68,25,7,.97) 92%,
+      rgba(12,3,0,.72) 100%
+    ) !important;
+
+  border-left:3px solid #160601 !important;
+  border-right:3px solid #160601 !important;
+
+  box-shadow:
+    inset 8px 0 12px rgba(0,0,0,.35),
+    inset -8px 0 12px rgba(0,0,0,.35),
+    8px 0 18px rgba(0,0,0,.28) !important;
+}
+
+/* Cornice interna */
+.western-sidebar::before{
+  content:"" !important;
+  display:block !important;
+  position:absolute !important;
+  inset:4px !important;
+  z-index:0 !important;
+  pointer-events:none !important;
+
+  border:1px solid rgba(197,112,45,.55) !important;
+  box-shadow:
+    inset 0 0 0 3px rgba(43,12,2,.55),
+    inset 0 0 18px rgba(0,0,0,.32) !important;
+}
+
+/* Parte bassa identica alla sidebar della Home */
+.western-sidebar::after{
+  content:"" !important;
+  display:block !important;
+  position:absolute !important;
+  left:0 !important;
+  right:0 !important;
+  bottom:0 !important;
+  height:var(--lc-sidebar-bottom-h) !important;
+  z-index:1 !important;
+  pointer-events:none !important;
+
+  background-image:url('sidebar-menu.png') !important;
+  background-size:100% 100vh !important;
+  background-position:center bottom !important;
+  background-repeat:no-repeat !important;
+}
+
+/* TESTATA/LOGO: ritaglio esatto della stessa immagine della Home */
+.sidebar-brand{
+  position:absolute !important;
+  left:0 !important;
+  right:0 !important;
+  top:0 !important;
+  z-index:2 !important;
+
+  width:100% !important;
+  height:var(--lc-sidebar-brand-h) !important;
+
+  margin:0 !important;
+  padding:0 !important;
+
+  display:block !important;
+
+  background-image:url('sidebar-menu.png') !important;
+  background-size:100% 100vh !important;
+  background-position:center top !important;
+  background-repeat:no-repeat !important;
+
+  border:0 !important;
+  box-shadow:none !important;
+  text-decoration:none !important;
+}
+
+/* Nasconde il vecchio logo bianco: ora si vede quello della Home */
+.sidebar-brand img,
+.sidebar-brand span{
+  display:none !important;
+}
+
+/* Area centrale scorrevole: utile nelle pagine con molte voci */
+.side-nav{
+  position:relative !important;
+  z-index:3 !important;
+
+  display:grid !important;
+  gap:8px !important;
+
+  width:100% !important;
+  max-height:calc(
+    100vh - var(--lc-sidebar-brand-h) - var(--lc-sidebar-bottom-h)
+  ) !important;
+
+  padding:5px 0 8px !important;
+  overflow-x:hidden !important;
+  overflow-y:auto !important;
+
+  scrollbar-width:thin;
+  scrollbar-color:#8b4b20 rgba(31,8,2,.55);
+}
+
+.side-nav::-webkit-scrollbar{
+  width:5px;
+}
+
+.side-nav::-webkit-scrollbar-track{
+  background:rgba(31,8,2,.55);
+}
+
+.side-nav::-webkit-scrollbar-thumb{
+  background:#8b4b20;
+  border-radius:6px;
+}
+
+/* Pulsanti laterali: proporzioni molto vicine alla Home */
+.side-nav a{
+  position:relative !important;
+
+  width:100% !important;
+  min-height:58px !important;
+  margin:0 !important;
+  padding:6px 12px 6px 10px !important;
+
+  display:grid !important;
+  grid-template-columns:40px minmax(0,1fr) !important;
+  align-items:center !important;
+
+  color:#170904 !important;
+  font-family:'Rye',Georgia,serif !important;
+  font-size:.80rem !important;
+  font-weight:700 !important;
+  line-height:1.08 !important;
+  letter-spacing:0 !important;
+  text-transform:uppercase !important;
+  text-decoration:none !important;
+
+  background-color:transparent !important;
+  background-image:url('bottone-pergamena-western.png') !important;
+  background-position:center center !important;
+  background-size:100% 100% !important;
+  background-repeat:no-repeat !important;
+
+  border:0 !important;
+  border-radius:0 !important;
+  clip-path:none !important;
+  box-shadow:none !important;
+
+  filter:none !important;
+
+  transition:
+    transform .14s ease,
+    filter .14s ease !important;
+}
+
+.side-nav a::before,
+.side-nav a::after{
+  content:none !important;
+  display:none !important;
+}
+
+.side-nav a:hover,
+.side-nav a:focus-visible{
+  transform:translateX(3px) !important;
+  filter:brightness(1.06) !important;
+  outline:none !important;
+}
+
+.side-icon{
+  width:34px !important;
+  height:34px !important;
+
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+
+  color:#170904 !important;
+  font-size:1.18rem !important;
+  font-weight:900 !important;
+  line-height:1 !important;
+
+  filter:grayscale(1) sepia(.35) contrast(1.25) !important;
+}
+
+.side-icon svg{
+  width:28px !important;
+  height:28px !important;
+  fill:currentColor !important;
+}
+
+/* Mantiene la sidebar della Home separata: queste regole sono
+   per western-sidebar, quindi non toccano .lc-sidebar. */
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+@media(max-width:1120px){
+  :root{
+    --lc-sidebar-brand-h:170px;
+    --lc-sidebar-bottom-h:112px;
+  }
+
+  .side-nav a{
+    min-height:54px !important;
+    grid-template-columns:34px minmax(0,1fr) !important;
+    font-size:.70rem !important;
+    padding-left:8px !important;
+    padding-right:8px !important;
+  }
+
+  .side-icon{
+    width:30px !important;
+    height:30px !important;
+    font-size:1.04rem !important;
+  }
+}
+
+@media(max-width:820px){
+  :root{
+    --lc-sidebar-brand-h:0px;
+    --lc-sidebar-bottom-h:0px;
+  }
+
+  .western-sidebar{
+    position:relative !important;
+    width:100% !important;
+    height:auto !important;
+    min-height:0 !important;
+
+    padding:9px 10px 10px !important;
+
+    border-left:0 !important;
+    border-right:0 !important;
+    border-bottom:3px solid #170601 !important;
+  }
+
+  .western-sidebar::before,
+  .western-sidebar::after,
+  .sidebar-brand{
+    display:none !important;
+  }
+
+  .side-nav{
+    display:flex !important;
+    gap:7px !important;
+    max-height:none !important;
+    padding:0 0 4px !important;
+    overflow-x:auto !important;
+    overflow-y:hidden !important;
+  }
+
+  .side-nav a{
+    flex:0 0 175px !important;
+    width:175px !important;
+    min-height:50px !important;
+    grid-template-columns:30px minmax(0,1fr) !important;
+    font-size:.68rem !important;
+  }
+
+  .side-icon{
+    width:27px !important;
+    height:27px !important;
+    font-size:.96rem !important;
+  }
+}
