@@ -5,11 +5,11 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Gestione Sceriffi - Lost Country</title>
 <link rel="stylesheet" href="style.css">
-<link rel="stylesheet" href="sheriff.css?v=20261020-2">
+<link rel="stylesheet" href="sheriff.css?v=20261020-4">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="supabase-config.js"></script>
 <script src="offenses-data.js"></script>
-<script defer src="sheriff.js?v=20261020-5"></script>
+<script defer src="sheriff.js?v=20261020-6"></script>
 </head>
 <body>
 <div class="side-logo left" aria-hidden="true"></div>
@@ -27,7 +27,7 @@
 
 <div id="configWarning" class="notice error hidden">Il database non è ancora configurato. Inserisci URL e Publishable/Anon Key in <strong>supabase-config.js</strong>.</div>
 
-<section id="loginPanel" class="auth-card">
+<section id="loginPanel" class="auth-card hidden">
 <h2>Accesso riservato</h2>
 <form id="loginForm" class="form-grid">
 <div class="full"><label>Email dello sceriffo</label><input id="loginEmail" type="email" autocomplete="username" required></div>
