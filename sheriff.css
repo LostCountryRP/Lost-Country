@@ -125,3 +125,40 @@ button,.btn-primary,.btn-secondary,.btn-danger,.btn-success,.btn-link{font-size:
 
 /* LOST COUNTRY — V2 UFFICIO SCERIFFO / ADMIN */
 .sheriff-shell,.admin-shell{max-width:100%!important}.sheriff-shell .app-title,.admin-shell .app-title{color:#2d0a01!important;font-family:'Rye',Georgia,serif!important;font-size:3.20rem!important;line-height:1.05!important;font-weight:700!important}.app-subtitle{color:#000!important;font-size:1.22rem!important;font-weight:900!important;line-height:1.40!important}.auth-card,.app-card,.admin-card{background:rgba(241,207,151,.48)!important;border:1px solid rgba(104,54,19,.38)!important;border-radius:3px!important;box-shadow:0 4px 15px rgba(67,31,10,.12),inset 0 0 0 1px rgba(255,245,218,.20)!important}.auth-card h2,.app-card h2,.admin-card h2{color:#2d0b01!important;font-family:'Rye',Georgia,serif!important;font-size:1.65rem!important;font-weight:700!important}label{color:#160803!important;font-weight:900!important}input,select,textarea{color:#000!important;font-size:1rem!important;font-weight:700!important;background:rgba(255,246,225,.88)!important}.tab-btn{min-height:50px!important;padding:8px 18px!important;color:#160803!important;font-family:'Rye',Georgia,serif!important;font-weight:700!important;background-color:transparent!important;background-image:url('bottone-pergamena-western.png')!important;background-position:center!important;background-size:100% 100%!important;background-repeat:no-repeat!important;border:0!important;border-radius:0!important;box-shadow:none!important}.tab-btn.active{color:#090301!important;background-image:url('bottone-pergamena-western.png')!important;filter:brightness(1.08) contrast(1.02)!important}@media(max-width:820px){.sheriff-shell .app-title,.admin-shell .app-title{font-size:2.25rem!important}}
+
+
+/* =========================================================
+   LOST COUNTRY — V3 SCERIFFO
+   Piccola armonizzazione con la nuova sidebar.
+   ========================================================= */
+
+.page-sceriffi .tabs,
+.page-admin .tabs{
+  gap:8px !important;
+}
+
+.page-sceriffi .tab-btn,
+.page-admin .tab-btn{
+  min-height:50px !important;
+  padding:8px 18px !important;
+
+  color:#170904 !important;
+  font-family:'Rye',Georgia,serif !important;
+  font-weight:700 !important;
+
+  background-color:transparent !important;
+  background-image:url('bottone-pergamena-western.png') !important;
+  background-position:center center !important;
+  background-size:100% 100% !important;
+  background-repeat:no-repeat !important;
+
+  border:0 !important;
+  border-radius:0 !important;
+  box-shadow:none !important;
+}
+
+.page-sceriffi .tab-btn.active,
+.page-admin .tab-btn.active{
+  color:#090301 !important;
+  filter:brightness(1.08) contrast(1.02) !important;
+}
