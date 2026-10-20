@@ -1143,3 +1143,397 @@ h1,.main-title,.app-title{color:#2d0a01!important;font-family:'Rye',Georgia,seri
     font-size:.96rem !important;
   }
 }
+
+
+/* =========================================================
+   LOST COUNTRY — V4 COLORI SIDEBAR PRESI DALLA HOME
+   Nessun colore ricostruito a mano:
+   header, legno e fondo provengono da sidebar-menu.png.
+   ========================================================= */
+
+:root{
+  --lc-sidebar-brand-h:clamp(185px,23vh,215px);
+  --lc-sidebar-bottom-h:clamp(125px,17vh,165px);
+}
+
+/* Il colore centrale ora arriva da una texture estratta
+   direttamente dalla sidebar della Home. */
+.western-sidebar{
+  background-color:#2a1005 !important;
+  background-image:url('sidebar-legno-home-esatto.png') !important;
+  background-position:center center !important;
+  background-size:100% 100% !important;
+  background-repeat:no-repeat !important;
+
+  border-left:0 !important;
+  border-right:3px solid #170601 !important;
+
+  box-shadow:
+    inset 5px 0 10px rgba(0,0,0,.24),
+    inset -5px 0 10px rgba(0,0,0,.24),
+    8px 0 18px rgba(0,0,0,.28) !important;
+}
+
+/* Non aggiungiamo più una cornice CSS di colore diverso. */
+.western-sidebar::before{
+  content:none !important;
+  display:none !important;
+}
+
+/* Fondo desertico preso pixel-per-pixel dalla sidebar della Home. */
+.western-sidebar::after{
+  content:"" !important;
+  display:block !important;
+  position:absolute !important;
+  left:0 !important;
+  right:0 !important;
+  bottom:0 !important;
+  height:var(--lc-sidebar-bottom-h) !important;
+  z-index:1 !important;
+  pointer-events:none !important;
+
+  background-image:url('sidebar-fondo-home-esatto.png') !important;
+  background-position:center bottom !important;
+  background-size:100% 100% !important;
+  background-repeat:no-repeat !important;
+}
+
+/* Testata/logo identici alla Home. */
+.sidebar-brand{
+  position:absolute !important;
+  left:0 !important;
+  right:0 !important;
+  top:0 !important;
+  z-index:2 !important;
+
+  width:100% !important;
+  height:var(--lc-sidebar-brand-h) !important;
+  margin:0 !important;
+  padding:0 !important;
+
+  background-color:transparent !important;
+  background-image:url('sidebar-header-home-esatto.png') !important;
+  background-position:center top !important;
+  background-size:100% 100% !important;
+  background-repeat:no-repeat !important;
+
+  border:0 !important;
+  box-shadow:none !important;
+}
+
+/* Il vecchio logo bianco non deve più comparire. */
+.sidebar-brand img,
+.sidebar-brand span{
+  display:none !important;
+}
+
+/* Menu sopra il legno esatto. */
+.side-nav{
+  z-index:3 !important;
+  gap:8px !important;
+  padding:5px 0 8px !important;
+}
+
+/* Pergamena ricalibrata sui colori reali dei bottoni della Home. */
+.side-nav a{
+  min-height:58px !important;
+  padding:6px 12px 6px 10px !important;
+
+  grid-template-columns:40px minmax(0,1fr) !important;
+
+  color:#160803 !important;
+  font-size:.80rem !important;
+  font-weight:700 !important;
+
+  background-color:transparent !important;
+  background-image:url('bottone-pergamena-home-match.png') !important;
+  background-position:center center !important;
+  background-size:100% 100% !important;
+  background-repeat:no-repeat !important;
+
+  border:0 !important;
+  border-radius:0 !important;
+  clip-path:none !important;
+  box-shadow:none !important;
+}
+
+.side-nav a:hover,
+.side-nav a:focus-visible{
+  transform:translateX(3px) !important;
+  filter:brightness(1.035) !important;
+}
+
+/* Stessa texture anche nei bottoni principali superiori:
+   così topbar e sidebar hanno la stessa pergamena. */
+.top-nav a,
+.top-nav a.active-page{
+  background-color:transparent !important;
+  background-image:url('bottone-pergamena-home-match.png') !important;
+  background-position:center center !important;
+  background-size:100% 100% !important;
+  background-repeat:no-repeat !important;
+}
+
+/* Tablet */
+@media(max-width:1120px){
+  :root{
+    --lc-sidebar-brand-h:170px;
+    --lc-sidebar-bottom-h:112px;
+  }
+}
+
+/* Mobile: niente testata/fondo verticale, menu orizzontale come prima. */
+@media(max-width:820px){
+  :root{
+    --lc-sidebar-brand-h:0px;
+    --lc-sidebar-bottom-h:0px;
+  }
+
+  .western-sidebar{
+    background-image:url('sidebar-legno-home-esatto.png') !important;
+    background-size:cover !important;
+  }
+
+  .western-sidebar::after,
+  .sidebar-brand{
+    display:none !important;
+  }
+}
+
+
+/* =========================================================
+   LOST COUNTRY — V5 FIX SIDEBAR
+   Evita pulsanti tagliati sotto il logo e sopra il fondo.
+   ========================================================= */
+
+.western-sidebar{
+  padding-top:var(--lc-sidebar-brand-h) !important;
+  padding-bottom:var(--lc-sidebar-bottom-h) !important;
+}
+
+/* Il menu occupa ESATTAMENTE lo spazio tra logo e paesaggio */
+.side-nav{
+  position:relative !important;
+  z-index:3 !important;
+
+  width:100% !important;
+  height:calc(
+    100vh - var(--lc-sidebar-brand-h) - var(--lc-sidebar-bottom-h)
+  ) !important;
+  max-height:none !important;
+
+  margin:0 !important;
+  padding:10px 0 12px !important;
+
+  display:grid !important;
+  grid-auto-rows:max-content !important;
+  align-content:start !important;
+  gap:8px !important;
+
+  overflow-x:hidden !important;
+  overflow-y:auto !important;
+
+  scroll-padding-top:10px !important;
+  scroll-padding-bottom:12px !important;
+  scroll-snap-type:y proximity !important;
+
+  scrollbar-width:thin !important;
+  scrollbar-color:#87451b rgba(31,8,2,.38) !important;
+}
+
+.side-nav a{
+  flex:none !important;
+  scroll-snap-align:start !important;
+  scroll-snap-stop:normal !important;
+}
+
+/* Piccola fascia di separazione sotto il logo:
+   impedisce visivamente che il primo bottone finisca sotto la testata. */
+.sidebar-brand::after{
+  content:"" !important;
+  position:absolute !important;
+  left:0 !important;
+  right:0 !important;
+  bottom:-6px !important;
+  height:7px !important;
+  pointer-events:none !important;
+  background:linear-gradient(
+    180deg,
+    rgba(29,7,1,.92),
+    rgba(55,18,5,.72),
+    transparent
+  ) !important;
+}
+
+/* Fondo sempre separato dall'ultimo pulsante */
+.western-sidebar::after{
+  border-top:3px solid rgba(39,9,1,.88) !important;
+}
+
+/* Scrollbar più discreta e confinata solo al menu */
+.side-nav::-webkit-scrollbar{
+  width:5px !important;
+}
+
+.side-nav::-webkit-scrollbar-track{
+  background:rgba(31,8,2,.38) !important;
+}
+
+.side-nav::-webkit-scrollbar-thumb{
+  background:#87451b !important;
+  border-radius:6px !important;
+}
+
+/* MOBILE */
+@media(max-width:820px){
+  .side-nav{
+    height:auto !important;
+    padding:0 0 4px !important;
+    scroll-snap-type:x proximity !important;
+  }
+
+  .side-nav a{
+    scroll-snap-align:start !important;
+  }
+
+  .sidebar-brand::after{
+    display:none !important;
+  }
+}
+
+
+/* =========================================================
+   LOST COUNTRY — V6 SIDEBAR PROPORZIONI COME HOME
+   Corregge:
+   - niente enorme spazio vuoto sotto pochi pulsanti
+   - niente primo pulsante tagliato
+   - altezza coerente con la Home
+   ========================================================= */
+
+/* La sidebar mantiene la stessa altezza visiva della Home */
+.western-sidebar{
+  height:100vh !important;
+  min-height:100vh !important;
+}
+
+/* Area pulsanti: distribuzione verticale ordinata */
+.side-nav{
+  height:calc(
+    100vh - var(--lc-sidebar-brand-h) - var(--lc-sidebar-bottom-h)
+  ) !important;
+
+  max-height:none !important;
+
+  display:flex !important;
+  flex-direction:column !important;
+  justify-content:flex-start !important;
+  align-items:stretch !important;
+
+  gap:8px !important;
+  padding:8px 0 10px !important;
+
+  overflow-y:auto !important;
+  overflow-x:hidden !important;
+}
+
+/* Tutti i pulsanti mantengono una misura uniforme */
+.side-nav a{
+  flex:0 0 58px !important;
+  min-height:58px !important;
+  max-height:58px !important;
+  width:100% !important;
+}
+
+/* PAGINE CON POCHE VOCI:
+   riempi meglio lo spazio come nella Home, senza lasciare
+   un enorme buco centrale. */
+body.page-sceriffi .side-nav,
+body.page-admin .side-nav{
+  justify-content:flex-start !important;
+}
+
+/* Solo per la pagina Sceriffi:
+   i 5 pulsanti vengono leggermente ingranditi per occupare meglio
+   la colonna e avvicinarsi visivamente alla Home. */
+body.page-sceriffi .side-nav a{
+  flex-basis:62px !important;
+  min-height:62px !important;
+  max-height:62px !important;
+}
+
+/* Se restano meno pulsanti, lascia il paesaggio più in alto
+   invece di un vuoto marrone enorme. */
+body.page-sceriffi{
+  --lc-sidebar-bottom-h:clamp(205px,28vh,265px);
+}
+
+/* Approfondimenti / Codice Penale:
+   mantieni la testata separata e il primo bottone intero. */
+body.page-approfondimenti .side-nav,
+body.page-codice-penale .side-nav{
+  padding-top:10px !important;
+}
+
+/* Evita sovrapposizione visiva tra logo e primo bottone */
+.sidebar-brand{
+  overflow:hidden !important;
+}
+
+.sidebar-brand::after{
+  bottom:0 !important;
+  height:4px !important;
+  background:rgba(25,7,1,.88) !important;
+}
+
+/* Fondo desertico sempre ben visibile */
+.western-sidebar::after{
+  z-index:2 !important;
+}
+
+/* Il menu resta sopra al fondo ma sotto la testata */
+.side-nav{
+  z-index:3 !important;
+}
+
+.sidebar-brand{
+  z-index:4 !important;
+}
+
+/* Tablet */
+@media(max-width:1120px){
+  .side-nav a{
+    flex-basis:54px !important;
+    min-height:54px !important;
+    max-height:54px !important;
+  }
+
+  body.page-sceriffi .side-nav a{
+    flex-basis:58px !important;
+    min-height:58px !important;
+    max-height:58px !important;
+  }
+}
+
+/* Mobile: torna menu orizzontale */
+@media(max-width:820px){
+  body.page-sceriffi{
+    --lc-sidebar-bottom-h:0px;
+  }
+
+  .side-nav{
+    height:auto !important;
+    display:flex !important;
+    flex-direction:row !important;
+    justify-content:flex-start !important;
+    gap:7px !important;
+    overflow-x:auto !important;
+    overflow-y:hidden !important;
+  }
+
+  .side-nav a,
+  body.page-sceriffi .side-nav a{
+    flex:0 0 175px !important;
+    min-height:50px !important;
+    max-height:none !important;
+  }
+}
