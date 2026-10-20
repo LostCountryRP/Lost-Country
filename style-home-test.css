@@ -1080,3 +1080,214 @@ i{
     font-size:.78rem !important;
   }
 }
+
+
+/* =========================================================
+   V14 — TUTTI I TITOLI PIÙ GRANDI
+   ========================================================= */
+
+/* Titolo principale: IL MANUALE DEL VERO COWBOY */
+.hero h1{
+  font-size:3.60rem !important;
+  line-height:1.02 !important;
+  font-weight:700 !important;
+}
+
+/* Sottotitolo: REGOLAMENTO LOST COUNTRY */
+.hero-subtitle{
+  font-size:2.00rem !important;
+  line-height:1.08 !important;
+  font-weight:700 !important;
+}
+
+/* Titoli PARTE 1 / PARTE 2 */
+.rule-section h2{
+  font-size:1.80rem !important;
+  line-height:1.18 !important;
+  font-weight:700 !important;
+}
+
+/* Tutti i titoli interni: Rispetto per il Player, Pilastri del Buon RP, ecc. */
+.rule-section h3{
+  font-size:1.55rem !important;
+  line-height:1.25 !important;
+  font-weight:700 !important;
+}
+
+/* Testo introduttivo sotto il titolo */
+.welcome p{
+  font-size:1.30rem !important;
+  line-height:1.48 !important;
+  font-weight:700 !important;
+}
+
+/* Più spazio attorno alla testata */
+.hero{
+  margin-bottom:38px !important;
+}
+
+.welcome{
+  max-width:780px !important;
+  padding-top:16px !important;
+  padding-bottom:18px !important;
+}
+
+/* RESPONSIVE */
+@media(max-width:780px){
+
+  .hero h1{
+    font-size:2.50rem !important;
+  }
+
+  .hero-subtitle{
+    font-size:1.50rem !important;
+  }
+
+  .rule-section h2{
+    font-size:1.40rem !important;
+  }
+
+  .rule-section h3{
+    font-size:1.25rem !important;
+  }
+
+  .welcome p{
+    font-size:1.05rem !important;
+  }
+}
+
+
+/* =========================================================
+   V15 — TUTTI I BOTTONI TOPBAR CON LO STESSO STILE
+   Usa la targa western generata come cornice grafica.
+   Il testo resta HTML, quindi ogni bottone mantiene il suo nome.
+   ========================================================= */
+
+.lc-topbar nav{
+  display:flex !important;
+  justify-content:center !important;
+  align-items:center !important;
+  gap:16px !important;
+}
+
+/* Regolamento / Approfondimenti / Codice Penale / Gestione Sceriffi */
+.lc-topbar a{
+  position:relative !important;
+
+  min-width:220px !important;
+  min-height:68px !important;
+  padding:13px 24px !important;
+
+  display:inline-flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+
+  color:#140904 !important;
+  font-family:'Rye', Georgia, serif !important;
+  font-size:1.02rem !important;
+  font-weight:700 !important;
+  line-height:1.05 !important;
+  letter-spacing:0 !important;
+  text-transform:uppercase !important;
+  text-decoration:none !important;
+  white-space:nowrap !important;
+
+  /* Centro pergamena */
+  background:
+    radial-gradient(circle at 16% 18%, rgba(255,247,218,.42), transparent 28%),
+    radial-gradient(circle at 84% 80%, rgba(135,74,29,.10), transparent 27%),
+    linear-gradient(180deg,#efc978 0%,#e3b362 52%,#d39548 100%) !important;
+
+  /* Cornice presa dall'immagine generata */
+  border:14px solid transparent !important;
+  border-image-source:url('targa_western_vintage_regolamento.png') !important;
+  border-image-slice:88 115 88 115 !important;
+  border-image-width:14px !important;
+  border-image-repeat:stretch !important;
+
+  border-radius:0 !important;
+
+  box-shadow:
+    0 5px 9px rgba(0,0,0,.30),
+    inset 0 1px 0 rgba(255,246,214,.55),
+    inset 0 -2px 0 rgba(113,62,24,.18) !important;
+
+  text-shadow:0 1px 0 rgba(255,239,196,.55) !important;
+  filter:none !important;
+
+  transition:
+    transform .14s ease,
+    filter .14s ease,
+    box-shadow .14s ease !important;
+}
+
+.lc-topbar a:hover{
+  transform:translateY(-2px) !important;
+  color:#0b0402 !important;
+
+  background:
+    radial-gradient(circle at 16% 18%, rgba(255,252,232,.50), transparent 28%),
+    radial-gradient(circle at 84% 80%, rgba(135,74,29,.09), transparent 27%),
+    linear-gradient(180deg,#f4d58e 0%,#e8bd73 52%,#da9f50 100%) !important;
+
+  box-shadow:
+    0 7px 12px rgba(0,0,0,.34),
+    inset 0 1px 0 rgba(255,250,226,.65),
+    inset 0 -2px 0 rgba(113,62,24,.18) !important;
+}
+
+/* Bottone della pagina corrente */
+.lc-topbar a.active{
+  color:#090302 !important;
+
+  background:
+    radial-gradient(circle at 16% 18%, rgba(255,255,239,.55), transparent 28%),
+    radial-gradient(circle at 84% 80%, rgba(135,74,29,.08), transparent 27%),
+    linear-gradient(180deg,#f6daa0 0%,#ebc27d 52%,#dda657 100%) !important;
+
+  outline:2px solid rgba(255,229,174,.55) !important;
+  outline-offset:2px !important;
+
+  box-shadow:
+    0 7px 12px rgba(0,0,0,.35),
+    inset 0 1px 0 rgba(255,252,231,.72),
+    inset 0 -2px 0 rgba(113,62,24,.18) !important;
+}
+
+/* Tablet */
+@media(max-width:1100px){
+  .lc-topbar nav{
+    gap:10px !important;
+    flex-wrap:wrap !important;
+  }
+
+  .lc-topbar a{
+    min-width:180px !important;
+    min-height:60px !important;
+    padding:11px 17px !important;
+    font-size:.88rem !important;
+
+    border-width:12px !important;
+    border-image-width:12px !important;
+  }
+}
+
+/* Smartphone */
+@media(max-width:780px){
+  .lc-topbar nav{
+    width:100% !important;
+    gap:8px !important;
+    flex-wrap:wrap !important;
+  }
+
+  .lc-topbar a{
+    flex:1 1 calc(50% - 8px) !important;
+    min-width:0 !important;
+    min-height:54px !important;
+    padding:9px 7px !important;
+    font-size:.76rem !important;
+
+    border-width:10px !important;
+    border-image-width:10px !important;
+  }
+}
