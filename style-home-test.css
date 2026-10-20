@@ -755,7 +755,7 @@ i{
 .rule-section p,
 .rule-section li{
   color:#000000 !important;
-  font-size:4.08rem !important; /* 1.02rem × 4 */
+  font-size:1.40rem !important;
   font-weight:900 !important;
   line-height:1.24 !important;
   letter-spacing:.01em !important;
@@ -772,7 +772,7 @@ i{
 /* Testo introduttivo coerente con il nuovo corpo */
 .welcome p{
   color:#000000 !important;
-  font-size:3.84rem !important; /* .96rem × 4 */
+  font-size:1.28rem !important;
   font-weight:900 !important;
   line-height:1.22 !important;
 }
@@ -785,7 +785,7 @@ i{
 /* Anche il footer segue il corpo */
 .lc-footer{
   color:#000000 !important;
-  font-size:4rem !important;
+  font-size:1.28rem !important;
   font-weight:900 !important;
   line-height:1.22 !important;
 }
@@ -840,14 +840,14 @@ i{
   /* Su mobile riduco leggermente per evitare overflow totale */
   .rule-section p,
   .rule-section li{
-    font-size:2.1rem !important;
+    font-size:1.12rem !important;
   }
 
   .welcome p{
-    font-size:2rem !important;
+    font-size:1.08rem !important;
   }
 
   .lc-footer{
-    font-size:2rem !important;
+    font-size:1.08rem !important;
   }
 }
