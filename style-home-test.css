@@ -327,3 +327,196 @@ em,i{color:#2d0d02;font-weight:700}
   .rule-section h3{font-size:1.05rem}
   .rule-section p,.rule-section li{font-size:.97rem;text-align:left}
 }
+
+
+/* =========================================================
+   LOST COUNTRY — V4
+   Migliorie SOLO parte destra: topbar, bottoni, testo, emoji
+   Sidebar lasciata invariata
+   ========================================================= */
+
+/* 1) Barra superiore con grafica legno dedicata */
+.lc-topbar{
+  min-height:78px;
+  padding:10px 18px;
+  gap:10px;
+  background:
+    linear-gradient(rgba(35,9,2,.10),rgba(35,9,2,.18)),
+    url('barra-legno.png') center center / 100% 100% no-repeat !important;
+  border-bottom:0;
+  box-shadow:
+    0 7px 16px rgba(0,0,0,.48),
+    inset 0 -1px 0 rgba(255,205,125,.18);
+}
+
+/* 2) Bottoni superiori con targa di legno */
+.lc-topbar nav{
+  gap:11px;
+}
+
+.lc-topbar a{
+  width:158px;
+  min-height:48px;
+  padding:9px 12px;
+
+  color:#f8e3b6;
+  font-family:'Rye',Georgia,serif;
+  font-size:.76rem;
+  font-weight:700;
+  letter-spacing:.15px;
+
+  border:0;
+  border-radius:0;
+
+  background:
+    linear-gradient(rgba(49,13,3,.08),rgba(49,13,3,.14)),
+    url('bottone-legno.png') center center / 100% 100% no-repeat !important;
+
+  text-shadow:
+    0 2px 1px rgba(41,12,2,.85),
+    0 0 2px rgba(0,0,0,.55);
+
+  box-shadow:
+    0 5px 9px rgba(0,0,0,.42);
+}
+
+.lc-topbar a:hover{
+  transform:translateY(-2px);
+  filter:brightness(1.12) saturate(1.04);
+}
+
+.lc-topbar a.active{
+  color:#fff1c9;
+  background:
+    linear-gradient(rgba(36,36,31,.34),rgba(28,28,24,.44)),
+    url('bottone-legno.png') center center / 100% 100% no-repeat !important;
+
+  box-shadow:
+    0 0 0 2px rgba(229,200,137,.34),
+    0 5px 10px rgba(0,0,0,.48);
+}
+
+/* 3) Oscura leggermente SOLO lo sfondo esterno/deserto */
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  z-index:-1;
+  pointer-events:none;
+  background:rgba(55,18,5,.22);
+}
+
+/* 4) Testo centrale: più leggibile, meno "muro nero" */
+.rule-section p,
+.rule-section li{
+  color:#2b1005;
+  font-size:1.03rem;
+  font-weight:600;
+  line-height:1.62;
+}
+
+.rule-section strong,
+.rule-section b{
+  color:#511806;
+  font-weight:700;
+}
+
+.rule-section em,
+.rule-section i{
+  color:#351205;
+  font-weight:600;
+}
+
+.rule-section h3{
+  color:#321004;
+  font-size:1.18rem;
+  font-weight:700;
+}
+
+.rule-section{
+  max-width:900px;
+}
+
+/* Titoli sezione con contrasto più netto */
+.rule-section h2{
+  color:#2a0901;
+  font-size:1.46rem;
+  font-weight:700;
+  border-color:rgba(83,35,9,.60);
+  box-shadow:
+    inset 0 1px 0 rgba(255,244,214,.50),
+    0 3px 7px rgba(73,27,5,.16);
+}
+
+/* 5) Emoji: tonalità western/sepia uniforme */
+.western-emoji{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width:1.34em;
+  height:1.34em;
+  margin-right:.16em;
+  vertical-align:-.13em;
+  font-size:.88em;
+  line-height:1;
+
+  filter:
+    grayscale(1)
+    sepia(1)
+    saturate(4.2)
+    hue-rotate(340deg)
+    brightness(.58)
+    contrast(1.45);
+
+  opacity:.92;
+}
+
+/* 6) Intro e footer coerenti col corpo */
+.welcome p{
+  color:#2d1005;
+  font-weight:600;
+  font-size:1rem;
+}
+
+.lc-footer{
+  color:#2d1005;
+  font-weight:600;
+}
+
+/* 7) Responsive topbar */
+@media(max-width:1120px){
+  .lc-topbar a{
+    width:145px;
+    font-size:.70rem;
+  }
+}
+
+@media(max-width:780px){
+  .lc-topbar{
+    min-height:62px;
+    padding:8px;
+    background-size:cover !important;
+  }
+
+  .lc-topbar nav{
+    gap:5px;
+  }
+
+  .lc-topbar a{
+    width:auto;
+    min-width:0;
+    min-height:42px;
+    padding:7px 5px;
+    font-size:.56rem;
+  }
+
+  .rule-section{
+    max-width:100%;
+  }
+
+  .rule-section p,
+  .rule-section li{
+    font-size:.98rem;
+    line-height:1.56;
+  }
+}
