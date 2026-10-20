@@ -113,3 +113,11 @@ button:hover,.btn-primary:hover,.btn-secondary:hover,.btn-danger:hover,.btn-succ
   .totals{grid-template-columns:1fr}
   .offense-row{align-items:flex-start;flex-direction:column}
 }
+
+
+/* Preview finale: componenti più compatti e coerenti con la pergamena */
+.sheriff-shell,.admin-shell{max-width:850px}
+.auth-card,.app-card,.admin-card{background:rgba(239,205,150,.48);border-color:rgba(104,54,19,.38);padding:17px}
+.sheriff-shell .app-title,.admin-shell .app-title{font-size:clamp(1.8rem,3.4vw,2.65rem)}
+input,select,textarea{font-size:.92rem;padding:9px 10px}
+button,.btn-primary,.btn-secondary,.btn-danger,.btn-success,.btn-link{font-size:.72rem;min-height:37px;padding:7px 12px}
