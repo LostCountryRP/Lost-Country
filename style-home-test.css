@@ -958,3 +958,125 @@ i{
     padding:10px 8px !important;
   }
 }
+
+
+/* =========================================================
+   V12 — BOTTONI TOPBAR STILE PERGAMENA LATERALE
+   La barra resta identica alla V11.
+   ========================================================= */
+
+.lc-topbar a{
+  min-width:220px !important;
+  min-height:68px !important;
+  padding:14px 24px !important;
+
+  display:inline-flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+
+  color:#211006 !important;
+  font-family:'Rye',Georgia,serif !important;
+  font-size:1.02rem !important;
+  font-weight:700 !important;
+  line-height:1.05 !important;
+  letter-spacing:.02em !important;
+  text-transform:uppercase !important;
+  text-decoration:none !important;
+  white-space:nowrap !important;
+
+  /* Pergamena più simile ai pulsanti della colonna sinistra */
+  background:
+    radial-gradient(circle at 18% 14%, rgba(255,248,224,.42), transparent 26%),
+    radial-gradient(circle at 82% 84%, rgba(127,70,28,.10), transparent 28%),
+    linear-gradient(180deg,#f2d29a 0%,#e5bd7b 48%,#d6a15f 100%) !important;
+
+  border:1px solid #774319 !important;
+  border-radius:0 !important;
+
+  /* Sagoma irregolare/tornata */
+  clip-path:polygon(
+    4% 0,
+    96% 1%,
+    100% 16%,
+    98% 47%,
+    100% 84%,
+    96% 100%,
+    4% 99%,
+    0 83%,
+    2% 49%,
+    0 17%
+  ) !important;
+
+  text-shadow:0 1px 0 rgba(255,245,218,.68) !important;
+
+  box-shadow:
+    inset 0 1px 0 rgba(255,250,230,.75),
+    inset 0 -2px 0 rgba(113,62,24,.18) !important;
+
+  filter:drop-shadow(0 5px 4px rgba(0,0,0,.30));
+  transition:
+    transform .14s ease,
+    filter .14s ease,
+    background .14s ease !important;
+}
+
+.lc-topbar a::before{
+  content:"";
+  position:absolute;
+  inset:4px 7px;
+  pointer-events:none;
+
+  border-top:1px solid rgba(104,58,23,.20);
+  border-bottom:1px solid rgba(104,58,23,.14);
+
+  clip-path:inherit;
+}
+
+/* Hover */
+.lc-topbar a:hover{
+  transform:translateY(-2px) !important;
+  color:#170904 !important;
+
+  background:
+    radial-gradient(circle at 18% 14%, rgba(255,252,235,.50), transparent 26%),
+    radial-gradient(circle at 82% 84%, rgba(127,70,28,.10), transparent 28%),
+    linear-gradient(180deg,#f6dba7 0%,#ebc889 48%,#dca968 100%) !important;
+
+  filter:brightness(1.03) drop-shadow(0 6px 5px rgba(0,0,0,.34));
+}
+
+/* Pulsante selezionato: stesso bottone, solo leggermente evidenziato */
+.lc-topbar a.active{
+  color:#120703 !important;
+
+  background:
+    radial-gradient(circle at 18% 14%, rgba(255,255,244,.58), transparent 26%),
+    radial-gradient(circle at 82% 84%, rgba(127,70,28,.09), transparent 28%),
+    linear-gradient(180deg,#f8dfb0 0%,#edcb91 48%,#dfa968 100%) !important;
+
+  outline:2px solid rgba(243,218,167,.58) !important;
+  outline-offset:2px !important;
+
+  filter:drop-shadow(0 6px 5px rgba(0,0,0,.34));
+}
+
+/* Desktop medio */
+@media(max-width:1100px){
+  .lc-topbar a{
+    min-width:180px !important;
+    min-height:58px !important;
+    padding:12px 17px !important;
+    font-size:.88rem !important;
+  }
+}
+
+/* Mobile */
+@media(max-width:780px){
+  .lc-topbar a{
+    flex:1 1 calc(50% - 8px) !important;
+    min-width:0 !important;
+    min-height:52px !important;
+    padding:9px 7px !important;
+    font-size:.78rem !important;
+  }
+}
