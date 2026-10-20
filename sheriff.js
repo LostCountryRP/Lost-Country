@@ -48,8 +48,31 @@ function showResetPassword(){
  notice("");
 }
 async function sendPasswordReset(){
+    alert("PULSANTE PASSWORD FUNZIONA");
+
     if(!state.db) return;
 
+    const email=$("#loginEmail").value.trim();
+
+    if(!email){
+        alert("Inserisci prima l'email dello sceriffo.");
+        return;
+    }
+
+    const redirectTo=window.location.origin+window.location.pathname;
+
+    const {error}=await state.db.auth.resetPasswordForEmail(
+        email,
+        {redirectTo}
+    );
+
+    if(error){
+        alert("Errore: "+error.message);
+        return;
+    }
+
+    alert("Email di recupero inviata. Controlla anche lo spam.");
+}
     const email = $("#loginEmail").value.trim();
 
     if(!email){
