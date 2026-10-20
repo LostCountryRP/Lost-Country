@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Rye&family=Special+Elite&family=Crimson+Text:ital,wght@0,400;0,600;0,700&display=swap');
 
 :root{
-  --shell:1100px;
+  --shell:1350px;
   --sidebar:230px;
   --topbar:64px;
   --ink:#250b02;
@@ -9,9 +9,18 @@
 
 *{box-sizing:border-box}
 html{scroll-behavior:smooth;background:#321306}
-background:
-  linear-gradient(rgba(44,14,3,.28),rgba(44,14,3,.28)),
-  url('sfondo-deserto.png') center center / cover no-repeat fixed;
+body{
+  margin:0;
+  min-height:100vh;
+  color:var(--ink);
+  font-family:'Crimson Text',Georgia,serif;
+  font-size:18px;
+  font-weight:700;
+  line-height:1.52;
+  background:
+    linear-gradient(rgba(44,14,3,.28),rgba(44,14,3,.28)),
+    url('sfondo-deserto.png') center center / cover no-repeat fixed;
+}
 a{color:inherit}
 svg{display:block;width:100%;height:100%}
 
@@ -92,8 +101,8 @@ svg{display:block;width:100%;height:100%}
   top:0;
   z-index:15;
   background:
-    linear-gradient(rgba(73,26,7,.35),rgba(36,10,2,.52)),
-    url('sfondo-deserto.png') center 25%/520px auto repeat;
+    linear-gradient(rgba(73,26,7,.72),rgba(36,10,2,.80)),
+    url('sfondo-deserto.png') center center / cover no-repeat;
   border-bottom:2px solid #a35a27;
   box-shadow:inset 0 -1px 0 rgba(232,166,91,.25),0 5px 12px rgba(0,0,0,.40);
 }
@@ -120,8 +129,8 @@ svg{display:block;width:100%;height:100%}
   border-bottom:3px solid #7b3815;
   border-radius:6px;
   background:
-    linear-gradient(rgba(151,79,34,.28),rgba(63,22,6,.45)),
-    url('sfondo-deserto.png') center/300px auto;
+    linear-gradient(rgba(151,79,34,.34),rgba(63,22,6,.52)),
+    url('sfondo-deserto.png') center center / cover no-repeat;
   box-shadow:0 4px 8px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,219,160,.18);
 }
 .lc-topbar a:hover{filter:brightness(1.10);transform:translateY(-1px)}
@@ -157,7 +166,7 @@ svg{display:block;width:100%;height:100%}
 .hero{
   position:relative;
   z-index:1;
-  max-width:720px;
+  max-width:860px;
   margin:0 auto 29px;
   text-align:center;
 }
@@ -222,7 +231,7 @@ svg{display:block;width:100%;height:100%}
 .rule-section{
   position:relative;
   z-index:1;
-  max-width:760px;
+  max-width:930px;
   margin:0 auto;
 }
 .rule-section h2{
@@ -279,7 +288,7 @@ em,i{color:#2d0d02;font-weight:700}
 .lc-footer{
   position:relative;
   z-index:1;
-  max-width:700px;
+  max-width:880px;
   margin:38px auto 0;
   padding:18px 15px 0;
   border-top:1px solid rgba(104,50,17,.65);
