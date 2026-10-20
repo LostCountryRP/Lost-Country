@@ -8,44 +8,36 @@ const fmtDate=v=>v?new Date(v).toLocaleString("it-IT"):"—";
 function bountyStatus(a){const n=Number(a||0);if(n<200)return{label:"Cittadino Libero",cls:"status-free"};if(n<350)return{label:"🔴 RICERCATO: VIVO",cls:"status-wanted"};if(n<500)return{label:"🔥 FEDERALE: VIVO",cls:"status-federal"};if(n<=1000)return{label:"☠️ FEDERALE: MORTO",cls:"status-dead"};return{label:"👑 NEMICO PUBBLICO №1",cls:"status-enemy"}}
 function notice(m,t=""){const b=$("#notice");b.textContent=m||"";b.className="notice"+(t?" "+t:"");b.classList.toggle("hidden",!m)}
 function esc(v){return String(v??"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;")}
+function setPanelVisible(selector,visible){
+ const el=$(selector);
+ if(!el)return;
+ if(visible){
+  el.classList.remove("hidden");
+  el.style.setProperty("display","block","important");
+ }else{
+  el.classList.add("hidden");
+  el.style.setProperty("display","none","important");
+ }
+}
 function showAuth(ok){
+ if(passwordRecoveryMode){
+  setPanelVisible("#loginPanel",false);
+  setPanelVisible("#appPanel",false);
+  setPanelVisible("#resetPasswordPanel",true);
+  return;
+ }
 
-    if(passwordRecoveryMode){
-        $("#loginPanel").classList.add("hidden");
-        $("#loginPanel").style.display = "none";
+ setPanelVisible("#resetPasswordPanel",false);
+ setPanelVisible("#loginPanel",!ok);
+ setPanelVisible("#appPanel",ok);
 
-        $("#appPanel").classList.add("hidden");
-        $("#appPanel").style.display = "none";
-
-        $("#resetPasswordPanel").classList.remove("hidden");
-        $("#resetPasswordPanel").style.display = "block";
-
-        return;
-    }
-
-    $("#resetPasswordPanel").classList.add("hidden");
-    $("#resetPasswordPanel").style.display = "none";
-
-    $("#loginPanel").classList.toggle("hidden", ok);
-    $("#loginPanel").style.display = ok ? "none" : "block";
-
-    $("#appPanel").classList.toggle("hidden", !ok);
-    $("#appPanel").style.display = ok ? "block" : "none";
-
-    if(ok && state.session?.user){
-
-        const user = state.session.user;
-
-        const officerName =
-            user.user_metadata?.display_name ||
-            user.email ||
-            "Sceriffo";
-
-        $("#sessionUser").textContent = officerName;
-        $("#officerName").value = officerName;
-        $("#officerName").readOnly = true;
-    }
-
+ if(ok&&state.session?.user){
+  const user=state.session.user;
+  const officerName=user.user_metadata?.display_name||user.email||"Sceriffo";
+  $("#sessionUser").textContent=officerName;
+  $("#officerName").value=officerName;
+  $("#officerName").readOnly=true;
+ }
 }
 function bind(){
  $("#loginForm").addEventListener("submit",login);$("#forgotPasswordBtn").addEventListener("click",sendPasswordReset);$("#resetPasswordForm").addEventListener("submit",saveNewPassword);$("#logoutBtn").addEventListener("click",()=>state.db.auth.signOut());
@@ -54,37 +46,61 @@ function bind(){
  $$(".tab-btn").forEach(b=>b.addEventListener("click",()=>{$$(".tab-btn").forEach(x=>x.classList.remove("active"));b.classList.add("active");$$(".tab-panel").forEach(p=>p.classList.add("hidden"));$("#"+b.dataset.tab).classList.remove("hidden");if(b.dataset.tab==="wantedTab")renderWanted();if(b.dataset.tab==="fedinaTab")renderFedinaFromSearch()}));
 }
 async function init(){
- populateOffenseSelect();bind();
- if(!configured()){$("#configWarning").classList.remove("hidden");$("#loginPanel").classList.add("hidden");return}
- state.db=window.supabase.createClient(window.LC_SUPABASE_URL,window.LC_SUPABASE_KEY,{auth:{persistSession:true,autoRefreshToken:true}});
- const{data}=await state.db.auth.getSession();state.session=data.session;showAuth(!!state.session);
+ populateOffenseSelect();
+ bind();
+
+ if(!configured()){
+  $("#configWarning").classList.remove("hidden");
+  setPanelVisible("#loginPanel",false);
+  return;
+ }
+
+ const hashParams=new URLSearchParams(window.location.hash.replace(/^#/,""));
+ const searchParams=new URLSearchParams(window.location.search);
+ if(hashParams.get("type")==="recovery"||searchParams.get("type")==="recovery"){
+  passwordRecoveryMode=true;
+  setPanelVisible("#loginPanel",false);
+  setPanelVisible("#appPanel",false);
+  setPanelVisible("#resetPasswordPanel",true);
+ }
+
+ state.db=window.supabase.createClient(
+  window.LC_SUPABASE_URL,
+  window.LC_SUPABASE_KEY,
+  {auth:{persistSession:true,autoRefreshToken:true}}
+ );
+
+ const{data}=await state.db.auth.getSession();
+ state.session=data.session;
+
+ if(!passwordRecoveryMode){
+  showAuth(!!state.session);
+ }
+
  state.db.auth.onAuthStateChange((event,s)=>{
   state.session=s;
+
   if(event==="PASSWORD_RECOVERY"){
    showResetPassword();
    return;
   }
-  if(passwordRecoveryMode) return;
+
+  if(passwordRecoveryMode)return;
+
   showAuth(!!s);
-  if(s) setTimeout(()=>loadAll(),0);
+  if(s)setTimeout(()=>loadAll(),0);
  });
- if(state.session&&!passwordRecoveryMode)await loadAll();
+
+ if(state.session&&!passwordRecoveryMode){
+  await loadAll();
+ }
 }
-
 function showResetPassword(){
-    passwordRecoveryMode = true;
-
-    $("#loginPanel").classList.add("hidden");
-    $("#loginPanel").style.display = "none";
-
-    $("#appPanel").classList.add("hidden");
-    $("#appPanel").style.display = "none";
-
-    $("#resetPasswordPanel").classList.remove("hidden");
-    $("#resetPasswordPanel").style.display = "block";
-
-    notice("");
-
+ passwordRecoveryMode=true;
+ setPanelVisible("#loginPanel",false);
+ setPanelVisible("#appPanel",false);
+ setPanelVisible("#resetPasswordPanel",true);
+ notice("");
 }
 async function sendPasswordReset(){
  if(!state.db) return;
@@ -136,7 +152,7 @@ async function saveNewPassword(e){
  await state.db.auth.signOut();
 
  alert("Password aggiornata correttamente. Ora puoi accedere con la nuova password.");
- window.location.href="sceriffi.html";
+ window.location.replace("sceriffi.html");
 }
 async function login(e){e.preventDefault();notice("");const{error}=await state.db.auth.signInWithPassword({email:$("#loginEmail").value.trim(),password:$("#loginPassword").value});if(error)notice("Accesso non riuscito: "+error.message,"error")}
 function populateOffenseSelect(){const s=$("#offenseSelect");s.innerHTML='<option value="">Seleziona un reato...</option>';const g={};(window.LC_OFFENSES||[]).forEach(o=>(g[o.category]??=[]).push(o));Object.entries(g).forEach(([cat,items])=>{const og=document.createElement("optgroup");og.label=cat;items.forEach(o=>{const op=document.createElement("option");op.value=o.code;op.textContent=`${o.code} — ${o.name} • ${money(o.fine)} • ${o.jail_minutes} min${o.capital_punishment?" • PENA CAPITALE":""}`;og.appendChild(op)});s.appendChild(og)})}
