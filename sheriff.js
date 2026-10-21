@@ -1,18 +1,39 @@
+// LOST COUNTRY RP — versione con nome sceriffo da Supabase (2026-10-22)
 (()=>{"use strict";
 const $=s=>document.querySelector(s),$$=s=>Array.from(document.querySelectorAll(s));
-const state={db:null,session:null,citizens:[],cases:[],rows:[],selectedOffenses:[],closures:[],photoUrls:{}};
+const state={db:null,session:null,citizens:[],cases:[],rows:[],selectedOffenses:[],closures:[],photoUrls:{},officerName:null};
 const configured=()=>window.LC_SUPABASE_URL&&window.LC_SUPABASE_KEY&&!window.LC_SUPABASE_URL.includes("INSERISCI")&&!window.LC_SUPABASE_KEY.includes("INSERISCI");
 const money=n=>"$"+Number(n||0).toLocaleString("it-IT",{maximumFractionDigits:0});
 const fmtDate=v=>v?new Date(v).toLocaleString("it-IT"):"—";
 function bountyStatus(a){const n=Number(a||0);if(n<200)return{label:"Cittadino Libero",cls:"status-free"};if(n<350)return{label:"🔴 RICERCATO: VIVO",cls:"status-wanted"};if(n<500)return{label:"🔥 FEDERALE: VIVO",cls:"status-federal"};if(n<=1000)return{label:"☠️ FEDERALE: MORTO",cls:"status-dead"};return{label:"👑 NEMICO PUBBLICO №1",cls:"status-enemy"}}
 function notice(m,t=""){const b=$("#notice");b.textContent=m||"";b.className="notice"+(t?" "+t:"");b.classList.toggle("hidden",!m)}
 function esc(v){return String(v??"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;")}
-function showAuth(ok){$("#loginPanel").classList.toggle("hidden",ok);$("#appPanel").classList.toggle("hidden",!ok);if(ok&&state.session?.user){$("#sessionUser").textContent=state.session.user.email||"Utente autenticato";const n=localStorage.getItem("lc_officer_name");if(n&&!$("#officerName").value)$("#officerName").value=n}}
+function showAuth(ok){
+ $("#loginPanel").classList.toggle("hidden",ok);
+ $("#appPanel").classList.toggle("hidden",!ok);
+ const field=$("#officerName");
+ if(field){field.readOnly=true;field.setAttribute("aria-readonly","true");field.title="Nome assegnato automaticamente dall’account sceriffo";field.autocomplete="off";field.value=ok?(state.officerName||"Caricamento nome sceriffo..."):"";}
+ const save=$("#saveCaseBtn");if(save)save.disabled=!ok||!state.officerName;
+ if(ok&&state.session?.user)$("#sessionUser").textContent=state.session.user.email||"Utente autenticato";
+}
+async function loadOfficerName(){
+ state.officerName=null;showAuth(!!state.session);
+ if(!state.session)return false;
+ const {data,error}=await state.db.rpc("current_sheriff_name");
+ if(error||!data||!String(data).trim()){
+  showAuth(false);
+  notice("Impossibile identificare lo sceriffo autorizzato: "+(error?.message||"nome non configurato")+". Verifica la funzione SQL current_sheriff_name.","error");
+  return false;
+ }
+ state.officerName=String(data).trim();
+ showAuth(true);
+ return true;
+}
 function bind(){
  $("#loginForm").addEventListener("submit",login);$("#logoutBtn").addEventListener("click",()=>state.db.auth.signOut());
  $("#addOffenseBtn").addEventListener("click",addOffense);$("#saveCaseBtn").addEventListener("click",saveCase);$("#refreshBtn").addEventListener("click",loadAll);
  $("#fedinaCitizen").addEventListener("change",renderFedinaFromSearch);$("#fedinaSearchBtn").addEventListener("click",renderFedinaFromSearch);$("#wantedSearch").addEventListener("input",renderWanted);
- $("#officerName").addEventListener("change",()=>localStorage.setItem("lc_officer_name",$("#officerName").value.trim()));
+
  $$(".tab-btn").forEach(b=>b.addEventListener("click",()=>{$$(".tab-btn").forEach(x=>x.classList.remove("active"));b.classList.add("active");$$(".tab-panel").forEach(p=>p.classList.add("hidden"));$("#"+b.dataset.tab).classList.remove("hidden");if(b.dataset.tab==="wantedTab")renderWanted();if(b.dataset.tab==="fedinaTab")renderFedinaFromSearch()}));
 }
 async function init(){
@@ -20,8 +41,15 @@ async function init(){
  if(!configured()){$("#configWarning").classList.remove("hidden");$("#loginPanel").classList.add("hidden");return}
  state.db=window.supabase.createClient(window.LC_SUPABASE_URL,window.LC_SUPABASE_KEY,{auth:{persistSession:true,autoRefreshToken:true}});
  const{data}=await state.db.auth.getSession();state.session=data.session;showAuth(!!state.session);
- state.db.auth.onAuthStateChange(async(_e,s)=>{state.session=s;showAuth(!!s);if(s)await loadAll()});
- if(state.session)await loadAll();
+ state.db.auth.onAuthStateChange((_e,s)=>{
+  const previousId=state.session?.user?.id;
+  state.session=s;
+  if(!s){state.officerName=null;showAuth(false);return;}
+  if(previousId!==s.user?.id||!state.officerName){
+   setTimeout(async()=>{if(await loadOfficerName())await loadAll()},0);
+  }
+ });
+ if(state.session&&await loadOfficerName())await loadAll();
 }
 async function login(e){e.preventDefault();notice("");const{error}=await state.db.auth.signInWithPassword({email:$("#loginEmail").value.trim(),password:$("#loginPassword").value});if(error)notice("Accesso non riuscito: "+error.message,"error")}
 function populateOffenseSelect(){const s=$("#offenseSelect");s.innerHTML='<option value="">Seleziona un reato...</option>';const g={};(window.LC_OFFENSES||[]).forEach(o=>(g[o.category]??=[]).push(o));Object.entries(g).forEach(([cat,items])=>{const og=document.createElement("optgroup");og.label=cat;items.forEach(o=>{const op=document.createElement("option");op.value=o.code;op.textContent=`${o.code} — ${o.name} • ${money(o.fine)} • ${o.jail_minutes} min${o.capital_punishment?" • PENA CAPITALE":""}`;og.appendChild(op)});s.appendChild(og)})}
@@ -30,7 +58,7 @@ function renderSelected(){const tb=$("#selectedOffensesBody");tb.innerHTML="";le
 async function loadAll(){notice("Aggiornamento archivio...");const[a,b,c,d]=await Promise.all([state.db.from("citizens").select("*").order("full_name"),state.db.from("cases").select("*").order("occurred_at",{ascending:false}),state.db.from("case_offenses").select("*").order("created_at",{ascending:false}),state.db.from("wanted_closures").select("*").order("closed_at",{ascending:false})]);const e=a.error||b.error||c.error||d.error;if(e){notice("Errore database: "+e.message,"error");return}state.citizens=a.data||[];state.cases=b.data||[];state.rows=c.data||[];state.closures=d.data||[];await loadPhotoUrls();populateCitizens();renderWanted();renderFedinaFromSearch();notice("")}
 function populateCitizens(){const dl=$("#citizensList");dl.innerHTML="";state.citizens.forEach(c=>{const o=document.createElement("option");o.value=c.full_name;o.label=c.registry_code?`${c.full_name} (${c.registry_code})`:c.full_name;dl.appendChild(o)});const s=$("#fedinaCitizen"),cur=s.value;s.innerHTML='<option value="">Seleziona un cittadino...</option>';state.citizens.forEach(c=>{const o=document.createElement("option");o.value=c.id;o.textContent=c.registry_code?`${c.full_name} — ${c.registry_code}`:c.full_name;s.appendChild(o)});if([...s.options].some(o=>o.value===cur))s.value=cur}
 async function getCitizen(){const name=$("#citizenName").value.trim();if(!name)throw Error("Inserisci il nome del cittadino.");const ex=state.citizens.find(c=>c.full_name.toLocaleLowerCase("it")===name.toLocaleLowerCase("it"));if(ex)return ex;const{data,error}=await state.db.from("citizens").insert({full_name:name,registry_code:$("#registryCode").value.trim()||null,alias:$("#citizenAlias").value.trim()||null}).select().single();if(error)throw error;return data}
-async function saveCase(){try{notice("");if(!state.selectedOffenses.length)throw Error("Aggiungi almeno un reato.");const officer=$("#officerName").value.trim();if(!officer)throw Error("Inserisci il nome dello sceriffo.");localStorage.setItem("lc_officer_name",officer);const citizen=await getCitizen();const when=$("#occurredAt").value?new Date($("#occurredAt").value).toISOString():new Date().toISOString();const{data:cas,error}=await state.db.from("cases").insert({citizen_id:citizen.id,officer_name:officer,occurred_at:when,notes:$("#caseNotes").value.trim()||null}).select().single();if(error)throw error;const rows=state.selectedOffenses.map(o=>({case_id:cas.id,offense_code:o.code,offense_name:o.name,category:o.category,description:o.description,fine:o.fine,jail_minutes:o.jail_minutes,capital_punishment:o.capital_punishment,is_paid:false}));const r=await state.db.from("case_offenses").insert(rows);if(r.error)throw r.error;const img=$("#casePhoto")?.files?.[0];if(img){try{await uploadCasePhoto(cas.id,citizen.id,img)}catch(photoError){await loadAll();notice("Verbale salvato, ma fotografia NON caricata: "+photoError.message,"error");return}}state.selectedOffenses=[];renderSelected();["citizenName","registryCode","citizenAlias","caseNotes"].forEach(id=>$("#"+id).value="");$("#offenseSelect").value="";if($("#casePhoto"))$("#casePhoto").value="";await loadAll();notice("Verbale registrato correttamente.","success")}catch(e){notice(e.message||String(e),"error")}}
+async function saveCase(){try{notice("");if(!state.selectedOffenses.length)throw Error("Aggiungi almeno un reato.");const officer=state.officerName;if(!state.session||!officer)throw Error("Identità dello sceriffo non verificata. Effettua nuovamente l’accesso.");const citizen=await getCitizen();const when=$("#occurredAt").value?new Date($("#occurredAt").value).toISOString():new Date().toISOString();const{data:cas,error}=await state.db.from("cases").insert({citizen_id:citizen.id,officer_name:officer,occurred_at:when,notes:$("#caseNotes").value.trim()||null}).select().single();if(error)throw error;const rows=state.selectedOffenses.map(o=>({case_id:cas.id,offense_code:o.code,offense_name:o.name,category:o.category,description:o.description,fine:o.fine,jail_minutes:o.jail_minutes,capital_punishment:o.capital_punishment,is_paid:false}));const r=await state.db.from("case_offenses").insert(rows);if(r.error)throw r.error;const img=$("#casePhoto")?.files?.[0];if(img){try{await uploadCasePhoto(cas.id,citizen.id,img)}catch(photoError){await loadAll();notice("Verbale salvato, ma fotografia NON caricata: "+photoError.message,"error");return}}state.selectedOffenses=[];renderSelected();["citizenName","registryCode","citizenAlias","caseNotes"].forEach(id=>$("#"+id).value="");$("#offenseSelect").value="";if($("#casePhoto"))$("#casePhoto").value="";await loadAll();notice("Verbale registrato correttamente.","success")}catch(e){notice(e.message||String(e),"error")}}
 
 async function uploadCasePhoto(caseId,citizenId,file){
  const accepted={"image/jpeg":"jpg","image/png":"png","image/webp":"webp"};
