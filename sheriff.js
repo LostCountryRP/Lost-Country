@@ -1,7 +1,7 @@
 // LOST COUNTRY RP — versione con nome sceriffo da Supabase (2026-10-22)
 (()=>{"use strict";
 const $=s=>document.querySelector(s),$$=s=>Array.from(document.querySelectorAll(s));
-const state={db:null,session:null,citizens:[],cases:[],rows:[],selectedOffenses:[],closures:[],photoUrls:{},officerName:null};
+const state={db:null,session:null,citizens:[],cases:[],rows:[],selectedOffenses:[],closures:[],photoUrls:{},officerName:null,isAdmin:false};
 const configured=()=>window.LC_SUPABASE_URL&&window.LC_SUPABASE_KEY&&!window.LC_SUPABASE_URL.includes("INSERISCI")&&!window.LC_SUPABASE_KEY.includes("INSERISCI");
 const money=n=>"$"+Number(n||0).toLocaleString("it-IT",{maximumFractionDigits:0});
 const fmtDate=v=>v?new Date(v).toLocaleString("it-IT"):"—";
@@ -17,7 +17,7 @@ function showAuth(ok){
  if(ok&&state.session?.user)$("#sessionUser").textContent=state.session.user.email||"Utente autenticato";
 }
 async function loadOfficerName(){
- state.officerName=null;showAuth(!!state.session);
+ state.officerName=null;state.isAdmin=false;showAuth(!!state.session);
  if(!state.session)return false;
  const {data,error}=await state.db.rpc("current_sheriff_name");
  if(error||!data||!String(data).trim()){
@@ -26,6 +26,8 @@ async function loadOfficerName(){
   return false;
  }
  state.officerName=String(data).trim();
+ const adminCheck=await state.db.rpc("is_sheriff_admin");
+ state.isAdmin=!adminCheck.error&&adminCheck.data===true;
  showAuth(true);
  return true;
 }
@@ -44,7 +46,7 @@ async function init(){
  state.db.auth.onAuthStateChange((_e,s)=>{
   const previousId=state.session?.user?.id;
   state.session=s;
-  if(!s){state.officerName=null;showAuth(false);return;}
+  if(!s){state.officerName=null;state.isAdmin=false;showAuth(false);return;}
   if(previousId!==s.user?.id||!state.officerName){
    setTimeout(async()=>{if(await loadOfficerName())await loadAll()},0);
   }
@@ -117,9 +119,41 @@ function renderWanted(){
 function openFedina(id){$("#fedinaCitizen").value=id;$$(".tab-btn").forEach(b=>b.classList.toggle("active",b.dataset.tab==="fedinaTab"));$$(".tab-panel").forEach(p=>p.classList.toggle("hidden",p.id!=="fedinaTab"));renderFedina(id);window.scrollTo({top:document.querySelector(".tabs").offsetTop-20,behavior:"smooth"})}
 function renderFedinaFromSearch(){renderFedina($("#fedinaCitizen").value)}
 function renderFedina(id){const b=$("#fedinaResults");b.innerHTML="";if(!id){b.innerHTML='<div class="empty-state">Seleziona un cittadino per visualizzare la fedina.</div>';return}const c=state.citizens.find(x=>x.id===id);if(!c)return;const st=stats(id),bs=isWantedActive(id)?bountyStatus(activeBounty(id)):{label:"Nessuna ricerca attiva",cls:"status-free"},sum=document.createElement("div");sum.className="app-card";sum.innerHTML=`${photoForCitizen(id)?photoHtml(photoForCitizen(id),"fedina-photo"):""}<h3>${esc(c.full_name)}</h3><p><span class="wanted-status ${bs.cls}">${bs.label}</span></p><div class="totals"><div class="total-box">Pendenti<strong>${money(st.pendingFine)}</strong></div><div class="total-box">Totale storico<strong>${money(st.totalFine)}</strong></div><div class="total-box">Prigione<strong>${st.totalJail} min</strong></div></div>`;b.appendChild(sum);
+ if(state.isAdmin){
+   const adminControls=document.createElement("div");
+   adminControls.className="case-card";
+   adminControls.innerHTML='<strong>Amministrazione archivio</strong><p>Operazione irreversibile: cancella cittadino, verbali, reati, multe e storico delle ricerche. Le fotografie associate saranno eliminate dallo Storage.</p><button type="button" class="btn-danger btn-small" id="deleteCitizenRecordBtn">Elimina definitivamente questa fedina</button>';
+   b.appendChild(adminControls);
+   adminControls.querySelector("#deleteCitizenRecordBtn").addEventListener("click",()=>deleteCitizenRecord(id));
+ }
  const history=state.closures.filter(x=>x.citizen_id===id);
  if(history.length){const h=document.createElement("div");h.className="case-card";h.innerHTML=`<strong>Storico chiusure ricerche</strong>${history.map(x=>`<p>${fmtDate(x.closed_at)} — ${esc(x.reason.replaceAll("_"," "))}: ${esc(x.notes||"")}</p>`).join("")}`;b.appendChild(h)}
  st.cases.forEach(ca=>{const d=document.createElement("div");d.className="case-card";d.innerHTML=`<div class="case-head"><strong>${fmtDate(ca.occurred_at)}</strong><span>Sceriffo: ${esc(ca.officer_name)}</span></div>${ca.notes?`<p>${esc(ca.notes)}</p>`:""}${ca.photo_path?photoHtml(ca.photo_path,"case-photo"):""}${caseRows(ca.id).map(r=>`<div class="offense-row ${r.is_paid?"paid":""}"><div class="offense-meta"><strong>${esc(r.offense_code)} — ${esc(r.offense_name)}</strong><br>${money(r.fine)} • ${r.jail_minutes} min${r.capital_punishment?'<span class="capital-flag"> • PENA CAPITALE</span>':""} • <strong>${r.is_paid?"PAGATO":"PENDENTE"}</strong></div><button class="${r.is_paid?"btn-secondary":"btn-success"} btn-small" data-t="${r.id}" data-paid="${r.is_paid?1:0}">${r.is_paid?"Rendi pendente":"Segna pagato"}</button></div>`).join("")}`;b.appendChild(d)});b.querySelectorAll("[data-t]").forEach(x=>x.onclick=()=>togglePaid(x.dataset.t,x.dataset.paid==="1"))}
+async function deleteCitizenRecord(id){
+ if(!state.session||!state.isAdmin){notice("Operazione riservata all'amministratore.","error");return}
+ const citizen=state.citizens.find(x=>x.id===id);if(!citizen)return;
+ const st=stats(id);
+ const first=confirm(`ELIMINAZIONE DEFINITIVA\n\nCittadino: ${citizen.full_name}\nVerbali: ${st.cases.length}\nReati: ${st.rows.length}\nMulte storiche: ${money(st.totalFine)}\n\nSaranno cancellati anche chiusure WANTED e foto. Vuoi continuare?`);
+ if(!first)return;
+ const typed=prompt(`SECONDA CONFERMA\nScrivi esattamente il nome del cittadino per autorizzare l'eliminazione:\n${citizen.full_name}`);
+ if(typed===null)return;
+ if(typed.trim()!==citizen.full_name){notice("Nome non corrispondente: eliminazione annullata.","error");return}
+ const btn=$("#deleteCitizenRecordBtn");if(btn)btn.disabled=true;
+ try{
+  const {data,error}=await state.db.rpc("admin_delete_citizen",{p_citizen_id:id,p_confirm_name:typed.trim()});
+  if(error)throw error;
+  const paths=Array.isArray(data?.photo_paths)?data.photo_paths:[];
+  let photoError=null;
+  if(paths.length){
+   const removed=await state.db.storage.from("wanted-photos").remove(paths);
+   if(removed.error)photoError=removed.error.message;
+  }
+  $("#fedinaCitizen").value="";
+  await loadAll();
+  if(photoError){notice(`Fedina eliminata dal database, ma ${paths.length} fotografie potrebbero rimanere nello Storage. Percorsi: ${paths.join(", ")}. Errore: ${photoError}`,"error")}
+  else notice(`Fedina di ${citizen.full_name} eliminata. ${paths.length} fotografie da Storage gestite; operazione registrata.`,"success");
+ }catch(e){if(btn)btn.disabled=false;notice("Eliminazione NON completata: "+(e.message||String(e)),"error")}
+}
 async function togglePaid(id,paid){const payload=paid?{is_paid:false,paid_at:null,paid_by:null}:{is_paid:true,paid_at:new Date().toISOString(),paid_by:state.session.user.id};const{error}=await state.db.from("case_offenses").update(payload).eq("id",id);if(error){notice("Errore aggiornamento: "+error.message,"error");return}await loadAll()}
 async function payAll(id){const st=stats(id),ids=st.rows.filter(r=>!r.is_paid&&Number(r.fine)>0).map(r=>r.id);if(!ids.length||!confirm(`Segnare come pagate tutte le multe pendenti (${money(st.pendingFine)})?`))return;const{error}=await state.db.from("case_offenses").update({is_paid:true,paid_at:new Date().toISOString(),paid_by:state.session.user.id}).in("id",ids);if(error){notice("Errore pagamento: "+error.message,"error");return}await loadAll();notice("Multe segnate come pagate.","success")}
 document.addEventListener("DOMContentLoaded",()=>{const d=new Date();d.setMinutes(d.getMinutes()-d.getTimezoneOffset());$("#occurredAt").value=d.toISOString().slice(0,16);renderSelected();init()});
