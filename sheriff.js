@@ -14,6 +14,7 @@ function showAuth(ok){
  const field=$("#officerName");
  if(field){field.readOnly=true;field.setAttribute("aria-readonly","true");field.title="Nome assegnato automaticamente dall’account sceriffo";field.autocomplete="off";field.value=ok?(state.officerName||"Caricamento nome sceriffo..."):"";}
  const save=$("#saveCaseBtn");if(save)save.disabled=!ok||!state.officerName;
+ const adminBtn=$("#adminBtn");if(adminBtn){adminBtn.classList.toggle("hidden",!(ok&&state.isAdmin));adminBtn.hidden=!(ok&&state.isAdmin);}
  if(ok&&state.session?.user)$("#sessionUser").textContent=state.session.user.email||"Utente autenticato";
 }
 async function loadOfficerName(){
@@ -33,6 +34,7 @@ async function loadOfficerName(){
 }
 function bind(){
  $("#loginForm").addEventListener("submit",login);$("#logoutBtn").addEventListener("click",()=>state.db.auth.signOut());
+ const adminBtn=$("#adminBtn");if(adminBtn)adminBtn.addEventListener("click",()=>{if(state.session&&state.isAdmin)window.location.href="admin-sceriffi.html";});
  $("#addOffenseBtn").addEventListener("click",addOffense);$("#saveCaseBtn").addEventListener("click",saveCase);$("#refreshBtn").addEventListener("click",loadAll);
  $("#fedinaCitizen").addEventListener("change",renderFedinaFromSearch);$("#fedinaSearchBtn").addEventListener("click",renderFedinaFromSearch);$("#wantedSearch").addEventListener("input",renderWanted);
 
