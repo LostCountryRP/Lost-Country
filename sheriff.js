@@ -35,6 +35,7 @@ async function loadOfficerName(){
 function bind(){
  $("#loginForm").addEventListener("submit",login);$("#logoutBtn").addEventListener("click",()=>state.db.auth.signOut());
  const adminBtn=$("#adminBtn");if(adminBtn)adminBtn.addEventListener("click",()=>{if(state.session&&state.isAdmin)window.location.href="admin-sceriffi.html";});
+ $("#offenseSearch").addEventListener("input",populateOffenseSelect);
  $("#addOffenseBtn").addEventListener("click",addOffense);$("#saveCaseBtn").addEventListener("click",saveCase);$("#refreshBtn").addEventListener("click",loadAll);
  $("#fedinaCitizen").addEventListener("change",renderFedinaFromSearch);$("#fedinaSearchBtn").addEventListener("click",renderFedinaFromSearch);$("#wantedSearch").addEventListener("input",renderWanted);
 
@@ -56,8 +57,27 @@ async function init(){
  if(state.session&&await loadOfficerName())await loadAll();
 }
 async function login(e){e.preventDefault();notice("");const{error}=await state.db.auth.signInWithPassword({email:$("#loginEmail").value.trim(),password:$("#loginPassword").value});if(error)notice("Accesso non riuscito: "+error.message,"error")}
-function populateOffenseSelect(){const s=$("#offenseSelect");s.innerHTML='<option value="">Seleziona un reato...</option>';const g={};(window.LC_OFFENSES||[]).forEach(o=>(g[o.category]??=[]).push(o));Object.entries(g).forEach(([cat,items])=>{const og=document.createElement("optgroup");og.label=cat;items.forEach(o=>{const op=document.createElement("option");op.value=o.code;op.textContent=`${o.code} — ${o.name} • ${money(o.fine)} • ${o.jail_minutes} min${o.capital_punishment?" • PENA CAPITALE":""}`;og.appendChild(op)});s.appendChild(og)})}
-function addOffense(){const o=(window.LC_OFFENSES||[]).find(x=>x.code===$("#offenseSelect").value);if(!o)return;state.selectedOffenses.push({...o,tempId:crypto.randomUUID()});renderSelected()}
+function populateOffenseSelect(){
+ const s=$("#offenseSelect"),search=$("#offenseSearch");
+ const normalize=t=>String(t??"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLocaleLowerCase("it");
+ const q=normalize(search?.value.trim()||"");
+ const previous=s.value;
+ s.innerHTML='<option value="">'+(q?'Seleziona un reato tra i risultati...':'Seleziona un reato...')+'</option>';
+ const groups={};let matches=0;
+ (window.LC_OFFENSES||[]).forEach(o=>{
+  if(q&&!normalize(`${o.code} ${o.name} ${o.category} ${o.description||""}`).includes(q))return;
+  (groups[o.category]??=[]).push(o);matches++;
+ });
+ Object.entries(groups).forEach(([cat,items])=>{
+  const og=document.createElement("optgroup");og.label=cat;
+  items.forEach(o=>{const op=document.createElement("option");op.value=o.code;op.textContent=`${o.code} — ${o.name} • ${money(o.fine)} • ${o.jail_minutes} min${o.capital_punishment?" • PENA CAPITALE":""}`;og.appendChild(op)});
+  s.appendChild(og);
+ });
+ if(previous&&[...s.options].some(o=>o.value===previous))s.value=previous;
+ const count=$("#offenseSearchCount");if(count)count.textContent=q?(matches?`${matches} reati trovati`:'Nessun reato trovato. Prova con un altro termine.'):'Cerca per nome, codice o categoria.';
+}
+
+function addOffense(){const o=(window.LC_OFFENSES||[]).find(x=>x.code===$("#offenseSelect").value);if(!o)return;state.selectedOffenses.push({...o,tempId:crypto.randomUUID()});renderSelected();$("#offenseSearch").value="";populateOffenseSelect()}
 function renderSelected(){const tb=$("#selectedOffensesBody");tb.innerHTML="";let f=0,j=0,c=false;state.selectedOffenses.forEach(o=>{f+=+o.fine;j+=+o.jail_minutes;c||=!!o.capital_punishment;const tr=document.createElement("tr");tr.innerHTML=`<td><strong>${esc(o.code)}</strong><br>${esc(o.name)}</td><td class="money">${money(o.fine)}</td><td>${o.jail_minutes} min${o.capital_punishment?'<span class="capital-flag">PENA CAPITALE</span>':""}</td><td class="center"><button class="btn-danger btn-small" data-r="${o.tempId}">Rimuovi</button></td>`;tb.appendChild(tr)});tb.querySelectorAll("[data-r]").forEach(b=>b.onclick=()=>{state.selectedOffenses=state.selectedOffenses.filter(o=>o.tempId!==b.dataset.r);renderSelected()});$("#totalFine").textContent=money(f);$("#totalJail").textContent=j+" min";$("#capitalWarning").classList.toggle("hidden",!c);$("#selectedEmpty").classList.toggle("hidden",state.selectedOffenses.length>0)}
 async function loadAll(){notice("Aggiornamento archivio...");const[a,b,c,d]=await Promise.all([state.db.from("citizens").select("*").order("full_name"),state.db.from("cases").select("*").order("occurred_at",{ascending:false}),state.db.from("case_offenses").select("*").order("created_at",{ascending:false}),state.db.from("wanted_closures").select("*").order("closed_at",{ascending:false})]);const e=a.error||b.error||c.error||d.error;if(e){notice("Errore database: "+e.message,"error");return}state.citizens=a.data||[];state.cases=b.data||[];state.rows=c.data||[];state.closures=d.data||[];await loadPhotoUrls();populateCitizens();renderWanted();renderFedinaFromSearch();notice("")}
 function populateCitizens(){const dl=$("#citizensList");dl.innerHTML="";state.citizens.forEach(c=>{const o=document.createElement("option");o.value=c.full_name;o.label=c.registry_code?`${c.full_name} (${c.registry_code})`:c.full_name;dl.appendChild(o)});const s=$("#fedinaCitizen"),cur=s.value;s.innerHTML='<option value="">Seleziona un cittadino...</option>';state.citizens.forEach(c=>{const o=document.createElement("option");o.value=c.id;o.textContent=c.registry_code?`${c.full_name} — ${c.registry_code}`:c.full_name;s.appendChild(o)});if([...s.options].some(o=>o.value===cur))s.value=cur}
