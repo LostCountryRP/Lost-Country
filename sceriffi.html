@@ -9,7 +9,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="supabase-config.js"></script>
 <script src="offenses-data.js"></script>
-<script defer src="sheriff.js?v=20261022-search1"></script>
+<script defer src="sheriff.js?v=20261022-soglie500v11"></script>
 <script defer>document.addEventListener("DOMContentLoaded",()=>{const m={"#newCaseTab":"newCaseTab","#fedinaTab":"fedinaTab","#wantedTab":"wantedTab"};document.querySelectorAll(".side-nav a").forEach(a=>{const tab=m[a.getAttribute("href")];if(!tab)return;a.addEventListener("click",e=>{const b=document.querySelector(`.tab-btn[data-tab="${tab}"]`);if(b){e.preventDefault();b.click();document.getElementById(tab)?.scrollIntoView({behavior:"smooth",block:"start"});}});});});</script>
 </head>
 <body class="page-sceriffi">
@@ -143,6 +143,7 @@ Connesso come: <strong id="sessionUser"></strong>
 <div class="total-box">Multa totale<strong id="totalFine">$0</strong></div>
 <div class="total-box">Prigione totale<strong id="totalJail">0 min</strong></div>
 </div>
+<div class="case-card" aria-live="polite"><strong>⚖️ Fascia di ricercabilità per i reati selezionati</strong><p><span id="bountyPreview" class="wanted-status status-free">$0 — Cittadino Libero</span></p><small>Questa è una stima relativa ai soli reati selezionati. La taglia effettiva tiene conto anche delle multe pendenti già registrate e delle ricerche chiuse.</small></div>
 <div class="notice error hidden" id="capitalWarning">
 ⚖️ Il verbale contiene almeno un reato con <strong>PENA CAPITALE</strong>.
 </div>
@@ -174,6 +175,17 @@ La taglia attiva è calcolata sulle <strong>multe ancora pendenti</strong>.
 <button class="btn-secondary" onclick="document.getElementById('wantedSearch').value='';document.getElementById('wantedSearch').dispatchEvent(new Event('input'));" type="button">
 Mostra tutti
 </button>
+</div>
+<div class="case-card" aria-label="Soglie delle taglie">
+<strong>⚖️ Soglie ufficiali delle taglie</strong>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(185px,1fr));gap:8px;margin-top:10px">
+<div><strong>Da $0 a $499,99</strong><div>Cittadino libero</div></div>
+<div><strong>Da $500 a $999,99</strong><div>🔴 Ricercato — VIVO</div></div>
+<div><strong>Da $1.000 a $1.499,99</strong><div>🔥 Federale — VIVO</div></div>
+<div><strong>Da $1.500 a $1.999,99</strong><div>☠️ Federale — MORTO</div></div>
+<div><strong>Da $2.000 in su</strong><div>👑 Nemico Pubblico №1</div></div>
+</div>
+<small>Calcolo automatico in base alle multe non pagate dei verbali successivi all'ultima chiusura della ricerca.</small>
 </div>
 <div class="wanted-grid" id="wantedGrid"></div>
 </div>
