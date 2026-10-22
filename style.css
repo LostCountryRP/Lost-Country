@@ -1659,3 +1659,71 @@ body.page-penale .side-nav{
     background-image:url('barra-legno-unica-chiara.png') !important;
   }
 }
+
+
+/* =============================================================
+   LOST COUNTRY — V10 / REVISIONE MIRATA 2026-10-22
+   Desktop: barra superiore sticky; textures senza deformazione.
+   Mobile: navigazione normale senza sovrapposizioni.
+   ============================================================= */
+
+/* La topbar deve rimanere all'interno della colonna principale.
+   Evitare un overflow sul contenitore che impedirebbe sticky. */
+@media (min-width:821px){
+  .site-shell{align-items:stretch !important;}
+  .site-main{position:relative !important; min-width:0 !important; overflow:visible !important;}
+  .site-main > .top-nav{
+    position:sticky !important;
+    top:0 !important;
+    z-index:100 !important;
+    background-color:#5b2a0d !important;
+    background-image:url('barra-legno-unica-chiara.png') !important;
+    background-position:center center !important;
+    background-repeat:no-repeat !important;
+    /* Preserva le proporzioni del legno, evitando 100% 100%. */
+    background-size:cover !important;
+    background-blend-mode:normal !important;
+    isolation:isolate;
+  }
+  /* Niente fascia scura supplementare in cima ai contenuti. */
+  .site-main > .parchment-page{position:relative; z-index:1;}
+  .parchment-content [id],.law-section{scroll-margin-top:calc(var(--lc-topbar,120px) + 18px);}
+
+  .western-sidebar{
+    position:sticky !important;
+    top:0 !important;
+    background-color:#351306 !important;
+    background-image:url('sidebar-legno-home-esatto.png') !important;
+    background-position:center top !important;
+    background-repeat:repeat-y !important;
+    background-size:100% auto !important;
+  }
+  .sidebar-brand{
+    background-size:100% auto !important;
+    background-position:center top !important;
+    background-repeat:no-repeat !important;
+  }
+  .western-sidebar::after{
+    background-image:url('sidebar-fondo-home-esatto-v3.png') !important;
+    background-size:100% auto !important;
+    background-position:center bottom !important;
+    background-repeat:no-repeat !important;
+    border-top:0 !important;
+  }
+  /* Rimuove solo la banda scura artificiale sotto il logo. */
+  .sidebar-brand::after{display:none !important;}
+}
+
+@media (min-width:821px) and (max-width:1120px){
+  .site-main > .top-nav{top:0 !important;}
+  .parchment-content [id],.law-section{scroll-margin-top:135px;}
+}
+
+@media (max-width:820px){
+  .site-shell{align-items:initial !important;}
+  .site-main{overflow:visible !important;}
+  .site-main > .top-nav{position:relative !important;top:auto !important;z-index:25 !important;}
+  .western-sidebar{position:relative !important;width:100% !important;height:auto !important;min-height:0 !important;padding:9px 10px 10px !important;background-size:cover !important;}
+  .western-sidebar::after,.sidebar-brand{display:none !important;}
+  .side-nav{height:auto !important;flex-direction:row !important;overflow-x:auto !important;overflow-y:hidden !important;}
+}
