@@ -31,13 +31,13 @@
     const row = button.closest("tr");
     const email = row?.cells?.[1]?.textContent?.trim();
     if (!userId || !email || email === "—") return show("Email account non disponibile.", true);
-    const entered = window.prompt(`Eliminazione DEFINITIVA di ${email}.\n\nPer confermare, scrivi esattamente l'email dell'account:`);
+    const entered = window.prompt(`Rimozione dell’accesso di ${email}.\n\nPer confermare, scrivi esattamente l'email dell'account:`);
     if (entered === null) return;
     if (entered.trim().toLowerCase() !== email.toLowerCase()) return show("Conferma non corrispondente: nessun account eliminato.", true);
-    if (!window.confirm(`Confermi l'eliminazione DEFINITIVA dell'account ${email}? L'accesso verrà revocato.`)) return;
+    if (!window.confirm(`Confermi la rimozione dell’account ${email}? Se esistono dati storici, l’utente verrà bloccato senza cancellare i verbali.`)) return;
     busy = true;
     button.disabled = true;
-    show("Eliminazione in corso...");
+    show("Verifica storico e rimozione accesso in corso...");
     try {
       const db = window.supabase.createClient(window.LC_SUPABASE_URL, window.LC_SUPABASE_KEY, {
         auth: { persistSession: true, autoRefreshToken: true },
@@ -47,10 +47,16 @@
       const { data, error } = await db.functions.invoke("delete-sheriff-account", {
         body: { userId, confirmEmail: email },
       });
-      if (error) throw error;
+      if (error) {
+        const details = error.context && typeof error.context.json === "function"
+          ? await error.context.json().catch(() => null) : null;
+        throw new Error(details?.error || error.message);
+      }
       if (!data?.ok) throw new Error(data?.error || "Eliminazione non confermata dal server.");
       row?.remove();
-      show(`Account ${email} eliminato. Aggiorna elenco per verificare.`);
+      show(data.action === "deleted"
+        ? `Account ${email} eliminato definitivamente.`
+        : `Account ${email} bloccato e autorizzazione revocata. Verbali conservati.`);
     } catch (err) {
       show("Errore: " + (err?.message || String(err)), true);
       button.disabled = false;
