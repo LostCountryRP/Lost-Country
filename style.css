@@ -1727,3 +1727,40 @@ body.page-penale .side-nav{
   .western-sidebar::after,.sidebar-brand{display:none !important;}
   .side-nav{height:auto !important;flex-direction:row !important;overflow-x:auto !important;overflow-y:hidden !important;}
 }
+
+
+/* ============================================================
+  LOST COUNTRY V11 — NAVIGAZIONE UNIFICATA, TUTTE LE PAGINE
+  Tutte le pagine condividono: logo, legno, pulsante, footer.
+  Nessun ritaglio 100% 100% di una sidebar completa.
+============================================================ */
+:root{--lc-sidebar:230px;--lc-nav-logo-height:195px;--lc-nav-footer-height:112px;--lc-nav-top-height:120px;}
+@media(min-width:821px){
+  .site-shell{display:grid!important;grid-template-columns:var(--lc-sidebar) minmax(0,1fr)!important;align-items:stretch!important;}
+  .site-shell > .western-sidebar{position:sticky!important;top:0!important;align-self:start!important;left:auto!important;width:100%!important;height:100vh!important;min-height:0!important;max-height:100vh!important;box-sizing:border-box!important;padding:var(--lc-nav-logo-height) 10px var(--lc-nav-footer-height)!important;background-color:#3e210f!important;background-image:url('legno.png')!important;background-repeat:repeat!important;background-position:center top!important;background-size:320px auto!important;border-left:0!important;border-right:3px solid #1b0b05!important;box-shadow:inset 0 0 14px rgba(18,7,2,.25),7px 0 12px rgba(0,0,0,.22)!important;}
+  .western-sidebar::before{content:none!important;display:none!important}
+  .western-sidebar::after{content:''!important;display:block!important;position:absolute!important;left:0!important;right:0!important;bottom:0!important;height:var(--lc-nav-footer-height)!important;background:url('sidebar-fondo-home-esatto-v3.png') center bottom/100% auto no-repeat!important;border:0!important;z-index:1!important;pointer-events:none!important;opacity:1!important}
+  .western-sidebar .sidebar-brand{position:absolute!important;display:flex!important;align-items:center!important;justify-content:center!important;top:0!important;left:0!important;right:0!important;width:100%!important;height:var(--lc-nav-logo-height)!important;min-height:0!important;padding:6px 10px!important;margin:0!important;border:0!important;background:none!important;box-shadow:none!important;z-index:2!important;overflow:hidden!important;}
+  .western-sidebar .sidebar-brand::after{content:none!important;display:none!important}
+  .western-sidebar .sidebar-brand img{display:block!important;visibility:visible!important;opacity:1!important;width:100%!important;max-width:200px!important;height:calc(var(--lc-nav-logo-height) - 16px)!important;max-height:none!important;object-fit:contain!important;filter:drop-shadow(0 3px 4px rgba(0,0,0,.65))!important;}
+  .western-sidebar .sidebar-brand span{display:none!important}
+  .western-sidebar .side-nav{height:calc(100vh - var(--lc-nav-logo-height) - var(--lc-nav-footer-height))!important;max-height:none!important;display:flex!important;flex-direction:column!important;align-items:stretch!important;justify-content:flex-start!important;gap:7px!important;padding:5px 0 10px!important;margin:0!important;overflow-y:auto!important;overflow-x:hidden!important;scrollbar-width:thin!important;z-index:3!important;}
+  .western-sidebar .side-nav a{box-sizing:border-box!important;flex:0 0 55px!important;width:100%!important;min-height:55px!important;max-height:55px!important;display:grid!important;grid-template-columns:30px minmax(0,1fr)!important;align-items:center!important;gap:4px!important;margin:0!important;padding:6px 8px!important;background-color:#d6a867!important;background-image:url('bottone-pergamena-home-match.png')!important;background-position:center!important;background-size:100% 100%!important;background-repeat:no-repeat!important;clip-path:none!important;border:0!important;box-shadow:none!important;border-radius:0!important;color:#231207!important;font-size:.70rem!important;line-height:1.14!important;text-shadow:0 1px rgba(255,235,189,.38)!important;overflow:hidden!important;}
+  .western-sidebar .side-nav a .side-icon{display:flex!important;width:28px!important;height:28px!important;align-items:center!important;justify-content:center!important;flex:none!important;color:#321909!important;filter:none!important;font-size:1.15rem!important;background-image:none!important;}
+  .western-sidebar .side-nav a .side-icon svg,.western-sidebar .side-nav a .side-icon img{display:none!important}
+  .western-sidebar .side-nav a .side-text{min-width:0;overflow-wrap:anywhere;}
+  .western-sidebar .side-nav a:hover,.western-sidebar .side-nav a:focus-visible{transform:translateX(2px)!important;filter:brightness(1.08)!important;}
+  .site-main{position:relative!important;min-width:0!important;}
+  .site-main > .top-nav{position:sticky!important;top:0!important;z-index:90!important;background-color:#5b2a0d!important;background-image:url('barra-legno-unica-chiara.png')!important;background-size:cover!important;background-position:center!important;background-repeat:no-repeat!important;}
+  .site-main .parchment-page [id]{scroll-margin-top:calc(var(--lc-topbar,120px) + 16px)!important;}
+}
+/* Identica grafica anche su schermi piccoli; menu orizzontale e non sticky */
+@media(max-width:820px){
+  .site-shell{display:block!important;}
+  .western-sidebar{position:relative!important;top:auto!important;left:auto!important;width:100%!important;height:auto!important;min-height:0!important;padding:9px!important;background:#3e210f url('legno.png') center/320px auto repeat!important;}
+  .western-sidebar::before,.western-sidebar::after,.sidebar-brand{display:none!important;}
+  .western-sidebar .side-nav{display:flex!important;flex-direction:row!important;height:auto!important;max-height:none!important;gap:7px!important;overflow-x:auto!important;overflow-y:hidden!important;padding:3px 0!important;}
+  .western-sidebar .side-nav a{flex:0 0 165px!important;width:165px!important;min-height:50px!important;max-height:none!important;display:grid!important;grid-template-columns:25px 1fr!important;align-items:center!important;background:url('bottone-pergamena-home-match.png') center/100% 100% no-repeat!important;color:#231207!important;font-size:.68rem!important;}
+  .western-sidebar .side-nav a .side-icon{display:flex!important;align-items:center!important;justify-content:center!important;background-image:none!important;filter:none!important;}
+  .site-main > .top-nav{position:relative!important;top:auto!important;background:#5b2a0d url('barra-legno-unica-chiara.png') center/cover no-repeat!important;}
+}
