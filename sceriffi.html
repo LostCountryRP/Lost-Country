@@ -9,7 +9,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="supabase-config.js"></script>
 <script src="offenses-data.js"></script>
-<script defer src="sheriff.js?v=20261022-adminfix2"></script>
+<script defer src="sheriff.js?v=20261022-search1"></script>
 <script defer>document.addEventListener("DOMContentLoaded",()=>{const m={"#newCaseTab":"newCaseTab","#fedinaTab":"fedinaTab","#wantedTab":"wantedTab"};document.querySelectorAll(".side-nav a").forEach(a=>{const tab=m[a.getAttribute("href")];if(!tab)return;a.addEventListener("click",e=>{const b=document.querySelector(`.tab-btn[data-tab="${tab}"]`);if(b){e.preventDefault();b.click();document.getElementById(tab)?.scrollIntoView({behavior:"smooth",block:"start"});}});});});</script>
 </head>
 <body class="page-sceriffi">
@@ -115,6 +115,11 @@ Connesso come: <strong id="sessionUser"></strong>
 </div>
 </div>
 <h3>Reati contestati</h3>
+<div style="margin-bottom:12px">
+<label for="offenseSearch">🔎 Ricerca rapida nel Codice Penale</label>
+<input id="offenseSearch" type="search" placeholder="Cerca per nome o codice (es. furto, ART-9)..." autocomplete="off" aria-describedby="offenseSearchCount" style="width:100%;box-sizing:border-box"/>
+<small id="offenseSearchCount" aria-live="polite">Cerca per nome, codice o categoria.</small>
+</div>
 <div class="offense-picker">
 <div>
 <label>Codice Penale</label>
