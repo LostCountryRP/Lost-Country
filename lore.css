@@ -15,9 +15,10 @@
 .flipbook{
   position:relative;
   width:100%;
-  max-width:960px;
+  width:min(100%, 1050px, calc(76vh * 1.24));
+  max-width:1050px;
   margin:0 auto;
-  aspect-ratio:1 / 1;
+  aspect-ratio:1.24 / 1;
   perspective:2200px;
   isolation:isolate;
 }
@@ -36,7 +37,9 @@
   bottom:0;
   width:50%;
   overflow:hidden;
-  background:#120906;
+  background:
+    linear-gradient(90deg,rgba(91,48,20,.18),transparent 12%,transparent 88%,rgba(91,48,20,.18)),
+    #d8b37b;
   z-index:2;
 }
 .book-left{
@@ -54,19 +57,30 @@
   inset:0;
   overflow:hidden;
 }
+.spread-crop{
+  background:
+    linear-gradient(90deg,rgba(67,31,10,.08),transparent 12%,transparent 88%,rgba(67,31,10,.08)),
+    #d8b37b;
+}
 .spread-crop img{
   position:absolute;
   top:0;
-  width:200%;
+  width:auto;
   height:100%;
   max-width:none;
   display:block;
-  object-fit:fill;
+  object-fit:contain;
   user-select:none;
   -webkit-user-drag:none;
 }
-.spread-left img{left:0}
-.spread-right img{left:-100%}
+.spread-left img{
+  left:100%;
+  transform:translateX(-50%);
+}
+.spread-right img{
+  left:0;
+  transform:translateX(-50%);
+}
 .book-spine{
   position:absolute;
   top:3%;
@@ -106,7 +120,7 @@
   overflow:hidden;
   backface-visibility:hidden;
   -webkit-backface-visibility:hidden;
-  background:#120906;
+  background:#d8b37b;
   will-change:transform,opacity;
 }
 .leaf-front{
@@ -264,4 +278,33 @@
   .flipbook-toolbar button{padding:8px 9px}
   #pageCounter{min-width:116px}
   .book-spine{width:8px}
+}
+
+/* Adattamento del libro alla visualizzazione browser al 100% */
+@media(min-width:901px){
+  .page-lore .lore-book-page{
+    padding-top:24px;
+    padding-bottom:36px;
+  }
+  .flipbook-shell{
+    grid-template-columns:54px minmax(0,1fr) 54px;
+    gap:14px;
+  }
+  .flipbook-arrow{
+    width:50px;
+    height:76px;
+    font-size:3rem;
+  }
+  .flipbook-toolbar{
+    margin-top:16px;
+  }
+  .flipbook-dots{
+    margin-top:12px;
+  }
+}
+@media(max-width:900px){
+  .flipbook{
+    width:min(100%, calc(68vh * 1.18));
+    aspect-ratio:1.18 / 1;
+  }
 }
