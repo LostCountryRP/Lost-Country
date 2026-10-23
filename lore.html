@@ -5,16 +5,18 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Lore - Lost Country</title>
 <link rel="stylesheet" href="style.css?v=20261022-coordinato">
-<link rel="stylesheet" href="lore.css?v=20261023-bookonly">
+<link rel="stylesheet" href="lore.css?v=20261023-flipbook">
+<script defer src="lore.js?v=20261023-flipbook"></script>
 </head>
 <body class="page-lore">
 <div class="site-shell">
 <aside class="western-sidebar">
 <a class="sidebar-brand" href="index.html"><img src="logo.png" alt="Lost Country Roleplay"><span>Lost Country Roleplay</span></a>
 <nav class="side-nav" aria-label="Lore">
-<a href="#libro"><span class="side-icon">☠</span><span>Il Mietitore di Sangue</span></a>
+<a href="#libro"><span class="side-icon">☠</span><span>Libro Lore</span></a>
 </nav>
 </aside>
+
 <main class="site-main">
 <nav class="top-nav" aria-label="Navigazione principale">
 <a href="index.html">Regolamento</a>
@@ -23,13 +25,36 @@
 <a class="active-page" href="lore.html">Lore</a>
 <a href="sceriffi.html">Gestione Sceriffi</a>
 </nav>
+
 <section class="parchment-page lore-book-page" id="libro">
 <div class="parchment-content lore-book-wrap">
-<img
-  src="LORE/IL_MIETITORE_DI_SANGUE/lost-country-lore-book.webp"
-  alt="Libro Lore Lost Country - Il Mietitore di Sangue"
-  class="lore-book-image"
-/>
+
+<div class="flipbook-shell">
+<button class="flipbook-arrow flipbook-prev" id="prevPage" type="button" aria-label="Pagina precedente">‹</button>
+
+<div class="flipbook" id="flipbook" aria-live="polite">
+<div class="book-shadow"></div>
+
+<div class="book-page book-page-base">
+<img id="basePage" src="LORE/IL_MIETITORE_DI_SANGUE/pages/01_copertina.webp" alt="Pagina 1 del libro Lore">
+</div>
+
+<div class="book-page book-page-turn" id="turnPage" aria-hidden="true">
+<img id="turnPageImg" src="" alt="">
+</div>
+</div>
+
+<button class="flipbook-arrow flipbook-next" id="nextPage" type="button" aria-label="Pagina successiva">›</button>
+</div>
+
+<div class="flipbook-toolbar">
+<button id="firstPage" type="button">« Prima</button>
+<span id="pageCounter">1 / 8</span>
+<button id="lastPage" type="button">Ultima »</button>
+</div>
+
+<div class="flipbook-dots" id="pageDots" aria-label="Selezione pagina"></div>
+
 </div>
 </section>
 </main>
