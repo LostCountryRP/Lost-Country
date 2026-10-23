@@ -167,3 +167,52 @@
   .lore-section-label{margin-bottom:-30px;padding-left:12px}
   .lore-evidence-stamp{float:none;display:inline-block;margin:0 0 18px}
 }
+
+
+/* Libro Lore — Il Mietitore di Sangue */
+.lore-place{
+  font-family:"Special Elite",monospace;
+  text-transform:uppercase;
+  letter-spacing:1.5px;
+  color:#6f3218;
+  border-bottom:1px solid rgba(91,42,15,.28);
+  padding-bottom:10px;
+  margin-bottom:22px;
+}
+.lore-chapter blockquote{
+  margin:22px auto;
+  padding:18px 22px;
+  text-align:center;
+  font-size:1.15rem;
+  font-style:italic;
+  font-weight:700;
+  color:#42160d;
+  background:rgba(111,31,22,.07);
+  border-left:0;
+  border-top:1px solid rgba(94,34,19,.32);
+  border-bottom:1px solid rgba(94,34,19,.32);
+}
+.lore-warning{
+  margin:24px 0 8px!important;
+  text-align:center;
+  font-family:"Rye",Georgia,serif;
+  font-size:clamp(1.35rem,3vw,2rem)!important;
+  letter-spacing:3px;
+  color:#791f17;
+  text-shadow:0 1px 0 rgba(255,238,205,.45);
+}
+.lore-epilogue .lore-story-card{
+  border-left-color:#35130c;
+  text-align:center;
+}
+.lore-final-word{
+  margin:34px 0 10px!important;
+  text-align:center;
+  font-family:"Rye",Georgia,serif;
+  font-size:clamp(2rem,5vw,3.3rem)!important;
+  letter-spacing:5px;
+  color:#67150f;
+}
+.lore-chapter{
+  scroll-margin-top:26px;
+}
