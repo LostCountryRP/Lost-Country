@@ -161,17 +161,19 @@ async function updateCaseEnforcement(caseId,kind){
 }
 async function closeWanted(id){
  const c=state.citizens.find(x=>x.id===id);if(!c)return;
- const reason=prompt(`Motivo chiusura ricerca per ${c.full_name}:\n1 = Pena scontata\n2 = Multe pagate\n3 = Taglia riscossa\n4 = Provvedimento amministrativo`);
- const reasons={"1":"pena_scontata","2":"multe_pagate","3":"taglia_riscossa","4":"provvedimento"};
+ const reason=prompt("Motivo della chiusura della ricerca per "+c.full_name+":");
  if(reason===null)return;
- if(!reasons[reason]){notice("Seleziona un motivo da 1 a 4.","error");return}
- const notes=prompt("Annotazioni obbligatorie: chi ha effettuato l'arresto/pagamento/riscossione? Numero pratica?");
- if(notes===null)return;
- if(!notes.trim()){notice("Inserisci una motivazione verificabile prima di chiudere.","error");return}
- if(!confirm(`Confermi la CHIUSURA della ricerca per ${c.full_name}? La fedina penale e le eventuali multe NON saranno cancellate.`))return;
- const {error}=await state.db.from("wanted_closures").insert({citizen_id:id,reason:reasons[reason],notes:notes.trim(),closed_by:state.session.user.id});
- if(error){notice("Chiusura non riuscita: "+error.message,"error");return}
- await loadAll();notice(`Ricerca chiusa per ${c.full_name}. La fedina e lo storico sono conservati.`,"success");
+ if(reason.trim().length<5){notice("Motivazione obbligatoria.","error");return}
+ const selected=citizenCases(id).filter(x=>pendingCase(x.id).evading);
+ if(!selected.length){notice("Nessuna segnalazione attiva.","error");return}
+ if(!confirm("Chiudere la ricerca per "+c.full_name+"? Le multe e le detenzioni pendenti restano registrate."))return;
+ for(const ca of selected){
+  const old=enforcementFor(ca.id);
+  const {error}=await state.db.from("case_enforcement").update({evading:false,updated_by:state.session.user.id,updated_at:new Date().toISOString()}).eq("case_id",ca.id);
+  if(error){notice("Chiusura non completata: "+error.message,"error");await loadAll();return}
+ }
+ const {error}=await state.db.from("wanted_closures").insert({citizen_id:id,reason:"provvedimento",notes:reason.trim(),closed_by:state.session.user.id});
+ await loadAll();notice(error?"Segnalazioni chiuse, ma errore nello storico: "+error.message:"Ricerca chiusa; precedenti e pene pendenti conservati.",error?"error":"success");
 }
 
 const caseRows=id=>state.rows.filter(r=>r.case_id===id),citizenCases=id=>state.cases.filter(c=>c.citizen_id===id);
