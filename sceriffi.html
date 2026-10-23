@@ -8,7 +8,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="supabase-config.js"></script>
 <script src="offenses-data.js?v=20261023-codice61"></script>
-<script defer src="sheriff.js?v=20261023-codice60"></script>
+<script defer src="sheriff.js?v=20261023-sanzioni-discrezionali"></script>
 <script defer>document.addEventListener("DOMContentLoaded",()=>{const m={"#newCaseTab":"newCaseTab","#fedinaTab":"fedinaTab","#wantedTab":"wantedTab"};document.querySelectorAll(".side-nav a").forEach(a=>{const tab=m[a.getAttribute("href")];if(!tab)return;a.addEventListener("click",e=>{const b=document.querySelector(`.tab-btn[data-tab="${tab}"]`);if(b){e.preventDefault();b.click();document.getElementById(tab)?.scrollIntoView({behavior:"smooth",block:"start"});}});});});</script>
 </head>
 <body class="page-sceriffi">
@@ -138,6 +138,17 @@ Connesso come: <strong id="sessionUser"></strong>
 </thead>
 <tbody id="selectedOffensesBody"></tbody>
 </table>
+<div class="case-card" aria-label="Adeguamento discrezionale delle sanzioni">
+<h3>⚖️ Adeguamento motivato delle pene</h3>
+<p>Lo Sceriffo può applicare uno sconto oppure una maggiorazione alla multa totale, e fino a 10 minuti aggiuntivi al verbale. Le sanzioni previste dal Codice Penale non cambiano.</p>
+<div class="form-grid">
+<div><label for="fineDiscount">Sconto multa (0–50%)</label><input id="fineDiscount" type="number" min="0" max="50" step="5" value="0"/></div>
+<div><label for="fineIncrease">Maggiorazione multa (0–50%)</label><input id="fineIncrease" type="number" min="0" max="50" step="5" value="0"/></div>
+<div><label for="jailIncrease">Detenzione aggiuntiva (0–10 minuti)</label><input id="jailIncrease" type="number" min="0" max="10" step="1" value="0"/></div>
+<div class="full"><label for="sanctionReason">Motivazione obbligatoria in caso di variazione</label><textarea id="sanctionReason" maxlength="1000" placeholder="Es. collaborazione, confessione, particolare gravità dei fatti..."></textarea></div>
+</div>
+<small id="adjustmentError" style="color:#a52a2a" role="alert"></small>
+</div>
 <div class="totals">
 <div class="total-box">Multa totale<strong id="totalFine">$0</strong></div>
 <div class="total-box">Prigione totale<strong id="totalJail">0 min</strong></div>
