@@ -65,12 +65,12 @@ function populateOffenseSelect(){
  s.innerHTML='<option value="">'+(q?'Seleziona un reato tra i risultati...':'Seleziona un reato...')+'</option>';
  const groups={};let matches=0;
  (window.LC_OFFENSES||[]).forEach(o=>{
-  if(q&&!normalize(`${o.code} ${o.name} ${o.category} ${o.description||""}`).includes(q))return;
+  if(q&&!normalize(`${o.code} art. ${o.article} articolo ${o.article} ${o.name} ${o.category} ${o.description||""}`).includes(q))return;
   (groups[o.category]??=[]).push(o);matches++;
  });
  Object.entries(groups).forEach(([cat,items])=>{
   const og=document.createElement("optgroup");og.label=cat;
-  items.forEach(o=>{const op=document.createElement("option");op.value=o.code;op.textContent=`${o.code} — ${o.name} • ${money(o.fine)} • ${o.jail_minutes} min${o.capital_punishment?" • PENA CAPITALE":""}`;og.appendChild(op)});
+  items.forEach(o=>{const op=document.createElement("option");op.value=o.code;op.textContent=`Art. ${o.article} — ${o.name} [${o.code}] • ${money(o.fine)} • ${o.jail_minutes} min${o.capital_punishment?" • PENA CAPITALE":""}`;og.appendChild(op)});
   s.appendChild(og);
  });
  if(previous&&[...s.options].some(o=>o.value===previous))s.value=previous;
