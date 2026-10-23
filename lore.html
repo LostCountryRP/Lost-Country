@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Lore - Lost Country</title>
 <link rel="stylesheet" href="style.css?v=20261022-coordinato">
-<link rel="stylesheet" href="lore.css?v=20261023-flipbook">
-<script defer src="lore.js?v=20261023-flipbook"></script>
+<link rel="stylesheet" href="lore.css?v=20261023-doppia-pagina">
+<script defer src="lore.js?v=20261023-doppia-pagina"></script>
 </head>
 <body class="page-lore">
 <div class="site-shell">
@@ -30,30 +30,36 @@
 <div class="parchment-content lore-book-wrap">
 
 <div class="flipbook-shell">
-<button class="flipbook-arrow flipbook-prev" id="prevPage" type="button" aria-label="Pagina precedente">‹</button>
+<button class="flipbook-arrow flipbook-prev" id="prevPage" type="button" aria-label="Pagine precedenti">‹</button>
 
 <div class="flipbook" id="flipbook" aria-live="polite">
 <div class="book-shadow"></div>
 
-<div class="book-page book-page-base">
-<img id="basePage" src="LORE/IL_MIETITORE_DI_SANGUE/pages/01_copertina.webp" alt="Pagina 1 del libro Lore">
+<div class="book-half book-left" aria-hidden="true">
+  <div class="spread-crop spread-left"><img id="leftPage" src="LORE/IL_MIETITORE_DI_SANGUE/pages/01_copertina.webp" alt=""></div>
+</div>
+<div class="book-half book-right" aria-hidden="true">
+  <div class="spread-crop spread-right"><img id="rightPage" src="LORE/IL_MIETITORE_DI_SANGUE/pages/01_copertina.webp" alt=""></div>
 </div>
 
-<div class="book-page book-page-turn" id="turnPage" aria-hidden="true">
-<img id="turnPageImg" src="" alt="">
-</div>
+<div class="book-leaf" id="turnLeaf" aria-hidden="true">
+  <div class="leaf-face leaf-front"><div class="spread-crop spread-right"><img id="leafFront" src="" alt=""></div></div>
+  <div class="leaf-face leaf-back"><div class="spread-crop spread-left"><img id="leafBack" src="" alt=""></div></div>
 </div>
 
-<button class="flipbook-arrow flipbook-next" id="nextPage" type="button" aria-label="Pagina successiva">›</button>
+<div class="book-spine" aria-hidden="true"></div>
+</div>
+
+<button class="flipbook-arrow flipbook-next" id="nextPage" type="button" aria-label="Pagine successive">›</button>
 </div>
 
 <div class="flipbook-toolbar">
 <button id="firstPage" type="button">« Prima</button>
-<span id="pageCounter">1 / 8</span>
+<span id="pageCounter">Pagine 1–2 / 16</span>
 <button id="lastPage" type="button">Ultima »</button>
 </div>
 
-<div class="flipbook-dots" id="pageDots" aria-label="Selezione pagina"></div>
+<div class="flipbook-dots" id="pageDots" aria-label="Selezione apertura"></div>
 
 </div>
 </section>
