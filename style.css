@@ -744,3 +744,133 @@ button{border:none;border-radius:7px;padding:10px 14px;cursor:pointer;font-famil
 .parchment-content,.sheriff-shell,.admin-shell {min-width:0;}
 /* La grafica del pannello contiene il logo; il link sovrapposto resta accessibile. */
 .western-sidebar .sidebar-brand:focus-visible {outline:2px solid #f2ce82;outline-offset:-3px;}
+
+/* ===== VISUALIZZAZIONE STANDARD 100% — 23-10-2026 ===== */
+@media (min-width:821px){
+  :root{
+    --lc-sidebar-width:210px;
+    --lc-bar-height:94px;
+  }
+
+  body{
+    font-size:16px;
+    line-height:1.48;
+  }
+
+  .lc-shell,
+  .site-shell{
+    width:min(100%,1460px);
+    grid-template-columns:var(--lc-sidebar-width) minmax(0,1fr);
+  }
+
+  .lc-topbar,
+  .site-main>.top-nav{
+    min-height:var(--lc-bar-height);
+    padding:8px 10px;
+    gap:7px;
+  }
+
+  .lc-topbar nav{
+    gap:7px;
+  }
+
+  .lc-topbar a,
+  .site-main>.top-nav a{
+    flex:0 1 168px;
+    min-height:46px;
+    height:46px;
+    padding:5px 9px;
+    font-size:.70rem;
+  }
+
+  .lc-sidebar-menu,
+  .western-sidebar .side-nav{
+    gap:5px;
+    padding-left:10px;
+    padding-right:10px;
+  }
+
+  .lc-side-btn,
+  .western-sidebar .side-nav a{
+    min-height:47px;
+    padding:7px 8px;
+    font-size:.65rem;
+  }
+
+  body:not(.page-home) .parchment-page{
+    padding:36px 40px 58px;
+  }
+
+  body:not(.page-home) h1,
+  body:not(.page-home) .app-title{
+    font-size:clamp(1.9rem,2.8vw,3rem);
+    line-height:1.08;
+  }
+
+  body:not(.page-home) h2{
+    font-size:1.52rem;
+  }
+
+  body:not(.page-home) h3{
+    font-size:1.28rem;
+  }
+
+  body:not(.page-home) .parchment-content p,
+  body:not(.page-home) .parchment-content li{
+    font-size:1.04rem;
+    line-height:1.48;
+  }
+
+  .lc-paper{
+    padding:34px 42px 58px;
+  }
+
+  .hero h1{
+    font-size:3rem !important;
+  }
+
+  .hero-subtitle{
+    font-size:1.55rem !important;
+  }
+
+  .welcome{
+    max-width:720px !important;
+    margin-top:16px;
+    padding:12px 16px 14px !important;
+  }
+
+  .welcome p{
+    font-size:1.08rem !important;
+    line-height:1.42 !important;
+  }
+
+  .rule-section h2{
+    margin:23px 0 13px;
+    padding:11px 16px 10px;
+    font-size:1.48rem !important;
+  }
+
+  .rule-section h3{
+    margin:20px 0 7px;
+    font-size:1.24rem !important;
+  }
+
+  .rule-section p,
+  .rule-section li{
+    font-size:1.08rem !important;
+    line-height:1.42 !important;
+  }
+
+  .lc-footer{
+    margin-top:30px;
+    font-size:1.05rem !important;
+    line-height:1.4 !important;
+  }
+
+  .law-card,
+  .auth-card,
+  .app-card,
+  .admin-card{
+    padding:17px 18px;
+  }
+}
