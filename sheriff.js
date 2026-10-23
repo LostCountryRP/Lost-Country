@@ -137,14 +137,28 @@ async function loadPhotoUrls(){
 function photoForCitizen(id){return citizenCases(id).filter(c=>c.photo_path).sort((a,b)=>new Date(b.occurred_at)-new Date(a.occurred_at))[0]?.photo_path||null}
 function photoHtml(path,cls="wanted-photo") {const url=state.photoUrls[path];return url?`<img class="${cls}" alt="Foto segnaletica allegata al verbale" src="${esc(url)}" loading="lazy">`:""}
 function lastClosure(id){return state.closures.find(x=>x.citizen_id===id)||null}
-function activeBounty(id){
- const last=lastClosure(id);
- const relevant=last?citizenCases(id).filter(c=>new Date(c.created_at)>new Date(last.closed_at)):citizenCases(id);
- const caseIds=new Set(relevant.map(c=>c.id));
- return state.rows.filter(r=>caseIds.has(r.case_id)&&!r.is_paid).reduce((a,r)=>a+Number(r.fine||0),0);
+function enforcementFor(id){return state.enforcement.find(x=>x.case_id===id)||null}
+function pendingCase(id){
+ const rr=state.rows.filter(r=>r.case_id===id),e=enforcementFor(id);
+ return {fine:rr.filter(r=>!r.is_paid).reduce((n,r)=>n+Number(r.fine||0),0),
+ jailPending:rr.some(r=>Number(r.jail_minutes)>0)&&!e?.jail_served,
+ evading:!!e?.evading};
 }
-function isWantedActive(id){return activeBounty(id)>=500}
-
+function activeBounty(id){return citizenCases(id).filter(c=>pendingCase(c.id).evading).reduce((n,c)=>n+pendingCase(c.id).fine,0)}
+function isWantedActive(id){return citizenCases(id).some(c=>{const p=pendingCase(c.id);return p.evading&&(p.fine>0||p.jailPending)})}
+async function updateCaseEnforcement(caseId,kind){
+ const e=enforcementFor(caseId)||{},p=pendingCase(caseId);
+ const value={case_id:caseId,jail_served:!!e.jail_served,jail_served_at:e.jail_served_at||null,evading:!!e.evading,evading_reason:e.evading_reason||null,updated_at:new Date().toISOString(),updated_by:state.session.user.id};
+ if(kind==="served"){value.jail_served=!value.jail_served;value.jail_served_at=value.jail_served?new Date().toISOString():null}
+ if(kind==="evading"){
+  if(!value.evading&&p.fine===0&&!p.jailPending){notice("Nessuna pena pendente.","error");return}
+  if(!value.evading){const reason=prompt("Motivo della fuga, del rifiuto o della mancata presentazione:");if(reason===null)return;if(reason.trim().length<5){notice("Motivazione insufficiente.","error");return}value.evading_reason=reason.trim()}
+  value.evading=!value.evading;
+ }
+ const {error}=await state.db.from("case_enforcement").upsert(value,{onConflict:"case_id"});
+ if(error){notice("Salvataggio stato pena non riuscito: "+error.message,"error");return}
+ await loadAll();notice("Stato pena aggiornato.","success");
+}
 async function closeWanted(id){
  const c=state.citizens.find(x=>x.id===id);if(!c)return;
  const reason=prompt(`Motivo chiusura ricerca per ${c.full_name}:\n1 = Pena scontata\n2 = Multe pagate\n3 = Taglia riscossa\n4 = Provvedimento amministrativo`);
