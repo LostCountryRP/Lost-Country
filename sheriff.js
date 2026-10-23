@@ -5,7 +5,7 @@ const state={db:null,session:null,citizens:[],cases:[],rows:[],selectedOffenses:
 const configured=()=>window.LC_SUPABASE_URL&&window.LC_SUPABASE_KEY&&!window.LC_SUPABASE_URL.includes("INSERISCI")&&!window.LC_SUPABASE_KEY.includes("INSERISCI");
 const money=n=>"$"+Number(n||0).toLocaleString("it-IT",{maximumFractionDigits:0});
 const fmtDate=v=>v?new Date(v).toLocaleString("it-IT"):"—";
-function bountyStatus(a){const n=Number(a||0);if(n<500)return{label:"Cittadino Libero",cls:"status-free"};if(n<1000)return{label:"🔴 RICERCATO: VIVO",cls:"status-wanted"};if(n<1500)return{label:"🔥 FEDERALE: VIVO",cls:"status-federal"};if(n<2000)return{label:"☠️ FEDERALE: MORTO",cls:"status-dead"};return{label:"👑 NEMICO PUBBLICO №1",cls:"status-enemy"}}
+function bountyStatus(a){const n=Number(a||0);if(n<500)return{label:"Cittadino Libero",cls:"status-free"};if(n<1000)return{label:"🔴 RICERCATO: VIVO",cls:"status-wanted"};if(n<2000)return{label:"🔥 FEDERALE: VIVO",cls:"status-federal"};return{label:"👑 NEMICO PUBBLICO №1 — VIVO",cls:"status-enemy"}}
 function notice(m,t=""){const b=$("#notice");b.textContent=m||"";b.className="notice"+(t?" "+t:"");b.classList.toggle("hidden",!m)}
 function esc(v){return String(v??"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;")}
 function showAuth(ok){
