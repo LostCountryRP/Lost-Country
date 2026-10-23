@@ -106,8 +106,8 @@ window.LC_OFFENSES = [
     "code": "LC26-061",
     "article": "11",
     "name": "Ricerca dell’oro senza licenza",
-    "description": "Chiunque eserciti attività di ricerca, estrazione o raccolta dell’oro senza regolare licenza o autorizzazione è responsabile del reato. Oltre alla sanzione pecuniaria, è prevista la confisca di tutto il materiale utilizzato o rinvenuto durante l’attività illecita.",
-    "fine": 50,
+    "description": "Chiunque eserciti attività di ricerca, estrazione o raccolta dell’oro senza regolare licenza o autorizzazione è responsabile del reato. È disposto il sequestro del materiale e delle attrezzature utilizzate per l’attività illecita.",
+    "fine": 100,
     "jail_minutes": 0,
     "capital_punishment": false,
     "category": "REATI CONTRO IL PATRIMONIO E LE ATTIVITÀ COMMERCIALI"
