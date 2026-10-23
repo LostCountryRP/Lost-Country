@@ -1,7 +1,7 @@
 (() => {
   'use strict';
 
-  const pages = [
+  const spreads = [
     'LORE/IL_MIETITORE_DI_SANGUE/pages/01_copertina.webp',
     'LORE/IL_MIETITORE_DI_SANGUE/pages/02_pagina.webp',
     'LORE/IL_MIETITORE_DI_SANGUE/pages/03_pagina.webp',
@@ -12,9 +12,11 @@
     'LORE/IL_MIETITORE_DI_SANGUE/pages/08_epilogo.webp'
   ];
 
-  const basePage = document.getElementById('basePage');
-  const turnPage = document.getElementById('turnPage');
-  const turnPageImg = document.getElementById('turnPageImg');
+  const leftPage = document.getElementById('leftPage');
+  const rightPage = document.getElementById('rightPage');
+  const turnLeaf = document.getElementById('turnLeaf');
+  const leafFront = document.getElementById('leafFront');
+  const leafBack = document.getElementById('leafBack');
   const prev = document.getElementById('prevPage');
   const next = document.getElementById('nextPage');
   const first = document.getElementById('firstPage');
@@ -27,91 +29,129 @@
   let animating = false;
   let touchStartX = 0;
 
-  pages.forEach((src) => {
+  spreads.forEach((src) => {
     const img = new Image();
     img.src = src;
   });
 
-  const dotButtons = pages.map((_, i) => {
+  const dotButtons = spreads.map((_, i) => {
     const button = document.createElement('button');
     button.type = 'button';
     button.className = 'flipbook-dot';
-    button.setAttribute('aria-label', 'Vai a pagina ' + (i + 1));
+    button.setAttribute('aria-label', 'Vai all\'apertura ' + (i + 1));
     button.addEventListener('click', () => goTo(i));
     dots.appendChild(button);
     return button;
   });
 
+  function pageRange(i) {
+    const firstPageNumber = (i * 2) + 1;
+    return `Pagine ${firstPageNumber}–${firstPageNumber + 1} / ${spreads.length * 2}`;
+  }
+
+  function setSpread(i) {
+    leftPage.src = spreads[i];
+    rightPage.src = spreads[i];
+  }
+
   function syncUi() {
-    basePage.src = pages[index];
-    basePage.alt = 'Pagina ' + (index + 1) + ' del libro Lore';
-    counter.textContent = (index + 1) + ' / ' + pages.length;
+    setSpread(index);
+    counter.textContent = pageRange(index);
     prev.disabled = index === 0;
-    next.disabled = index === pages.length - 1;
+    next.disabled = index === spreads.length - 1;
     first.disabled = index === 0;
-    last.disabled = index === pages.length - 1;
+    last.disabled = index === spreads.length - 1;
     dotButtons.forEach((dot, i) => dot.classList.toggle('active', i === index));
   }
 
-  function finish(newIndex) {
-    index = newIndex;
-    basePage.src = pages[index];
-    turnPage.className = 'book-page book-page-turn';
-    turnPageImg.src = '';
-    turnPage.style.visibility = '';
+  function resetLeaf() {
+    turnLeaf.className = 'book-leaf';
+    turnLeaf.style.visibility = '';
+    leafFront.src = '';
+    leafBack.src = '';
+  }
+
+  function finish(target) {
+    index = target;
+    setSpread(index);
+    resetLeaf();
     animating = false;
     syncUi();
   }
 
   function flipNext() {
-    if (animating || index >= pages.length - 1) return;
+    if (animating || index >= spreads.length - 1) return;
     animating = true;
     const target = index + 1;
-    basePage.src = pages[target];
-    turnPageImg.src = pages[index];
-    turnPage.style.visibility = 'visible';
-    turnPage.className = 'book-page book-page-turn flip-next';
-    window.setTimeout(() => finish(target), 720);
+
+    rightPage.src = spreads[target];
+    leftPage.src = spreads[index];
+
+    leafFront.src = spreads[index];
+    leafBack.src = spreads[target];
+    turnLeaf.style.visibility = 'visible';
+    turnLeaf.className = 'book-leaf flip-next';
+
+    window.setTimeout(() => finish(target), 820);
   }
 
   function flipPrev() {
     if (animating || index <= 0) return;
     animating = true;
     const target = index - 1;
-    basePage.src = pages[index];
-    turnPageImg.src = pages[target];
-    turnPage.style.visibility = 'visible';
-    turnPage.className = 'book-page book-page-turn flip-prev';
-    window.setTimeout(() => finish(target), 720);
+
+    leftPage.src = spreads[target];
+    rightPage.src = spreads[index];
+
+    leafFront.src = spreads[target];
+    leafBack.src = spreads[index];
+    turnLeaf.style.visibility = 'visible';
+    turnLeaf.className = 'book-leaf flip-prev';
+
+    window.setTimeout(() => finish(target), 820);
   }
 
   function goTo(target) {
-    if (animating || target === index || target < 0 || target >= pages.length) return;
+    if (animating || target === index || target < 0 || target >= spreads.length) return;
     if (target > index) {
-      basePage.src = pages[target];
-      turnPageImg.src = pages[index];
-      turnPage.style.visibility = 'visible';
-      turnPage.className = 'book-page book-page-turn flip-next';
+      flipNextTo(target);
     } else {
-      basePage.src = pages[index];
-      turnPageImg.src = pages[target];
-      turnPage.style.visibility = 'visible';
-      turnPage.className = 'book-page book-page-turn flip-prev';
+      flipPrevTo(target);
     }
+  }
+
+  function flipNextTo(target) {
     animating = true;
-    window.setTimeout(() => finish(target), 720);
+    rightPage.src = spreads[target];
+    leftPage.src = spreads[index];
+    leafFront.src = spreads[index];
+    leafBack.src = spreads[target];
+    turnLeaf.style.visibility = 'visible';
+    turnLeaf.className = 'book-leaf flip-next';
+    window.setTimeout(() => finish(target), 820);
+  }
+
+  function flipPrevTo(target) {
+    animating = true;
+    leftPage.src = spreads[target];
+    rightPage.src = spreads[index];
+    leafFront.src = spreads[target];
+    leafBack.src = spreads[index];
+    turnLeaf.style.visibility = 'visible';
+    turnLeaf.className = 'book-leaf flip-prev';
+    window.setTimeout(() => finish(target), 820);
   }
 
   prev.addEventListener('click', flipPrev);
   next.addEventListener('click', flipNext);
   first.addEventListener('click', () => goTo(0));
-  last.addEventListener('click', () => goTo(pages.length - 1));
+  last.addEventListener('click', () => goTo(spreads.length - 1));
 
   document.addEventListener('keydown', (event) => {
     if (event.key === 'ArrowRight' || event.key === 'PageDown') flipNext();
     if (event.key === 'ArrowLeft' || event.key === 'PageUp') flipPrev();
     if (event.key === 'Home') goTo(0);
-    if (event.key === 'End') goTo(pages.length - 1);
+    if (event.key === 'End') goTo(spreads.length - 1);
   });
 
   book.addEventListener('touchstart', (event) => {
