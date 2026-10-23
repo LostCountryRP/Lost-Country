@@ -8,7 +8,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="supabase-config.js"></script>
 <script src="offenses-data.js?v=20261023-codice61"></script>
-<script defer src="sheriff.js?v=20261023-sanzioni-discrezionali"></script>
+<script defer src="sheriff.js?v=20261023-soglie-solo-vivo"></script>
 <script defer>document.addEventListener("DOMContentLoaded",()=>{const m={"#newCaseTab":"newCaseTab","#fedinaTab":"fedinaTab","#wantedTab":"wantedTab"};document.querySelectorAll(".side-nav a").forEach(a=>{const tab=m[a.getAttribute("href")];if(!tab)return;a.addEventListener("click",e=>{const b=document.querySelector(`.tab-btn[data-tab="${tab}"]`);if(b){e.preventDefault();b.click();document.getElementById(tab)?.scrollIntoView({behavior:"smooth",block:"start"});}});});});</script>
 </head>
 <body class="page-sceriffi">
@@ -191,9 +191,8 @@ Mostra tutti
 <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(185px,1fr));gap:8px;margin-top:10px">
 <div><strong>Da $0 a $499,99</strong><div>Cittadino libero</div></div>
 <div><strong>Da $500 a $999,99</strong><div>🔴 Ricercato — VIVO</div></div>
-<div><strong>Da $1.000 a $1.499,99</strong><div>🔥 Federale — VIVO</div></div>
-<div><strong>Da $1.500 a $1.999,99</strong><div>☠️ Federale — MORTO</div></div>
-<div><strong>Da $2.000 in su</strong><div>👑 Nemico Pubblico №1</div></div>
+<div><strong>Da $1.000 a $1.999,99</strong><div>🔥 Federale — VIVO</div></div>
+<div><strong>Da $2.000 in su</strong><div>👑 Nemico Pubblico №1 — VIVO</div></div>
 </div>
 <small>Calcolo automatico in base alle multe non pagate dei verbali successivi all'ultima chiusura della ricerca.</small>
 </div>
