@@ -107,6 +107,7 @@
   backface-visibility:hidden;
   -webkit-backface-visibility:hidden;
   background:#120906;
+  will-change:transform,opacity;
 }
 .leaf-front{
   transform:rotateY(0deg);
@@ -120,21 +121,51 @@
 }
 .book-leaf.flip-next{
   visibility:visible;
-  animation:loreFlipNext .82s cubic-bezier(.22,.61,.36,1) forwards;
+  animation:loreFlipNext .56s cubic-bezier(.30,.65,.36,1) forwards;
 }
 .book-leaf.flip-prev{
   visibility:visible;
-  animation:loreFlipPrev .82s cubic-bezier(.22,.61,.36,1) forwards;
+  animation:loreFlipPrev .56s cubic-bezier(.30,.65,.36,1) forwards;
+}
+.book-leaf.flip-next .leaf-front{
+  animation:leafFrontOut .56s linear forwards;
+}
+.book-leaf.flip-next .leaf-back{
+  animation:leafBackIn .56s linear forwards;
+}
+.book-leaf.flip-prev .leaf-front{
+  animation:leafFrontIn .56s linear forwards;
+}
+.book-leaf.flip-prev .leaf-back{
+  animation:leafBackOut .56s linear forwards;
 }
 @keyframes loreFlipNext{
   0%{transform:rotateY(0deg);filter:brightness(1)}
-  45%{filter:brightness(.72)}
-  100%{transform:rotateY(-180deg);filter:brightness(.92)}
+  48%{filter:brightness(.72)}
+  52%{filter:brightness(.72)}
+  100%{transform:rotateY(-180deg);filter:brightness(.96)}
 }
 @keyframes loreFlipPrev{
-  0%{transform:rotateY(-180deg);filter:brightness(.92)}
-  55%{filter:brightness(.72)}
+  0%{transform:rotateY(-180deg);filter:brightness(.96)}
+  48%{filter:brightness(.72)}
+  52%{filter:brightness(.72)}
   100%{transform:rotateY(0deg);filter:brightness(1)}
+}
+@keyframes leafFrontOut{
+  0%,47%{opacity:1}
+  50%,100%{opacity:0}
+}
+@keyframes leafBackIn{
+  0%,50%{opacity:0}
+  53%,100%{opacity:1}
+}
+@keyframes leafFrontIn{
+  0%,50%{opacity:0}
+  53%,100%{opacity:1}
+}
+@keyframes leafBackOut{
+  0%,47%{opacity:1}
+  50%,100%{opacity:0}
 }
 .flipbook-arrow{
   width:58px;
