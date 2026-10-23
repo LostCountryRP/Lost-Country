@@ -25,6 +25,7 @@
   const dots = document.getElementById('pageDots');
   const book = document.getElementById('flipbook');
 
+  const FLIP_MS = 560;
   let index = 0;
   let animating = false;
   let touchStartX = 0;
@@ -79,67 +80,40 @@
     syncUi();
   }
 
-  function flipNext() {
-    if (animating || index >= spreads.length - 1) return;
+  function animateTo(target, direction) {
+    if (animating || target === index || target < 0 || target >= spreads.length) return;
     animating = true;
-    const target = index + 1;
 
-    rightPage.src = spreads[target];
-    leftPage.src = spreads[index];
+    if (direction === 'next') {
+      leftPage.src = spreads[target];
+      rightPage.src = spreads[target];
+      leafFront.src = spreads[index];
+      leafBack.src = spreads[target];
+      turnLeaf.className = 'book-leaf flip-next';
+    } else {
+      leftPage.src = spreads[target];
+      rightPage.src = spreads[target];
+      leafFront.src = spreads[target];
+      leafBack.src = spreads[index];
+      turnLeaf.className = 'book-leaf flip-prev';
+    }
 
-    leafFront.src = spreads[index];
-    leafBack.src = spreads[target];
     turnLeaf.style.visibility = 'visible';
-    turnLeaf.className = 'book-leaf flip-next';
+    window.setTimeout(() => finish(target), FLIP_MS);
+  }
 
-    window.setTimeout(() => finish(target), 820);
+  function flipNext() {
+    if (index >= spreads.length - 1) return;
+    animateTo(index + 1, 'next');
   }
 
   function flipPrev() {
-    if (animating || index <= 0) return;
-    animating = true;
-    const target = index - 1;
-
-    leftPage.src = spreads[target];
-    rightPage.src = spreads[index];
-
-    leafFront.src = spreads[target];
-    leafBack.src = spreads[index];
-    turnLeaf.style.visibility = 'visible';
-    turnLeaf.className = 'book-leaf flip-prev';
-
-    window.setTimeout(() => finish(target), 820);
+    if (index <= 0) return;
+    animateTo(index - 1, 'prev');
   }
 
   function goTo(target) {
-    if (animating || target === index || target < 0 || target >= spreads.length) return;
-    if (target > index) {
-      flipNextTo(target);
-    } else {
-      flipPrevTo(target);
-    }
-  }
-
-  function flipNextTo(target) {
-    animating = true;
-    rightPage.src = spreads[target];
-    leftPage.src = spreads[index];
-    leafFront.src = spreads[index];
-    leafBack.src = spreads[target];
-    turnLeaf.style.visibility = 'visible';
-    turnLeaf.className = 'book-leaf flip-next';
-    window.setTimeout(() => finish(target), 820);
-  }
-
-  function flipPrevTo(target) {
-    animating = true;
-    leftPage.src = spreads[target];
-    rightPage.src = spreads[index];
-    leafFront.src = spreads[target];
-    leafBack.src = spreads[index];
-    turnLeaf.style.visibility = 'visible';
-    turnLeaf.className = 'book-leaf flip-prev';
-    window.setTimeout(() => finish(target), 820);
+    animateTo(target, target > index ? 'next' : 'prev');
   }
 
   prev.addEventListener('click', flipPrev);
