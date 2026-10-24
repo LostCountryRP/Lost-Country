@@ -2410,3 +2410,19 @@ textarea:focus-visible{
     justify-content:flex-start;
   }
 }
+
+/* ===== ANGOLI MORBIDI PERGAMENA — 24-10-2026 ===== */
+.page-home .welcome,
+.page-home .rule-section-intro,
+.page-home .rule-content,
+.page-home .lc-footer{
+  border-radius:7px !important;
+}
+.page-home .rule-section > h2,
+.page-home .rule-section > h3{
+  border-radius:6px !important;
+}
+.page-home .rule-content .danger,
+.page-home .rule-content .success{
+  border-radius:4px !important;
+}
