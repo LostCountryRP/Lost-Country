@@ -187,8 +187,18 @@ function renderWanted(){
  .filter(x=>!q||x.citizen.full_name.toLocaleLowerCase("it").includes(q))
  .sort((a,b)=>activeBounty(b.citizen.id)-activeBounty(a.citizen.id));
  if(!rec.length){b.innerHTML='<div class="empty-state">Nessun ricercato attivo.</div>';return}
- rec.forEach(x=>{const s=bountyStatus(activeBounty(x.citizen.id)),d=document.createElement("div"),photo=photoForCitizen(x.citizen.id);d.className="wanted-card";
- d.innerHTML=`<div class="wanted-heading">WANTED</div>${photo?photoHtml(photo):'<div class="wanted-photo placeholder">FOTO NON DISPONIBILE</div>'}<h3>${esc(x.citizen.full_name)}</h3><span class="wanted-status ${s.cls}">${s.label}</span><p><strong>Taglia attiva:</strong> ${money(activeBounty(x.citizen.id))}</p><p><strong>Verbali:</strong> ${x.cases.length}</p><button class="btn-secondary btn-small" data-f="${x.citizen.id}">Apri fedina</button> <button class="btn-danger btn-small" data-close="${x.citizen.id}">Chiudi ricerca</button>`;b.appendChild(d)});
+ rec.forEach(x=>{
+  const amount=activeBounty(x.citizen.id),s=bountyStatus(amount),d=document.createElement("article"),photo=photoForCitizen(x.citizen.id);
+  d.className="wanted-card wanted-poster";
+  d.innerHTML=`<div class="wanted-poster-top"><span class="wanted-star" aria-hidden="true">★</span><div><div class="wanted-heading">WANTED</div><div class="wanted-subheading">RICERCATO NEL TERRITORIO DI LOST COUNTRY</div></div><span class="wanted-star" aria-hidden="true">★</span></div>
+  <div class="wanted-photo-frame">${photo?photoHtml(photo):'<div class="wanted-photo placeholder">FOTO NON DISPONIBILE</div>'}</div>
+  <h3 class="wanted-name">${esc(x.citizen.full_name)}</h3>
+  <div class="wanted-rank"><span class="wanted-status ${s.cls}">${s.label}</span></div>
+  <div class="wanted-bounty"><span>TAGLIA</span><strong>${money(amount)}</strong></div>
+  <div class="wanted-meta"><span><strong>Verbali</strong>${x.cases.length}</span><span><strong>Stato</strong>Ricerca attiva</span></div>
+  <div class="wanted-actions"><button class="btn-secondary btn-small" data-f="${x.citizen.id}">Apri fedina</button><button class="btn-danger btn-small" data-close="${x.citizen.id}">Chiudi ricerca</button></div>`;
+  b.appendChild(d)
+ });
  b.querySelectorAll("[data-f]").forEach(x=>x.onclick=()=>openFedina(x.dataset.f));
  b.querySelectorAll("[data-close]").forEach(x=>x.onclick=()=>closeWanted(x.dataset.close));
 }
