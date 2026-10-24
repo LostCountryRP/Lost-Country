@@ -12,6 +12,7 @@
     detail:{allowed:isAdmin,role:rights.role,sections:rights.sections||[]}
   }));
   window.LC_ADMIN_CAN = can;
+  window.LC_ADMIN_ROLE = () => rights.role;
   const config = {
     news:{
       table:"frontier_news",label:"Articoli del giornale",singular:"articolo",
