@@ -5,7 +5,13 @@
     auth:{persistSession:true,autoRefreshToken:true}
   });
   window.LC_ADMIN_DB = db;
-  const announce = allowed => document.dispatchEvent(new CustomEvent("lc-admin-state",{detail:{allowed}}));
+  let rights={role:"none",sections:[],legacy_sheriff_admin:false};
+  const root=()=>["super_admin","admin"].includes(rights.role);
+  const can=section=>Array.isArray(rights.sections)&&rights.sections.includes(section);
+  const announce = () => document.dispatchEvent(new CustomEvent("lc-admin-state",{
+    detail:{allowed:isAdmin,role:rights.role,sections:rights.sections||[]}
+  }));
+  window.LC_ADMIN_CAN = can;
   const config = {
     news:{
       table:"frontier_news",label:"Articoli del giornale",singular:"articolo",
@@ -58,32 +64,65 @@
   let isAdmin=false, section="news", rows=[], selected=null, busy=false;
   function goLogin() {
     isAdmin=false;
-    announce(false);
+    rights={role:"none",sections:[],legacy_sheriff_admin:false};
+    announce();
     $("hubWorkspace").hidden=true;
     $("hubLoginPanel").hidden=false;
     $("hubDenied").hidden=true;
   }
   function goDenied() {
     isAdmin=false;
-    announce(false);
+    rights={role:"none",sections:[],legacy_sheriff_admin:false};
+    announce();
     $("hubWorkspace").hidden=true;
     $("hubLoginPanel").hidden=true;
     $("hubDenied").hidden=false;
   }
+  function configureWorkspace() {
+    const isRoot=root();
+    const moderation=['news','business','events'].filter(can);
+    const allowedViews={
+      adminOverview:isRoot,adminServices:isRoot,adminPages:can('content'),
+      adminStaff:isRoot,adminSystem:isRoot,adminAudit:isRoot,
+      adminRoles:rights.role==='super_admin',adminModeration:moderation.length>0
+    };
+    Object.entries(allowedViews).forEach(([id,visible])=>{
+      const sectionNode=$(id);
+      if(sectionNode)sectionNode.hidden=!visible;
+      document.querySelectorAll('.side-nav a[href="#'+id+'"]').forEach(a=>a.hidden=!visible);
+    });
+    const sheriffOnly=document.querySelectorAll('[data-legacy-admin]');
+    sheriffOnly.forEach(node=>node.hidden=!rights.legacy_sheriff_admin);
+    section=moderation[0]||'news';
+    document.querySelectorAll(".hub-tab").forEach(btn=>{
+      const allowed=can(btn.dataset.section),active=allowed&&btn.dataset.section===section;
+      btn.hidden=!allowed;
+      btn.classList.toggle('active',active);
+      btn.setAttribute('aria-pressed',String(active));
+    });
+    const identity=$("hubRoleLabel");
+    if(identity)identity.textContent={
+      super_admin:"Super Amministratore",admin:"Amministratore",
+      section_manager:"Responsabile di sezione"
+    }[rights.role]||"";
+  }
   async function checkPermission() {
     const result=await db.auth.getUser();
     if(result.error || !result.data.user) {goLogin();return;}
-    const access=await db.rpc("is_sheriff_admin");
-    if(access.error) throw access.error;
-    if(access.data!==true) {goDenied();return;}
+    const access=await db.rpc("lc_my_portal_access");
+    if(access.error)throw access.error;
+    rights=access.data||{role:"none",sections:[],legacy_sheriff_admin:false};
+    if(rights.role==="none"||!Array.isArray(rights.sections)){goDenied();return;}
     isAdmin=true;
     $("hubLoginPanel").hidden=true;
     $("hubDenied").hidden=true;
     $("hubWorkspace").hidden=false;
     $("hubIdentity").textContent=result.data.user.email||"Amministratore";
-    announce(true);
+    configureWorkspace();
+    announce();
     $status("");
-    await Promise.all([stats(),loadData(),staffPermissions(),loadStaff()]);
+    await Promise.all([root()?stats():Promise.resolve(),can(section)?loadData():Promise.resolve(),
+      root()?staffPermissions():Promise.resolve(),root()?loadStaff():Promise.resolve()]);
   }
   async function login(e) {
     e.preventDefault();
@@ -113,7 +152,7 @@
     if(r.error) $(id).title="Dato non accessibile: "+r.error.message;
   }
   async function stats(){
-    if(!isAdmin)return;
+    if(!isAdmin||!root())return;
     const jobs=[
       count("frontier_news","hubStatNews"),
       count("commercial_registry","hubStatBusiness"),
@@ -132,6 +171,7 @@
     await Promise.allSettled(jobs);
   }
   async function staffPermissions() {
+    if(!root())return;
     await Promise.all([
       (async()=>{const r=await db.rpc("is_medical_staff");
         const node=$("hubMedicalPermission");
@@ -190,7 +230,7 @@
     }
   }
   async function loadData(){
-    if(!isAdmin)return;
+    if(!isAdmin||!can(section))return;
     selected=null;$("hubEditPanel").hidden=true;
     const conf=config[section];
     $("hubListTitle").textContent=conf.label;
@@ -200,7 +240,7 @@
     rows=r.data||[];renderList();
   }
   function setSection(next){
-    if(!config[next]||next===section)return;
+    if(!config[next]||!can(next)||next===section)return;
     section=next;
     $("hubFilter").value="";
     document.querySelectorAll(".hub-tab").forEach(btn=>{
@@ -261,7 +301,7 @@
   }
   async function save(e){
     e.preventDefault();
-    if(!isAdmin||!selected||busy||selected.section!==section)return;
+    if(!isAdmin||!can(section)||!selected||busy||selected.section!==section)return;
     const cfg=config[section];
     const changes={};
     for(const f of cfg.fields){
@@ -283,7 +323,7 @@
     finally{busy=false;$("hubSave").disabled=false;}
   }
   async function toggle(item){
-    if(!isAdmin||busy)return;
+    if(!isAdmin||!can(section)||busy)return;
     const conf=config[section],task=conf.action(item);
     if(!window.confirm("Confermi: "+task.label+"?\n\n"+item[conf.name]))return;
     busy=true;$status("Aggiornamento in corso…");
@@ -301,7 +341,7 @@
   };
   let staffBusy=false;
   async function loadStaff() {
-    if(!isAdmin)return;
+    if(!isAdmin||!root())return;
     await Promise.all(Object.entries(staffConfig).map(async([type,cfg])=>{
       const box=$(cfg.target);
       box.replaceChildren(node("div","hub-empty","Caricamento personale…"));
@@ -332,7 +372,7 @@
     }));
   }
   async function toggleStaff(type,person) {
-    if(!isAdmin||staffBusy)return;
+    if(!isAdmin||!root()||staffBusy)return;
     const cfg=staffConfig[type];
     const word=person.active?"sospendere":"riattivare";
     if(!window.confirm("Confermi di "+word+" il ruolo per "+person[cfg.name]+"?\n\nL'accesso dell'utente all'ufficio cambierà immediatamente alla prossima verifica."))return;
@@ -349,7 +389,7 @@
   }
   async function createStaff(e) {
     e.preventDefault();
-    if(!isAdmin||staffBusy)return;
+    if(!isAdmin||!root()||staffBusy)return;
     const cfg=staffConfig[$("hubStaffRole").value];
     if(!cfg)return;
     const name=$("hubStaffName").value.trim();
@@ -374,7 +414,7 @@
     $("hubLoginForm").addEventListener("submit",login);
     $("hubSignout").addEventListener("click",logout);
     $("hubDeniedLogout").addEventListener("click",logout);
-    $("hubReload").addEventListener("click",async()=>{await Promise.all([loadData(),stats(),staffPermissions(),loadStaff()]);$status("Dati aggiornati.")});
+    $("hubReload").addEventListener("click",async()=>{await checkPermission();$status("Dati e permessi aggiornati.")});
     $("hubFilter").addEventListener("input",renderList);
     $("hubRefreshList").addEventListener("click",loadData);
     document.querySelectorAll(".hub-tab").forEach(btn=>btn.addEventListener("click",()=>setSection(btn.dataset.section)));
