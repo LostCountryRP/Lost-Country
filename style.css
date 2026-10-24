@@ -3010,3 +3010,512 @@ body.news-modal-open{
     font-size:.63rem;
   }
 }
+
+/* ===== CARTELLE CLINICHE — 24-10-2026 ===== */
+.page-medico .medical-shell{
+  max-width:1120px;
+  margin:0 auto;
+}
+.page-medico .medical-hero{
+  text-align:center;
+  margin-bottom:24px;
+}
+.page-medico .medical-kicker,
+.page-medico .medical-section-kicker,
+.page-medico .medical-user-label{
+  margin:0 0 5px;
+  color:#683117;
+  font-family:"Special Elite",monospace;
+  font-size:.66rem;
+  font-weight:700;
+  letter-spacing:.12em;
+}
+.page-medico .medical-login-card{
+  max-width:760px;
+  margin:0 auto;
+}
+.page-medico .medical-userbar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  margin-bottom:14px;
+  padding:12px 14px;
+  background:rgba(245,219,176,.35);
+  border:1px solid rgba(93,43,13,.25);
+  border-radius:7px;
+}
+.page-medico .medical-userbar strong{
+  display:block;
+  color:#321106;
+  font-size:1rem;
+}
+
+.page-medico .medical-stats{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:10px;
+  margin-bottom:18px;
+}
+.page-medico .medical-stats article{
+  padding:12px 13px;
+  background:linear-gradient(180deg,rgba(247,221,180,.45),rgba(208,158,96,.29));
+  border:1px solid rgba(92,42,13,.25);
+  border-radius:7px;
+  box-shadow:inset 0 1px 0 rgba(255,246,216,.25);
+}
+.page-medico .medical-stats span{
+  display:block;
+  margin-bottom:5px;
+  color:#6a351b;
+  font-family:"Special Elite",monospace;
+  font-size:.65rem;
+  text-transform:uppercase;
+  letter-spacing:.06em;
+}
+.page-medico .medical-stats strong{
+  color:#301006;
+  font-family:"Rye",Georgia,serif;
+  font-size:1.28rem;
+}
+
+.page-medico .medical-new-report{
+  margin-bottom:26px;
+  border-radius:7px !important;
+}
+.page-medico .medical-card-heading,
+.page-medico .medical-archive-heading{
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  gap:14px;
+  margin-bottom:13px;
+}
+.page-medico .medical-card-heading h2,
+.page-medico .medical-archive-heading h2{
+  margin:0 !important;
+}
+.page-medico .medical-form-actions{
+  display:flex;
+  justify-content:flex-start;
+}
+.page-medico #medicPatient.is-locked{
+  background:rgba(218,190,145,.40);
+  border-color:rgba(82,35,10,.34);
+  font-weight:700;
+}
+
+.page-medico .medical-archive{
+  margin-top:4px;
+}
+.page-medico .medical-tools{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) 210px;
+  gap:12px;
+  margin-bottom:14px;
+  padding:12px;
+  background:rgba(245,219,177,.28);
+  border:1px solid rgba(91,42,13,.22);
+  border-radius:7px;
+}
+.page-medico .medical-tools label{
+  display:block;
+  margin-bottom:5px;
+  color:#3c1709;
+  font-family:"Special Elite",monospace;
+  font-size:.72rem;
+  font-weight:700;
+}
+.page-medico .medical-tools input,
+.page-medico .medical-tools select{
+  width:100%;
+  height:40px;
+}
+
+.page-medico .medical-folder-grid{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:14px;
+}
+.page-medico .medical-folder-card{
+  min-width:0;
+  overflow:hidden;
+  background:linear-gradient(180deg,rgba(248,223,182,.50),rgba(210,160,96,.31));
+  border:1px solid rgba(91,42,13,.27);
+  border-radius:7px;
+  box-shadow:inset 0 1px 0 rgba(255,246,216,.22),0 4px 10px rgba(50,18,4,.06);
+}
+.page-medico .medical-folder-open{
+  appearance:none;
+  display:flex;
+  flex-direction:column;
+  width:100%;
+  height:100%;
+  padding:14px;
+  border:0;
+  background:transparent;
+  color:inherit;
+  text-align:left;
+  cursor:pointer;
+}
+.page-medico .medical-folder-open:hover{
+  background:rgba(255,237,202,.14);
+}
+.page-medico .medical-folder-card-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+}
+.page-medico .medical-folder-mini-mark{
+  position:relative;
+  display:inline-block;
+  width:24px;
+  height:24px;
+  color:#111;
+}
+.page-medico .medical-folder-mini-mark i{
+  position:absolute;
+  inset:auto;
+  display:block;
+  background:currentColor;
+  border-radius:1px;
+}
+.page-medico .medical-folder-mini-mark i:first-child{
+  width:7px;
+  height:22px;
+  left:8px;
+  top:1px;
+}
+.page-medico .medical-folder-mini-mark i:last-child{
+  width:22px;
+  height:7px;
+  left:1px;
+  top:8px;
+}
+.page-medico .medical-folder-badge{
+  padding:4px 7px;
+  border:1px solid rgba(86,37,11,.24);
+  border-radius:4px;
+  color:#653016;
+  background:rgba(244,216,170,.35);
+  font-family:"Special Elite",monospace;
+  font-size:.59rem;
+  font-weight:700;
+  letter-spacing:.05em;
+}
+.page-medico .medical-folder-card h3{
+  margin:11px 0 10px;
+  color:#311006;
+  font-size:1.08rem;
+  line-height:1.18;
+}
+.page-medico .medical-folder-card dl{
+  margin:0;
+}
+.page-medico .medical-folder-card dl div{
+  display:grid;
+  grid-template-columns:92px minmax(0,1fr);
+  gap:8px;
+  padding:5px 0;
+}
+.page-medico .medical-folder-card dt{
+  color:#6a351b;
+  font-family:"Special Elite",monospace;
+  font-size:.64rem;
+}
+.page-medico .medical-folder-card dd{
+  margin:0;
+  min-width:0;
+  overflow:hidden;
+  color:#351407;
+  font-size:.78rem;
+  line-height:1.25;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+.page-medico .medical-folder-cta{
+  display:block;
+  margin-top:auto;
+  padding-top:11px;
+  color:#54220d;
+  font-family:"Special Elite",monospace;
+  font-size:.68rem;
+  font-weight:700;
+}
+
+.page-medico .medical-empty-state{
+  grid-column:1/-1;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:5px;
+  padding:28px 16px;
+  text-align:center;
+  background:rgba(245,219,177,.26);
+  border:1px solid rgba(91,42,13,.22);
+  border-radius:7px;
+}
+.page-medico .medical-empty-state strong{
+  font-family:"Rye",Georgia,serif;
+}
+.page-medico .medical-empty-state span{
+  color:#69391f;
+  font-size:.86rem;
+}
+
+.page-medico .medical-folder-detail{
+  margin-top:8px;
+}
+.page-medico .medical-folder-toolbar{
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  margin-bottom:12px;
+}
+.page-medico .medical-folder-header{
+  display:flex;
+  align-items:center;
+  gap:17px;
+  padding:17px 18px;
+  background:linear-gradient(180deg,rgba(247,219,174,.60),rgba(207,154,90,.38));
+  border:1px solid rgba(88,39,11,.30);
+  border-radius:7px;
+  box-shadow:inset 0 1px 0 rgba(255,247,219,.28);
+}
+.page-medico .medical-folder-mark{
+  position:relative;
+  flex:0 0 52px;
+  width:52px;
+  height:52px;
+  color:#111;
+}
+.page-medico .medical-folder-mark span{
+  position:absolute;
+  display:block;
+  background:currentColor;
+  border-radius:2px;
+}
+.page-medico .medical-folder-mark span:first-child{
+  width:15px;
+  height:48px;
+  left:19px;
+  top:2px;
+}
+.page-medico .medical-folder-mark span:last-child{
+  width:48px;
+  height:15px;
+  left:2px;
+  top:19px;
+}
+.page-medico .medical-folder-header p{
+  margin:0 0 4px;
+  color:#6a351a;
+  font-family:"Special Elite",monospace;
+  font-size:.66rem;
+  font-weight:700;
+  letter-spacing:.13em;
+}
+.page-medico .medical-folder-header h2{
+  margin:0 0 8px !important;
+  padding:0 !important;
+  background:none !important;
+  border:0 !important;
+  box-shadow:none !important;
+  color:#301006;
+  font-size:1.75rem;
+}
+.page-medico .medical-folder-summary{
+  display:flex;
+  flex-wrap:wrap;
+  gap:7px;
+}
+.page-medico .medical-folder-summary span{
+  padding:4px 7px;
+  color:#57260f;
+  background:rgba(249,230,195,.34);
+  border:1px solid rgba(91,42,13,.20);
+  border-radius:4px;
+  font-family:"Special Elite",monospace;
+  font-size:.63rem;
+}
+
+.page-medico .medical-timeline{
+  position:relative;
+  margin:18px 0 0 17px;
+  padding-left:27px;
+}
+.page-medico .medical-timeline::before{
+  content:"";
+  position:absolute;
+  left:5px;
+  top:5px;
+  bottom:8px;
+  width:1px;
+  background:rgba(77,31,8,.30);
+}
+.page-medico .medical-timeline-item{
+  position:relative;
+  margin:0 0 13px;
+}
+.page-medico .medical-timeline-dot{
+  position:absolute;
+  left:-27px;
+  top:18px;
+  width:11px;
+  height:11px;
+  border:2px solid #4e1f0b;
+  border-radius:50%;
+  background:#d9ad70;
+  box-shadow:0 0 0 4px rgba(231,199,148,.45);
+}
+.page-medico .medical-record-card{
+  overflow:hidden;
+  background:linear-gradient(180deg,rgba(248,224,184,.47),rgba(213,166,104,.27));
+  border:1px solid rgba(92,42,13,.25);
+  border-radius:7px;
+}
+.page-medico .medical-record-card summary{
+  display:grid;
+  grid-template-columns:145px minmax(0,1fr) auto;
+  gap:12px;
+  align-items:center;
+  padding:12px 14px;
+  cursor:pointer;
+  list-style:none;
+}
+.page-medico .medical-record-card summary::-webkit-details-marker{
+  display:none;
+}
+.page-medico .medical-record-card summary::after{
+  content:"+";
+  grid-column:4;
+  color:#5b260f;
+  font-family:"Special Elite",monospace;
+  font-size:1.1rem;
+}
+.page-medico .medical-record-card[open] summary::after{
+  content:"−";
+}
+.page-medico .medical-record-date,
+.page-medico .medical-record-doctor{
+  color:#69371e;
+  font-family:"Special Elite",monospace;
+  font-size:.65rem;
+}
+.page-medico .medical-record-card summary strong{
+  color:#321106;
+  font-size:.92rem;
+}
+.page-medico .medical-record-body{
+  display:grid;
+  gap:10px;
+  padding:0 14px 14px;
+}
+.page-medico .medical-record-body section{
+  padding:10px 11px;
+  background:rgba(255,239,208,.22);
+  border:1px solid rgba(92,42,13,.16);
+  border-radius:5px;
+}
+.page-medico .medical-record-body h4{
+  margin:0 0 5px;
+  color:#5a250e;
+  font-family:"Special Elite",monospace;
+  font-size:.68rem;
+  text-transform:uppercase;
+  letter-spacing:.05em;
+}
+.page-medico .medical-record-body p{
+  margin:0;
+  font-size:.86rem;
+  line-height:1.45;
+}
+.page-medico .medical-private-notes{
+  border-left:3px solid rgba(92,35,13,.58) !important;
+  background:rgba(218,178,116,.24) !important;
+}
+.page-medico .medical-notice{
+  min-height:22px;
+  margin:14px 0 0;
+  text-align:center;
+  font-family:"Special Elite",monospace;
+  font-size:.76rem;
+}
+.page-medico .medical-notice[data-type="success"]{
+  color:#28511f;
+}
+.page-medico .medical-notice[data-type="error"]{
+  color:#7b1f14;
+}
+
+@media(max-width:1020px){
+  .page-medico .medical-folder-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+}
+@media(max-width:820px){
+  .page-medico .medical-stats{
+    grid-template-columns:1fr;
+  }
+  .page-medico .medical-tools{
+    grid-template-columns:1fr;
+  }
+  .page-medico .medical-card-heading,
+  .page-medico .medical-archive-heading,
+  .page-medico .medical-folder-toolbar,
+  .page-medico .medical-userbar{
+    align-items:flex-start;
+  }
+  .page-medico .medical-folder-header{
+    align-items:flex-start;
+  }
+  .page-medico .medical-record-card summary{
+    grid-template-columns:1fr;
+    gap:5px;
+  }
+  .page-medico .medical-record-card summary::after{
+    grid-column:1;
+    position:absolute;
+    right:14px;
+    top:11px;
+  }
+}
+@media(max-width:570px){
+  .page-medico .medical-folder-grid{
+    grid-template-columns:1fr;
+  }
+  .page-medico .medical-card-heading,
+  .page-medico .medical-archive-heading,
+  .page-medico .medical-folder-toolbar,
+  .page-medico .medical-userbar{
+    flex-direction:column;
+  }
+  .page-medico .medical-folder-header{
+    padding:14px;
+  }
+  .page-medico .medical-folder-mark{
+    flex-basis:40px;
+    width:40px;
+    height:40px;
+  }
+  .page-medico .medical-folder-mark span:first-child{
+    width:12px;
+    height:38px;
+    left:14px;
+    top:1px;
+  }
+  .page-medico .medical-folder-mark span:last-child{
+    width:38px;
+    height:12px;
+    left:1px;
+    top:14px;
+  }
+  .page-medico .medical-timeline{
+    margin-left:8px;
+    padding-left:21px;
+  }
+  .page-medico .medical-timeline-dot{
+    left:-21px;
+  }
+}
