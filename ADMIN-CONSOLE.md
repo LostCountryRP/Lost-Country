@@ -43,5 +43,34 @@ Sono registrati orario, autore identificato dalla sessione Supabase, origine, ID
 - Test database in transazione con rollback: inserimento -> modifica di testo -> incremento versione e due voci audit correttamente generati.
 - Controllo statico della sintassi JS effettuato. Restano raccomandati test da browser autentico con account autorizzato e account non autorizzato.
 
-## Note sui permessi
-Non è stata introdotta una nuova classe universale di \"super admin\" o una delega generalizzata ai responsabili di sezione. Per ora la console **rispetta gli amministratori preesistenti** per non alterare in modo rischioso le autorizzazioni degli uffici. La gestione gerarchica dei permessi va progettata coordinando anche la Edge Function degli Sceriffi.
+## Gestione gerarchica dei permessi (24 ottobre 2026)
+
+Ruoli correnti:
+- **Super Amministratore**: Mineko, accesso alle funzioni del portale e delega dei ruoli. Non può sospendere autonomamente il proprio ruolo via pannello.
+- **Amministratore**: Diego, gestione centrale di articoli, attività commerciali, eventi, testi e personale medico/giornalistico; non può assegnare amministratori.
+- **Responsabile di sezione**: nominato dal Super Amministratore tramite UID Supabase già esistente. Si possono assegnare anche più sezioni: `news`, `business`, `events`, `content`. Non accede alla gestione ruoli, alla lista del personale, ai backup o al registro generale.
+- Nessun ruolo di Responsabile è assegnato al momento dell'attivazione della funzione.
+
+### Controlli tecnici
+- `public.lc_admin_assignments` usa RLS; la tabella è leggibile solo dal Super Amministratore. I client non hanno privilegi diretti per inserire/aggiornare ruoli.
+- `public.lc_set_portal_role(uid,role,section,active)` è l'unico endpoint per le assegnazioni, controlla a ogni invocazione la sessione corrente e impedisce escalation, auto-modifica e sospensione degli amministratori storici protetti.
+- `public.lc_portal_can_manage(section)` è richiamata dalle policy RLS per Giornale, Attività, Eventi, Editor testi.
+- `public.lc_portal_is_admin()` abilita le funzioni comuni della direzione: elenco e abilitazioni dei giornalisti e medici, storico amministrativo. **Non** concede accesso ai referti medici.
+- Lo storico `lc_admin_history` registra anche l'attivazione e la sospensione dei nuovi ruoli.
+- La console nasconde sezioni non autorizzate, ma la protezione reale è applicata nel database. L'editor testi può essere utilizzato da un Responsabile della sezione `content` senza esporre lo storico completo.
+
+### Permessi specialistici non unificati
+Le funzioni degli Sceriffi (`admin-sceriffi.html` e `manage-sheriffs`) e l'hosting immagini possiedono ancora controlli specialistici legati a `is_sheriff_admin()`. Un nuovo **Amministratore del portale** non ottiene automaticamente tali privilegi. Mineko e Diego mantengono gli accessi preesistenti.
+
+Per evitare revoche soltanto apparenti, la console **non consente di sospendere l'account storico di Diego** mentre `is_sheriff_admin()` continua a riconoscerlo come amministratore Sceriffi. La modifica di questi accessi richiede interventi coordinati sul sistema legacy.
+
+L'editor del Codice Penale modifica solamente le descrizioni: multe, durata del carcere e dati dei reati devono essere mantenuti coerenti tramite intervento tecnico.
+
+### Collaudi
+- Simulazione SQL di Mineko: `super_admin=true`, gestione dei contenuti autorizzata.
+- Simulazione SQL di Diego: `admin=true`, nomina nuovi amministratori negata.
+- Simulazione SQL di account estraneo: nessun ruolo e nessuna autorizzazione.
+- Simulazione temporanea di Responsabile `content`: controllo `content=true` e `news=false` (transazione poi annullata).
+- Simulazione di assegnazione tramite RPC come Super Amministratore: riuscita, quindi annullata con `ROLLBACK`.
+- Test statico sintassi degli script JavaScript. Resta da verificare manualmente l'interfaccia in browser con account autentici dopo pubblicazione GitHub Pages.
+
