@@ -960,3 +960,392 @@ button:hover,.btn-primary:hover,.btn-secondary:hover{filter:brightness(1.05)}
   .lc-frontier-link{min-height:165px}
 }
 
+
+/* V3 — CINEMATIC BLACK BRONZE BRAND / REFERENCE-MATCHED */
+:root{--lc-bar-height:76px;--lc-sidebar-width:245px}
+html{background:#15100d}
+body{
+  background:
+    radial-gradient(ellipse at 48% 5%,rgba(127,65,25,.20),transparent 40%),
+    linear-gradient(90deg,#120e0c,#281a11 52%,#150f0c);
+}
+.site-shell,.lc-shell{
+  width:min(100%,1560px);
+  background:#1c120e;
+  border-left:1px solid #5b3b25;
+  border-right:1px solid #5b3b25;
+}
+
+/* Authored scenic artwork replaces the repeating orange desert image. */
+.lc-cinematic-banner.is-home{
+  height:357px;
+  min-height:357px;
+  overflow:hidden;
+  justify-content:center;
+  padding:8px 12px 14px;
+  border-top:2px solid #b17b3d;
+  border-bottom:4px double #b88341;
+  background:
+    linear-gradient(90deg,rgba(9,8,9,.80) 0%,rgba(18,12,10,.13) 33%,rgba(13,9,8,.13) 67%,rgba(9,8,9,.79) 100%),
+    url('frontier-panorama.svg') center 45% / cover no-repeat #19120f;
+  box-shadow:inset 0 0 0 3px rgba(29,13,7,.75),
+             inset 0 0 30px rgba(0,0,0,.65),
+             0 5px 12px rgba(0,0,0,.37);
+}
+.lc-cinematic-banner.is-home .lc-masthead-logo{
+  width:min(328px,36%);
+  height:255px;
+  max-width:none;
+  flex:none;
+  margin:-16px 0 -4px;
+  object-fit:contain;
+  filter:drop-shadow(0 6px 9px rgba(0,0,0,.92))
+         drop-shadow(0 0 14px rgba(241,167,82,.26));
+}
+.lc-cinematic-banner.is-home h1{
+  display:block;
+  position:static;
+  width:auto;
+  height:auto;
+  overflow:visible;
+  clip:auto;
+  white-space:normal;
+  margin:0;
+  padding:0 20px;
+  border:0;
+  font-family:'Rye',Georgia,serif;
+  font-size:clamp(2.05rem,4.45vw,4.6rem);
+  font-weight:700;
+  color:#f5dab0;
+  letter-spacing:.02em;
+  text-transform:uppercase;
+  line-height:1.04;
+  text-shadow:0 2px 0 #a57141,0 4px 0 #2c140b,0 7px 14px rgba(0,0,0,.9);
+}
+.lc-cinematic-banner.is-home p{
+  bottom:11px;
+  color:#f1d6aa;
+  letter-spacing:.17em;
+  font-size:clamp(.64rem,.85vw,.84rem);
+}
+.lc-cinematic-banner.is-home::before,
+.lc-cinematic-banner.is-home::after{
+  top:49%;
+  width:20%;
+  max-width:235px;
+  padding:17px 5px;
+  background:linear-gradient(90deg,transparent,rgba(7,6,7,.28),transparent);
+  border-color:rgba(223,158,86,.38);
+  font-size:clamp(.66rem,.9vw,.87rem);
+  line-height:2;
+  color:#eac68e;
+}
+.lc-cinematic-banner.is-home::before{left:1.5%}
+.lc-cinematic-banner.is-home::after{right:1.5%}
+.lc-cinematic-banner:not(.is-home){
+  background:
+    linear-gradient(90deg,rgba(13,10,9,.91),rgba(25,14,11,.38),rgba(13,10,9,.89)),
+    url('frontier-panorama.svg') center 40% / cover no-repeat #241913;
+}
+.lc-cinematic-banner:not(.is-home) h1{color:#f8deb7}
+
+/* Reference sidebar: distinct public navigation + original local index retained. */
+.western-sidebar,.lc-sidebar{
+  background:
+    linear-gradient(170deg,rgba(176,106,44,.13),transparent 25%),
+    repeating-linear-gradient(0deg,transparent 0 46px,rgba(227,163,88,.026) 47px,transparent 48px),
+    linear-gradient(90deg,#151110,#231a15 52%,#110d0c);
+  border-right:2px solid #a27038;
+}
+.western-sidebar .sidebar-brand,.lc-sidebar-logo{
+  min-height:158px;
+  padding:9px 10px 7px;
+  background:radial-gradient(ellipse at center,rgba(162,96,42,.24),transparent 72%);
+  border-bottom:1px solid rgba(201,138,66,.29);
+}
+.western-sidebar .sidebar-brand img,.lc-sidebar-logo img{
+  width:130px;
+  max-width:130px;
+  height:120px;
+}
+.western-sidebar .sidebar-brand span{
+  font-size:.67rem;
+  color:#edcf9a;
+  letter-spacing:.07em;
+}
+.lc-premium-side-nav{
+  display:flex;
+  flex:1 1 auto;
+  min-height:0;
+  flex-direction:column;
+  gap:2px;
+  padding:11px 10px 7px;
+  overflow-y:auto;
+  overflow-x:hidden;
+  scrollbar-color:#80532e #201710;
+  scrollbar-width:thin;
+}
+.lc-premium-side-nav a{
+  display:flex;
+  align-items:center;
+  flex:0 0 auto;
+  gap:11px;
+  min-height:47px;
+  padding:8px 11px;
+  border:1px solid rgba(178,123,63,.22);
+  border-radius:3px;
+  background:rgba(17,13,12,.47);
+  color:#f2dfbd;
+  font-family:'Crimson Text',Georgia,serif;
+  font-size:.88rem;
+  font-weight:700;
+  line-height:1.2;
+  letter-spacing:.015em;
+  text-transform:uppercase;
+  text-decoration:none;
+  text-align:left;
+  text-shadow:0 1px 2px #000;
+  transition:background .16s,border-color .16s,transform .16s;
+}
+.lc-premium-side-nav a:hover,
+.lc-premium-side-nav a.is-active{
+  color:#fff0d1;
+  background:linear-gradient(115deg,#77502a,#422919);
+  border-color:#c8924a;
+  box-shadow:inset 0 0 0 1px rgba(247,206,142,.17),0 1px 7px rgba(0,0,0,.3);
+  transform:translateX(1px);
+}
+.lc-premium-side-nav .lc-premium-side-icon{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width:22px;
+  flex:0 0 22px;
+  color:#d9a45f;
+  font-family:Georgia,serif;
+  font-size:1.34rem;
+  line-height:1;
+  text-shadow:0 2px 2px #000;
+}
+.lc-premium-page-index{
+  display:block;
+  flex:0 0 auto;
+  min-height:0;
+  margin:2px 10px 4px;
+  border-top:1px solid rgba(180,120,60,.33);
+  color:#e4c79e;
+}
+.lc-premium-page-index summary{
+  cursor:pointer;
+  padding:8px 11px;
+  font-family:'Crimson Text',Georgia,serif;
+  font-size:.83rem;
+  font-weight:700;
+  text-transform:uppercase;
+  letter-spacing:.06em;
+}
+.lc-premium-page-index[open]{max-height:43vh;overflow-y:auto}
+.lc-premium-page-index .side-nav,
+.western-sidebar .lc-premium-page-index .side-nav{
+  display:flex;
+  position:static;
+  flex:none;
+  width:100%;
+  height:auto;
+  max-height:none;
+  flex-direction:column;
+  gap:3px;
+  overflow:visible;
+  margin:0;
+  padding:6px 0 8px;
+}
+.lc-premium-page-index .side-nav a{
+  justify-content:flex-start;
+  min-height:37px;
+  padding:7px 10px;
+  background:rgba(167,107,48,.09);
+  color:#efd9b3;
+  font-family:'Crimson Text',Georgia,serif;
+  font-size:.81rem;
+  text-align:left;
+  border-radius:3px;
+}
+.lc-premium-side-emblem{
+  flex:0 0 144px;
+  width:100%;
+  height:144px;
+  margin:0;
+  background:
+    linear-gradient(0deg,rgba(12,9,8,.08),rgba(12,9,8,.12)),
+    url('frontier-guns-emblem.svg') center center / contain no-repeat;
+  border-top:1px solid rgba(209,153,78,.34);
+}
+.lc-premium-side-nav a:focus-visible,.lc-premium-page-index summary:focus-visible{
+  outline:2px solid #edc37e;
+  outline-offset:2px;
+}
+
+/* Keep functional, non-public sidebars usable; only decorate them lightly. */
+.western-sidebar:not(:has(.lc-premium-side-nav)) .side-nav{
+  margin-bottom:0;
+  padding-bottom:15px;
+}
+
+/* Less bulky navigation consistent with the screenshot concept. */
+.lc-topbar,.site-main > .top-nav{
+  min-height:70px;
+  padding:9px 9px;
+  background:linear-gradient(180deg,#322219,#17100e);
+  border-top:1px solid rgba(239,175,100,.23);
+  border-bottom:2px solid #966934;
+  box-shadow:inset 0 1px 0 rgba(255,214,161,.10),0 4px 9px rgba(0,0,0,.42);
+}
+.lc-topbar .lc-global-nav >a,
+.site-main > .top-nav.lc-global-nav >a{
+  border:1px solid rgba(209,152,82,.31);
+  border-radius:2px;
+  background:rgba(24,15,11,.52);
+  font-family:'Crimson Text',Georgia,serif;
+  font-size:clamp(.83rem,1vw,1rem);
+  min-height:47px;
+  height:47px;
+  color:#f4ddba;
+  letter-spacing:.02em;
+}
+.lc-topbar .lc-global-nav >a:hover,
+.site-main > .top-nav.lc-global-nav >a:hover{
+  color:#fff5de;
+  background:linear-gradient(180deg,#714726,#452718);
+}
+.lc-global-nav .lc-more-menu summary{
+  min-height:47px;
+  height:47px;
+  color:#f2d5a5;
+}
+
+/* Portal: golden parchment and cinematic separated scene, not repeating flat desert. */
+.page-home .parchment-page{
+  padding-top:23px !important;
+  background:
+    linear-gradient(rgba(247,224,185,.26),rgba(230,193,137,.18)),
+    url('sfondo.png') center top / 100% auto repeat-y #e3c391;
+}
+.lc-frontier-intro{
+  min-height:305px;
+  grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);
+  border:1px solid #85502b;
+  border-radius:4px;
+  box-shadow:0 7px 17px rgba(37,13,3,.20);
+}
+.lc-frontier-intro-copy{padding:32px 33px}
+.lc-frontier-intro h2{
+  font-size:clamp(2.05rem,2.8vw,3.0rem);
+  line-height:1.12;
+}
+.lc-frontier-intro-scene{
+  min-height:305px;
+  background:
+    linear-gradient(0deg,rgba(16,11,9,.78),transparent 65%),
+    url('frontier-panorama.svg') 78% center / auto 100% no-repeat #3c281d;
+}
+.lc-frontier-intro-scene p{
+  max-width:350px;
+  font-family:'Crimson Text',Georgia,serif;
+  font-size:1.25rem;
+  font-weight:700;
+  font-style:italic;
+  letter-spacing:.02em;
+}
+.lc-frontier-link{
+  border:1px solid rgba(124,74,28,.46);
+  background:
+    linear-gradient(180deg,rgba(255,248,228,.77),rgba(221,179,119,.27)),
+    url('sfondo.png') center / cover #ecd3ab;
+  box-shadow:inset 0 0 0 2px rgba(112,67,25,.10),0 3px 11px rgba(57,24,5,.12);
+}
+.lc-frontier-link:hover{box-shadow:inset 0 0 0 2px rgba(128,78,28,.20),0 8px 17px rgba(40,18,6,.25)}
+.lc-frontier-panel{
+  background:linear-gradient(120deg,rgba(32,21,17,.82),rgba(25,16,13,.93)),#1c1714;
+  border:1px solid #916234;
+  position:relative;
+  padding-left:152px;
+  min-height:178px;
+}
+.lc-frontier-panel::before{
+  content:'';
+  position:absolute;
+  top:10px;
+  left:10px;
+  bottom:10px;
+  width:126px;
+  background:url('frontier-panorama.svg') 78% center / auto 100% no-repeat #57371d;
+  border:1px solid rgba(188,131,63,.65);
+  box-shadow:0 2px 9px rgba(0,0,0,.4);
+}
+.lc-frontier-panel:last-child::before{
+  background-position:94% center;
+  filter:sepia(.26);
+}
+.lc-frontier-panel h3{font-size:1.22rem;margin-bottom:10px}
+.lc-frontier-panel p{font-size:.99rem}
+.lc-frontier-panel a{color:#ffd697;font-weight:700}
+.lc-manual-divider{margin-top:40px}
+
+/* Further reduce UI at narrower resolutions and preserve tap targets. */
+@media(min-width:821px) and (max-height:720px){
+  .western-sidebar .sidebar-brand{min-height:116px}
+  .western-sidebar .sidebar-brand img{height:80px}
+  .lc-premium-side-emblem{height:85px;flex-basis:85px}
+  .lc-premium-side-nav a{min-height:42px;padding:6px 9px}
+}
+@media(max-width:1250px){
+  .lc-topbar .lc-global-nav >a,.site-main > .top-nav.lc-global-nav >a{
+    flex:0 0 159px;
+    width:159px;
+    min-width:159px;
+    height:50px;
+    min-height:50px;
+  }
+}
+@media(max-width:820px){
+  .lc-cinematic-banner.is-home{height:260px;min-height:260px;padding:12px 11px 22px}
+  .lc-cinematic-banner.is-home .lc-masthead-logo{width:155px;height:155px;margin:-5px 0 2px}
+  .lc-cinematic-banner.is-home h1{font-size:clamp(1.6rem,5.3vw,2.6rem);line-height:1.1}
+  .lc-cinematic-banner.is-home p{font-size:.60rem;letter-spacing:.09em;bottom:9px}
+  .lc-cinematic-banner.is-home::before,.lc-cinematic-banner.is-home::after{display:none}
+  .western-sidebar .sidebar-brand{height:75px;min-height:75px}
+  .western-sidebar .sidebar-brand img{width:62px;height:61px}
+  .lc-premium-side-nav{
+    display:flex;
+    flex-direction:row;
+    min-height:0;
+    height:auto;
+    flex:none;
+    gap:6px;
+    width:100%;
+    padding:8px;
+    overflow-x:auto;
+    overflow-y:hidden;
+    scrollbar-width:thin;
+  }
+  .lc-premium-side-nav a{
+    flex:0 0 152px;
+    min-height:44px;
+    padding:8px 9px;
+    font-size:.78rem;
+  }
+  .lc-premium-page-index{display:none}
+  .lc-premium-side-emblem{display:none}
+  .lc-frontier-intro{grid-template-columns:1fr}
+  .lc-frontier-intro-scene{min-height:180px;background-size:cover;background-position:78% center}
+  .lc-frontier-panel{padding-left:20px}
+  .lc-frontier-panel::before{display:none}
+}
+@media(max-width:540px){
+  .lc-cinematic-banner.is-home{height:224px;min-height:224px}
+  .lc-cinematic-banner.is-home .lc-masthead-logo{width:132px;height:132px}
+  .lc-cinematic-banner.is-home h1{font-size:clamp(1.2rem,6vw,1.75rem)}
+  .lc-frontier-intro h2{font-size:clamp(1.78rem,7.6vw,2.25rem)}
+  .lc-frontier-panel{min-height:auto}
+}
+
