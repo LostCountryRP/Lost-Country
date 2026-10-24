@@ -3,13 +3,13 @@
 **Pannello:** https://lostcountryrp.github.io/Lost-Country/hosting-immagini.html  
 **Pagina:** `hosting-immagini.html` — **Script:** `hosting-immagini.js` — **Stile:** `hosting-immagini.css`.
 
-## Configurazione Supabase (necessaria una sola volta)
-1. Aprire Supabase > progetto LostCountryRP > **Storage** > **New bucket**.
+## Configurazione Supabase (attivata il 24 ottobre 2026)
+1. **Bucket già creato e verificato nel progetto**. Per ispezionarlo aprire Supabase > Storage.
 2. ID/nome bucket: **`lc-image-hosting`** (esatto, tutto minuscolo).
 3. Attivare **Public bucket**. I link diretti delle singole immagini devono poter essere visualizzati senza autenticazione.
 4. Impostare **Restrict file size** a **10 MB** (10485760 byte).
 5. Impostare **Restrict MIME types** a `image/jpeg`, `image/png`, `image/webp`, `image/gif`.
-6. Salvare. Non riutilizzare il bucket privato `wanted-photos`.
+6. **Configurazione già salvata e verificata.** Non riutilizzare il bucket privato `wanted-photos`.
 
 Le tre policy RLS **sono già state configurate** su `storage.objects` nel progetto Supabase:
 - `lc_image_host_admin_list`: solo amministratori autenticati, SELECT/lista.
