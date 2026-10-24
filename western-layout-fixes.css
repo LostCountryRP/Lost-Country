@@ -603,3 +603,44 @@ body.page-home{overflow-x:clip}
   .page-news .news-featured-card .news-cover-button{max-width:100%}
   .page-sceriffi .form-grid{grid-template-columns:minmax(0,1fr)}
 }
+
+
+/* Tablet header must be one row, never four stacked lines in 64px. */
+@media(max-width:1100px){
+  .page-home .western-sidebar .sidebar-brand{
+    display:flex!important;
+    flex-direction:row!important;
+    align-items:center!important;
+    justify-content:center!important;
+    gap:10px!important;
+  }
+  .page-home .western-sidebar .sidebar-brand::after{display:none!important}
+  .page-home .western-sidebar .sidebar-brand img{
+    display:block!important;
+    position:static!important;
+    width:55px!important;
+    height:55px!important;
+    max-width:55px!important;
+    object-fit:contain;
+    margin:0!important;
+    padding:0!important;
+    clip:auto!important;
+    clip-path:none!important;
+    overflow:visible!important;
+  }
+  .page-home .western-sidebar .sidebar-brand span{
+    display:block!important;
+    position:static!important;
+    width:auto!important;
+    height:auto!important;
+    max-width:220px;
+    margin:0!important;
+    padding:0!important;
+    clip:auto!important;
+    clip-path:none!important;
+    overflow:visible!important;
+    text-align:left;
+    font-size:.8rem;
+    line-height:1.2;
+  }
+}
