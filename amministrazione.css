@@ -73,3 +73,10 @@
 .hub-staff-create h3{margin:0 0 4px}
 .hub-staff-create p{font-size:.92rem;margin:0 0 15px}
 @media(max-width:720px){.hub-staff-grid{grid-template-columns:1fr}}
+
+.hub-systems{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px}
+.hub-systems a{display:flex;flex-direction:column;gap:8px;padding:18px 19px;text-decoration:none;border:1px solid #906031;border-radius:11px;background:#eed8af;color:#432514;transition:background .15s,transform .15s}
+.hub-systems a:hover{background:#f5e6c8;transform:translateY(-2px)}
+.hub-systems strong{font-size:1.07rem}
+.hub-systems span{font-size:.86rem;color:#775037}
+@media(max-width:720px){.hub-systems{grid-template-columns:1fr}}
