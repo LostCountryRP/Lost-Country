@@ -38,7 +38,7 @@ create table if not exists public.weapon_registry_history (
  changed_by_name text not null
 );
 create or replace function public.log_weapon_registry_change()
-returns trigger language plpgsql security invoker as $$
+returns trigger language plpgsql security definer set search_path=public,pg_temp as $
 begin
  if tg_op='INSERT' then
   insert into public.weapon_registry_history(weapon_id,new_owner_id,new_status,reason,changed_by_name)
