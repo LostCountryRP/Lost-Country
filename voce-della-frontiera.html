@@ -1,1 +1,150 @@
-<!doctype html><html lang="it"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>La Voce della Frontiera — Lost Country RP</title><link rel="stylesheet" href="style.css?v=20261024-check-generale"><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="supabase-config.js"></script><script defer src="frontier-portal.js?v=1"></script><script defer src="site-enhancements.js?v=20261024-check-generale"></script>\n</head><body class="page-sceriffi page-portal page-news" data-section="news"><div class="site-shell"><aside class="western-sidebar"><a class="sidebar-brand" href="index.html"><img src="logo.png" alt="Lost Country RP"><span>Lost Country Roleplay</span></a><nav class="side-nav"><a href="index.html">Regolamento</a><a href="voce-della-frontiera.html">La Voce della Frontiera</a><a href="attivita-commerciali.html">Registro attività</a><a href="eventi.html">Calendario eventi</a><a href="redazione.html">Accesso Redazione</a></nav></aside><main class="site-main"><nav class="top-nav"><a href="index.html">Regolamento</a><a href="codice-penale.html">Codice Penale</a><a href="sceriffi.html">Gestione Sceriffi</a></nav><section class="parchment-page"><div class="parchment-content"><div class="sheriff-shell"><h1 class="app-title">La Voce della Frontiera</h1><p class="app-subtitle">Gazzetta ufficiale e cronache del territorio</p><div class="app-card"><label for="search">Cerca nel registro</label><input id="search" type="search" placeholder="Cerca per nome, luogo o argomento"><p id="message" role="status"></p><div id="items"></div></div><p><a href="index.html">← Torna al regolamento</a></p></div></div></section></main></div></body></html>
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Archivio della Frontiera — Lost Country RP</title>
+  <link rel="stylesheet" href="style.css?v=20261024-emeroteca">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-config.js"></script>
+  <script defer src="frontier-portal.js?v=1"></script>
+  <script defer src="news-archive.js?v=20261024-1"></script>
+  <script defer src="site-enhancements.js?v=20261024-emeroteca"></script>
+</head>
+<body class="page-sceriffi page-portal page-news" data-section="news">
+  <div class="site-shell">
+    <aside class="western-sidebar">
+      <a class="sidebar-brand" href="index.html">
+        <img src="logo.png" alt="Lost Country RP">
+        <span>Lost Country Roleplay</span>
+      </a>
+      <nav class="side-nav" aria-label="Indice dell'emeroteca">
+        <a href="#archivio"><span>Archivio storico</span></a>
+        <a href="#ultima-uscita"><span>Ultima uscita</span></a>
+        <a href="#tutte-le-uscite"><span>Tutte le uscite</span></a>
+        <a href="#cronache-redazione"><span>Cronache redazione</span></a>
+        <a href="redazione.html"><span>Accesso Redazione</span></a>
+      </nav>
+    </aside>
+
+    <main class="site-main">
+      <nav class="top-nav" aria-label="Navigazione principale">
+        <a href="index.html">Regolamento</a>
+        <a href="approfondimenti.html">Approfondimenti</a>
+        <a href="codice-penale.html">Codice Penale</a>
+        <a href="lore.html">Lore</a>
+        <a href="sceriffi.html">Gestione Sceriffi</a>
+        <a href="medico.html">Registro Medico</a>
+        <a class="active-page" href="voce-della-frontiera.html">La Voce della Frontiera</a>
+        <a href="attivita-commerciali.html">Attività commerciali</a>
+        <a href="eventi.html">Eventi</a>
+      </nav>
+
+      <section class="parchment-page news-archive-page" id="archivio">
+        <div class="parchment-content">
+          <div class="news-archive-shell">
+
+            <header class="news-archive-hero">
+              <p class="news-archive-kicker">EMEROTECA DI LOST COUNTRY</p>
+              <h1 class="app-title">Archivio della Frontiera</h1>
+              <p class="app-subtitle">Giornali, manifesti e cronache conservati dalla Redazione</p>
+              <div class="news-archive-stats" aria-label="Stato dell'archivio">
+                <span id="newsArchiveCount">8 documenti conservati</span>
+                <span>1885</span>
+                <span>Dal più recente al più antico</span>
+              </div>
+            </header>
+
+            <section class="news-archive-toolbar" aria-label="Strumenti archivio">
+              <div class="news-search-box">
+                <label for="newsArchiveSearch">Cerca nell'emeroteca</label>
+                <input id="newsArchiveSearch" type="search" placeholder="Titolo, data, luogo o argomento">
+              </div>
+              <div class="news-filter-row" aria-label="Filtra per collezione">
+                <button class="news-filter-btn active" type="button" data-filter="all" aria-pressed="true">Tutto</button>
+                <button class="news-filter-btn" type="button" data-filter="ledger" aria-pressed="false">Blackwater Ledger</button>
+                <button class="news-filter-btn" type="button" data-filter="voce" aria-pressed="false">Voce della Frontiera</button>
+                <button class="news-filter-btn" type="button" data-filter="avviso" aria-pressed="false">Avvisi pubblici</button>
+              </div>
+            </section>
+
+            <section class="news-featured-section" id="ultima-uscita" aria-labelledby="ultimaUscitaTitle">
+              <div class="news-section-heading">
+                <div>
+                  <p>IN PRIMO PIANO</p>
+                  <h2 id="ultimaUscitaTitle">Ultima pubblicazione</h2>
+                </div>
+                <span class="news-archive-stamp">ARCHIVIO</span>
+              </div>
+              <div id="newsFeatured"></div>
+            </section>
+
+            <section class="news-all-section" id="tutte-le-uscite" aria-labelledby="tutteUsciteTitle">
+              <div class="news-section-heading">
+                <div>
+                  <p>COLLEZIONE STORICA</p>
+                  <h2 id="tutteUsciteTitle">Tutte le uscite</h2>
+                </div>
+                <span class="news-order-note">Più recente → più antico</span>
+              </div>
+              <div class="news-archive-grid" id="newsArchiveGrid"></div>
+            </section>
+
+            <section class="news-live-section" id="cronache-redazione" aria-labelledby="cronacheTitle">
+              <div class="news-section-heading">
+                <div>
+                  <p>ARCHIVIO TESTUALE</p>
+                  <h2 id="cronacheTitle">Cronache della Redazione</h2>
+                </div>
+              </div>
+              <p class="news-live-intro">Articoli e comunicati pubblicati dalla Redazione e conservati separatamente dalle scansioni storiche.</p>
+              <div class="news-live-card">
+                <label for="search">Cerca nelle cronache</label>
+                <input id="search" type="search" placeholder="Cerca per nome, luogo o argomento">
+                <p id="message" role="status"></p>
+                <div id="items" class="news-live-items"></div>
+              </div>
+            </section>
+
+            <p class="news-back-link"><a href="index.html">← Torna al regolamento</a></p>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div class="news-archive-modal" id="newsArchiveModal" hidden aria-modal="true" role="dialog" aria-labelledby="newsViewerTitle">
+    <button class="news-modal-backdrop" type="button" data-news-close aria-label="Chiudi visualizzatore"></button>
+    <div class="news-modal-window">
+      <header class="news-modal-header">
+        <div>
+          <p id="newsViewerMeta"></p>
+          <h2 id="newsViewerTitle">Documento</h2>
+        </div>
+        <button class="news-modal-close" id="newsModalClose" type="button" aria-label="Chiudi">×</button>
+      </header>
+
+      <div class="news-modal-toolbar" aria-label="Controlli documento">
+        <button type="button" id="newsPrev">‹ Precedente</button>
+        <div class="news-zoom-controls">
+          <button type="button" id="newsZoomOut" aria-label="Riduci zoom">−</button>
+          <button type="button" id="newsZoomReset"><span id="newsZoomValue">100%</span></button>
+          <button type="button" id="newsZoomIn" aria-label="Aumenta zoom">+</button>
+        </div>
+        <button type="button" id="newsNext">Successivo ›</button>
+      </div>
+
+      <div class="news-viewer-scroll">
+        <div class="news-viewer-paper">
+          <img id="newsViewerImage" src="" alt="">
+        </div>
+      </div>
+
+      <footer class="news-modal-footer">
+        <span id="newsViewerPosition">1 / 8</span>
+        <span>Usa ← → per sfogliare · + − per lo zoom · Esc per chiudere</span>
+      </footer>
+    </div>
+  </div>
+</body>
+</html>
