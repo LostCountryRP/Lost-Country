@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <title>Console Amministratori | Lost Country RP</title>
+  <link rel="stylesheet" href="style.css?v=20261024-check-generale">
+  <link rel="stylesheet" href="amministrazione.css?v=1">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-config.js"></script>
+  <script defer src="amministrazione.js?v=1"></script>
+</head>
+<body class="page-admin page-admin-hub">
+<div class="site-shell">
+  <aside class="western-sidebar">
+    <a class="sidebar-brand" href="index.html"><img src="logo.png" alt="Lost Country RP"><span>Lost Country RP</span></a>
+    <nav class="side-nav">
+      <a href="index.html">← Sito principale</a>
+      <a href="#adminOverview">Panoramica</a>
+      <a href="#adminServices">Gestione degli uffici</a>
+      <a href="#adminModeration">Controllo pubblicazioni</a>
+      <a href="hosting-immagini.html">Archivio immagini</a>
+    </nav>
+  </aside>
+  <main class="site-main">
+    <section class="parchment-page"><div class="parchment-content admin-hub">
+      <header class="hub-hero">
+        <div><p class="hub-eyebrow">Lost Country RP · Direzione generale</p>
+        <h1 class="app-title">Console Amministratori</h1>
+        <p>Un solo centro di controllo per gestire gli uffici, le pubblicazioni e gli archivi della frontiera.</p></div>
+        <div class="hub-seal" aria-hidden="true">★<small>ADMIN</small></div>
+      </header>
+      <div class="hub-disclaimer">Area riservata agli account amministratori autorizzati. Il login è verificato direttamente da Supabase.</div>
+      <section id="hubLoginPanel" class="app-card hub-login">
+        <h2>Accesso amministratori</h2>
+        <form id="hubLoginForm" class="form-grid">
+          <div><label for="hubEmail">Email</label><input id="hubEmail" type="email" autocomplete="username" required></div>
+          <div><label for="hubPassword">Password</label><input id="hubPassword" type="password" autocomplete="current-password" required></div>
+          <div class="full"><button id="hubLoginSubmit" class="btn-primary" type="submit">Entra nella console</button></div>
+        </form>
+      </section>
+      <div id="hubDenied" class="app-card" hidden><h2>Accesso non consentito</h2><p>Questo account non dispone dei permessi di amministrazione di Lost Country RP.</p><button type="button" id="hubDeniedLogout" class="btn-secondary">Esci dall'account</button></div>
+      <div id="hubWorkspace" hidden>
+        <div class="hub-userbar"><div><span class="hub-user-dot"></span> Amministratore connesso: <strong id="hubIdentity">—</strong></div><div class="hub-user-actions"><button id="hubReload" class="btn-secondary" type="button">Aggiorna</button><button id="hubSignout" class="btn-secondary" type="button">Disconnetti</button></div></div>
+        <section id="adminOverview">
+          <div class="hub-heading"><h2>Panoramica del territorio</h2><p>Dati in tempo reale dal database. Alcuni archivi riservati mantengono i propri permessi.</p></div>
+          <div class="hub-stats">
+            <article><span>Articoli del giornale</span><strong id="hubStatNews">—</strong><small>Totali, incluse bozze</small></article>
+            <article><span>Attività commerciali</span><strong id="hubStatBusiness">—</strong><small>Registrate</small></article>
+            <article><span>Eventi</span><strong id="hubStatEvents">—</strong><small>Registrati</small></article>
+            <article><span>Immagini</span><strong id="hubStatImages">—</strong><small>Apri archivio dedicato</small></article>
+          </div>
+        </section>
+        <section id="adminServices" class="hub-section">
+          <div class="hub-heading"><h2>Uffici e strumenti di gestione</h2><p>Ogni ufficio mantiene la sua pagina e le proprie autorizzazioni.</p></div>
+          <div class="hub-service-grid">
+            <article class="hub-service"><div class="hub-service-icon">⚖</div><h3>Ufficio Sceriffi</h3><p>Verbali, ricercati, anagrafe, seriali armi, licenze e sequestri.</p><a class="btn-primary" href="sceriffi.html">Apri Ufficio Sceriffi →</a></article>
+            <article class="hub-service"><div class="hub-service-icon">⚙</div><h3>Gestione account</h3><p>Gestisci gli account e le credenziali del personale Sceriffo.</p><a class="btn-primary" href="admin-sceriffi.html">Gestisci account →</a></article>
+            <article class="hub-service"><div class="hub-service-icon">✚</div><h3>Registro Medico</h3><p>Referti e cartelle cliniche. Accesso con abilitazione medica specifica.</p><span id="hubMedicalPermission" class="hub-access">Verifica autorizzazione…</span><a class="btn-primary" href="medico.html">Apri Registro Medico →</a></article>
+            <article class="hub-service"><div class="hub-service-icon">✒</div><h3>Redazione</h3><p>Pubblica nuovi articoli e gestisci il giornale della frontiera.</p><span id="hubJournalPermission" class="hub-access">Verifica autorizzazione…</span><a class="btn-primary" href="redazione.html">Apri Redazione →</a></article>
+            <article class="hub-service"><div class="hub-service-icon">♜</div><h3>Ufficio Civico</h3><p>Pubblica nuove attività commerciali e organizza gli eventi.</p><a class="btn-primary" href="ufficio-civico.html">Apri Ufficio Civico →</a></article>
+            <article class="hub-service"><div class="hub-service-icon">▣</div><h3>Hosting immagini</h3><p>Carica, consulta e copia i link delle immagini non elencate pubblicamente.</p><a class="btn-primary" href="hosting-immagini.html">Gestisci immagini →</a></article>
+          </div>
+        </section>
+        <section id="adminModeration" class="hub-section">
+          <div class="hub-heading"><h2>Controllo delle pubblicazioni</h2><p>Modifica o cambia lo stato dei contenuti. Non viene eliminato alcun record.</p></div>
+          <div class="hub-tabs" role="group" aria-label="Tipo di pubblicazione">
+            <button class="hub-tab active" data-section="news" type="button" aria-pressed="true">Giornale</button>
+            <button class="hub-tab" data-section="business" type="button" aria-pressed="false">Attività commerciali</button>
+            <button class="hub-tab" data-section="events" type="button" aria-pressed="false">Eventi</button>
+          </div>
+          <div class="app-card hub-moderation">
+            <div class="hub-moderation-head"><div><h3 id="hubListTitle">Articoli</h3><small>Fino agli ultimi 100 elementi · ordinati dal più recente</small></div><button class="btn-secondary" id="hubRefreshList" type="button">Aggiorna elenco</button></div>
+            <label for="hubFilter">Cerca nell'elenco</label>
+            <input id="hubFilter" type="search" placeholder="Titolo o nome…">
+            <div id="hubRows" class="hub-items" aria-live="polite"></div>
+          </div>
+          <section id="hubEditPanel" class="app-card hub-edit" hidden>
+            <div class="hub-edit-head"><h3 id="hubEditTitle">Modifica pubblicazione</h3><button id="hubEditCancel" class="btn-secondary" type="button">Chiudi</button></div>
+            <form id="hubEditForm">
+              <div id="hubEditFields" class="form-grid"></div>
+              <div class="hub-edit-actions"><button id="hubSave" class="btn-primary" type="submit">Salva modifiche</button></div>
+            </form>
+          </section>
+        </section>
+      </div>
+      <p id="hubStatus" class="hub-status" role="status" aria-live="polite"></p>
+    </div></section>
+  </main>
+</div>
+</body></html>
