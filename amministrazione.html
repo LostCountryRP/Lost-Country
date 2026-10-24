@@ -19,6 +19,7 @@
       <a href="#adminOverview">Panoramica</a>
       <a href="#adminServices">Gestione degli uffici</a>
       <a href="#adminStaff">Personale e ruoli</a>
+      <a href="#adminSystem">Sistema e backup</a>
       <a href="#adminModeration">Controllo pubblicazioni</a>
       <a href="hosting-immagini.html">Archivio immagini</a>
     </nav>
@@ -84,6 +85,14 @@
               <div class="full"><label for="hubStaffUid">User UID dell'account Supabase</label><input id="hubStaffUid" type="text" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" required pattern="[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}"></div>
               <div class="full"><button id="hubStaffCreateSubmit" class="btn-primary" type="submit">Assegna ruolo</button></div>
             </form>
+          </div>
+        </section>
+        <section class="hub-section" id="adminSystem">
+          <div class="hub-heading"><h2>Gestione tecnica e backup</h2><p>Collegamenti agli strumenti esterni. GitHub e Supabase richiedono una propria autenticazione amministrativa.</p></div>
+          <div class="hub-systems">
+            <a href="https://github.com/LostCountryRP/Lost-Country" target="_blank" rel="noopener noreferrer"><strong>GitHub — Codice sito</strong><span>Repository e versioni del portale ↗</span></a>
+            <a href="https://github.com/LostCountryRP/Lost-Country/actions/workflows/backup-database.yml" target="_blank" rel="noopener noreferrer"><strong>Backup del database</strong><span>Verifica gli archivi cifrati e le esecuzioni ↗</span></a>
+            <a href="https://supabase.com/dashboard/project/rzwgfjejnuwqsypbhnmk" target="_blank" rel="noopener noreferrer"><strong>Supabase — Database</strong><span>Gestione tecnica e Storage, accesso separato ↗</span></a>
           </div>
         </section>
         <section id="adminModeration" class="hub-section">
