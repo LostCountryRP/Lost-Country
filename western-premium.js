@@ -173,7 +173,17 @@
     });
   }
 
-  function initializePremium(){addMasthead();refinePremiumNavigation();organizePublicSidebar();refineHomeIcons();}
+  function initializePremium(){
+    addMasthead();
+    refinePremiumNavigation();
+    organizePublicSidebar();
+    refineHomeIcons();
+    if(document.body.classList.contains('page-home') &&
+       document.querySelector('.lc-premium-side-nav') &&
+       document.querySelector('.lc-cinematic-banner.is-home')){
+      document.body.classList.add('lc-premium-ready');
+    }
+  }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',initializePremium,{once:true});
   else initializePremium();
 })();
