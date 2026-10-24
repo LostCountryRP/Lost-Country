@@ -250,6 +250,7 @@
     activeIndex = (activeIndex + step + ISSUES.length) % ISSUES.length;
     zoom = 1;
     updateViewer();
+    $('.news-viewer-scroll')?.scrollTo(0, 0);
   }
 
   function changeZoom(delta) {
@@ -283,6 +284,13 @@
     document.addEventListener('keydown', e => {
       const modal = $('#newsArchiveModal');
       if (!modal || modal.hidden) return;
+      if (e.key === 'Tab') {
+        const controls = $$('button:not([disabled]), [href], input, [tabindex="0"]', modal).filter(el => !el.hidden);
+        const first = controls[0], last = controls[controls.length - 1];
+        if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last?.focus(); }
+        else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first?.focus(); }
+      }
+      if (['Escape', 'ArrowLeft', 'ArrowRight', '+', '=', '-'].includes(e.key)) e.preventDefault();
       if (e.key === 'Escape') closeViewer();
       if (e.key === 'ArrowLeft') moveViewer(-1);
       if (e.key === 'ArrowRight') moveViewer(1);
