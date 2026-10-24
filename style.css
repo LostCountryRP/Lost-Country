@@ -3676,3 +3676,20 @@ body.news-modal-open{
     border-radius:6px !important;
   }
 }
+
+/* Pulsante separato per la Direzione — indipendente dall'Ufficio Sceriffi */
+.site-main > .top-nav .lc-admin-nav-btn,
+.lc-topbar nav .lc-admin-nav-btn,
+.site-main > .top-nav.lc-global-nav .lc-admin-nav-btn,
+.lc-topbar .lc-global-nav .lc-admin-nav-btn {
+  color:#fff0d1;
+  background:linear-gradient(150deg,#854e23,#553014);
+  border:1px solid #cfac68;
+  font-weight:700;
+  letter-spacing:.01em;
+}
+.site-main > .top-nav .lc-admin-nav-btn:hover,
+.lc-topbar nav .lc-admin-nav-btn:hover {
+  background:linear-gradient(150deg,#a36a31,#623717);
+  color:#fff9e7;
+}
