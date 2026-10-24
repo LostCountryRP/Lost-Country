@@ -1,0 +1,29 @@
+name: Lost Country - Snapshot codice
+on:
+  schedule:
+    - cron: '15 3 * * 1'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  snapshot:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Copia versione corrente
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          persist-credentials: true
+      - name: Crea tag settimanale
+        shell: bash
+        run: |
+          set -euo pipefail
+          TAG="backup-code-$(date -u +%Y-%m-%d)"
+          if git ls-remote --exit-code --tags origin "refs/tags/$TAG" >/dev/null; then
+            echo "Snapshot già presente: $TAG"
+            exit 0
+          fi
+          git config user.name "Lost Country Backups"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git tag -a "$TAG" -m "Snapshot automatico Lost Country: $TAG"
+          git push origin "refs/tags/$TAG"
