@@ -197,6 +197,28 @@
     }
   }
   document.addEventListener('DOMContentLoaded',()=>{
+    $('cmsRoot').innerHTML = `
+      <div class="form-grid hub-cms-controls">
+        <div><label for="cmsPage">Pagina</label><select id="cmsPage"><option value="index.html">Regolamento</option><option value="approfondimenti.html">Approfondimenti</option><option value="codice-penale.html">Codice penale — descrizioni</option></select></div>
+        <div><label for="cmsSearch">Cerca un argomento</label><input id="cmsSearch" type="search" placeholder="Cerca nei testi…"></div>
+      </div>
+      <div class="hub-cms-toolbar"><span id="cmsCounter">—</span><button type="button" class="btn-secondary" id="cmsRefresh">Aggiorna testi</button></div>
+      <div id="cmsBlocks" class="hub-items" aria-live="polite"></div>
+      <p id="cmsStatus" class="hub-status" role="status" aria-live="polite"></p>
+      <div id="cmsEditor" class="hub-cms-editor" hidden>
+        <div class="hub-edit-head"><div><h3 id="cmsTitle">Modifica testo</h3><small id="cmsCode"></small></div><button type="button" class="btn-secondary" id="cmsClose">Chiudi</button></div>
+        <p>Modifica HTML semplice: &lt;p&gt;, &lt;strong&gt;, &lt;em&gt; ed elenchi. Il codice non consentito viene rimosso automaticamente.</p>
+        <form id="cmsForm">
+          <label for="cmsHtml">Contenuto da pubblicare</label><textarea id="cmsHtml" rows="11" required spellcheck="true"></textarea>
+          <h4>Anteprima pubblica</h4><div id="cmsPreview" class="hub-cms-preview"></div>
+          <div class="hub-edit-actions"><button type="button" class="btn-secondary" id="cmsReset">Ripristina originale</button><button type="submit" class="btn-primary" id="cmsSave">Pubblica modifica</button></div>
+        </form>
+        <details><summary>Leggi testo originale</summary><p id="cmsOriginal" class="hub-cms-original"></p></details>
+        <h4>Versioni precedenti</h4><div id="cmsVersions"></div>
+      </div>`;
+    $('cmsAuditRoot').innerHTML = `
+      <div class="hub-cms-toolbar"><strong>Ultime 70 operazioni</strong><button class="btn-secondary" id="cmsAuditRefresh" type="button">Aggiorna</button></div>
+      <div id="cmsAuditRows" class="hub-audit-list" aria-live="polite"></div>`;
     $('cmsPage').addEventListener('change',loadPage);
     $('cmsSearch').addEventListener('input',renderList);
     $('cmsRefresh').addEventListener('click',loadPage);
