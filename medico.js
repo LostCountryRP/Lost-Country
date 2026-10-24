@@ -89,6 +89,16 @@ function buildFolders(){
   });
 }
 
+function drawPatientOptions(){
+  const list=$("#medicPatientOptions");
+  if(!list)return;
+  list.innerHTML=folders
+    .slice()
+    .sort((a,b)=>a.name.localeCompare(b.name,"it",{sensitivity:"base"}))
+    .map(folder=>'<option value="'+escapeHtml(folder.name)+'"></option>')
+    .join("");
+}
+
 function drawStats(){
   $("#medicStatPatients").textContent=String(folders.length);
   $("#medicStatRecords").textContent=String(records.length);
@@ -234,6 +244,7 @@ async function refresh({keepFolder=true}={}){
 
     records=result.data||[];
     buildFolders();
+    drawPatientOptions();
     drawStats();
     drawFolders();
     info("");
@@ -260,8 +271,10 @@ async function save(event){
     const medic=await identity();
     const value=id=>$("#"+id).value.trim();
 
-    const patientName=value("medicPatient");
-    const folderKey=normalizePatient(patientName);
+    const enteredPatient=value("medicPatient");
+    const folderKey=normalizePatient(enteredPatient);
+    const existingFolder=folders.find(folder=>folder.key===folderKey);
+    const patientName=existingFolder?.name||enteredPatient;
 
     const result=await client.from("medical_records").insert({
       patient_name:patientName,
