@@ -53,7 +53,7 @@
     if (/nativi|nativo/.test(t)) return 'feather';
     if (/postale|missive/.test(t)) return 'mail';
 
-    if (/bolla|bug|malfunzion/.test(t)) return 'alert';
+    if (/bolla|bug|malfunzion|camperaggio|bait|revenge/.test(t)) return 'alert';
     if (/propriet/.test(t)) return 'house';
     if (/legge.*civili|ordine pubblico/.test(t)) return 'scales';
     if (/fair play/.test(t)) return 'handshake';
@@ -63,7 +63,10 @@
     if (/riconosc/.test(t)) return 'eye';
     if (/permadeath|morte/.test(t)) return 'skull';
     if (/file|integrit|verbale/.test(t)) return 'file';
-    if (/assistenza|support/.test(t)) return 'support';
+    if (/assistenza|support|ferite|svenimenti|medici|neutralit/.test(t)) return 'support';
+    if (/clip|convalid/.test(t)) return 'file';
+    if (/zone safe|zone rosse/.test(t)) return 'badge';
+    if (/sciacall/.test(t)) return 'chest';
 
     if (/disposizioni generali|disposizioni|preambolo/.test(t)) return 'book';
     if (/reati minori/.test(t)) return 'seal';
