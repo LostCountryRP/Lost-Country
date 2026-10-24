@@ -65,7 +65,7 @@
     if (/riconosc/.test(t)) return 'eye';
     if (/permadeath|morte/.test(t)) return 'skull';
     if (/file|integrit|verbale/.test(t)) return 'file';
-    if (/assistenza|support|ferite|svenimenti|medici|neutralit/.test(t)) return 'support';
+    if (/assistenza|support|ferite|svenimenti|medic|neutralit|cartelle cliniche|referto/.test(t)) return 'support';
     if (/clip|convalid/.test(t)) return 'file';
     if (/zone safe|zone rosse/.test(t)) return 'badge';
     if (/sciacall/.test(t)) return 'chest';
@@ -80,6 +80,7 @@
     if (/fedina|scheda/.test(t)) return 'id';
     if (/ricercati|wanted/.test(t)) return 'wanted';
     if (/licenz/.test(t)) return 'seal';
+    if (/registro medico/.test(t)) return 'support';
     if (/registro cittadini|registro/.test(t)) return 'book';
     if (/armi|arma/.test(t)) return 'revolver';
     if (/frontiera|mappa/.test(t)) return 'map';
