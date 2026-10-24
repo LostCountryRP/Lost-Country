@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="amministrazione.css?v=3">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="supabase-config.js"></script>
-  <script defer src="amministrazione.js?v=3"></script>
+  <script defer src="lc-cms-core.js?v=20261024-1"></script><script defer src="amministrazione.js?v=4"></script><script defer src="amministrazione-contenuti.js?v=20261024-1"></script>
 </head>
 <body class="page-admin page-admin-hub">
 <div class="site-shell">
@@ -18,7 +18,7 @@
       <a href="index.html">← Sito principale</a>
       <a href="#adminOverview">Panoramica</a>
       <a href="#adminServices">Gestione degli uffici</a>
-      <a href="#adminStaff">Personale e ruoli</a>
+      <a href="#adminPages">Editor dei testi</a><a href="#adminStaff">Personale e ruoli</a><a href="#adminAudit">Registro attività</a>
       <a href="#adminSystem">Sistema e backup</a>
       <a href="#adminModeration">Controllo pubblicazioni</a>
       <a href="hosting-immagini.html">Archivio immagini</a>
@@ -64,7 +64,7 @@
             <article class="hub-service"><div class="hub-service-icon">▣</div><h3>Hosting immagini</h3><p>Carica, consulta e copia i link delle immagini non elencate pubblicamente.</p><a class="btn-primary" href="hosting-immagini.html">Gestisci immagini →</a></article>
           </div>
         </section>
-        <section id="adminStaff" class="hub-section">
+        <section id="adminPages" class="hub-section"><div class="hub-heading"><h2>Editor dei testi del sito</h2><p>Modifica regolamento, approfondimenti e descrizioni del codice penale. I testi originali sono sempre recuperabili.</p></div><div id="cmsRoot" class="app-card"></div></section><section id="adminStaff" class="hub-section">
           <div class="hub-heading"><h2>Personale e autorizzazioni</h2><p>Abilita o sospendi il personale medico e i giornalisti senza eliminarne i dati. Per aggiungere un account, recupera prima l'UID da Supabase → Authentication → Users.</p></div>
           <div class="hub-staff-grid">
             <div class="app-card">
@@ -87,7 +87,7 @@
             </form>
           </div>
         </section>
-        <section class="hub-section" id="adminSystem">
+        <section id="adminAudit" class="hub-section"><div class="hub-heading"><h2>Registro modifiche</h2><p>Storico riservato delle operazioni amministrative.</p></div><div id="cmsAuditRoot" class="app-card"></div></section><section class="hub-section" id="adminSystem">
           <div class="hub-heading"><h2>Gestione tecnica e backup</h2><p>Collegamenti agli strumenti esterni. GitHub e Supabase richiedono una propria autenticazione amministrativa.</p></div>
           <div class="hub-systems">
             <a href="https://github.com/LostCountryRP/Lost-Country" target="_blank" rel="noopener noreferrer"><strong>GitHub — Codice sito</strong><span>Repository e versioni del portale ↗</span></a>
