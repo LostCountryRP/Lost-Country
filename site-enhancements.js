@@ -155,6 +155,7 @@
       ['codice-penale.html','Codice Penale'],
       ['lore.html','Lore'],
       ['sceriffi.html','Gestione Sceriffi'],
+      ['medico.html','Registro Medico'],
       ['voce-della-frontiera.html','La Voce della Frontiera'],
       ['attivita-commerciali.html','Attività commerciali'],
       ['eventi.html','Eventi']
