@@ -20,6 +20,23 @@
     el.textContent = message || "";
     el.classList.toggle("error", Boolean(error));
   }
+  function uploadFeedback(kind, title, detail, completed, total) {
+    const panel = $("hostingUploadFeedback");
+    panel.hidden = false;
+    panel.dataset.state = kind;
+    $("hostingUploadFeedbackTitle").textContent = title;
+    $("hostingUploadFeedbackText").textContent = detail || "";
+    const bar = $("hostingUploadProgress");
+    bar.hidden = kind !== "loading";
+    if (kind === "loading") {
+      bar.value = total > 0 ? Math.round(100 * completed / total) : 0;
+    }
+  }
+  function clearUploadFeedback() {
+    const el = $("hostingUploadFeedback");
+    el.hidden = true;
+    el.removeAttribute("data-state");
+  }
   function showPanel(allowed) {
     authorized = allowed;
     $("hostingLogin").hidden = allowed;
@@ -92,83 +109,131 @@
     btn.addEventListener("click", handler);
     return btn;
   }
-  function resultItem(fileName, link, error) {
+function resultItem(fileName, link, error) {
     const box = document.createElement("div");
-    box.className = "hosting-result" + (error ? " error" : "");
-    const header = document.createElement("div");
-    header.textContent = fileName + " — " + (error || "immagine caricata");
+    box.className = "hosting-result" + (error ? " error" : " success");
+    const header = document.createElement("strong");
+    header.className = "hosting-result-title";
+    header.textContent = (error ? "❌ Caricamento non riuscito — " : "✅ Immagine caricata — ") + fileName;
     box.appendChild(header);
+    if (error) {
+      const description = document.createElement("p");
+      description.textContent = error;
+      box.appendChild(description);
+    }
     if (link) {
-      const a = document.createElement("a");
-      a.href = link;
-      a.target = "_blank";
-      a.rel = "noopener noreferrer";
-      a.textContent = link;
-      box.appendChild(a);
-      box.appendChild(document.createElement("br"));
-      box.appendChild(actionButton("Copia link", e => copyLink(link, e.currentTarget), "hosting-copy"));
+      const preview = document.createElement("img");
+      preview.className = "hosting-result-preview";
+      preview.src = link;
+      preview.alt = "Anteprima: " + fileName;
+      preview.loading = "lazy";
+      box.appendChild(preview);
+      const field = document.createElement("input");
+      field.type = "text";
+      field.readOnly = true;
+      field.className = "hosting-result-link";
+      field.setAttribute("aria-label", "Link diretto di " + fileName);
+      field.value = link;
+      field.addEventListener("click", () => field.select());
+      box.appendChild(field);
+      const actions = document.createElement("div");
+      actions.className = "hosting-result-actions";
+      actions.appendChild(actionButton("🔗 Usa immagine · Copia link", e => copyLink(link, e.currentTarget), "hosting-copy"));
+      actions.appendChild(actionButton("Copia HTML", e => copyLink(htmlForImage(link, fileName), e.currentTarget), "hosting-copy"));
+      const open = document.createElement("a");
+      open.href = link;
+      open.target = "_blank";
+      open.rel = "noopener noreferrer";
+      open.textContent = "Apri immagine ↗";
+      actions.appendChild(open);
+      box.appendChild(actions);
     }
     $("hostingResults").prepend(box);
   }
+  function htmlForImage(link, description) {
+    const safe = value => String(value).replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    return '<img src="' + safe(link) + '" alt="' + safe(description) + '">';
+  }
+  
   function chooseFiles(files) {
     if (busy) return;
     selected = Array.from(files || []).slice(0,30);
     const count = selected.length;
     $("hostingUploadBtn").disabled = count === 0;
     $("hostingSelection").textContent = count ? count + " file selezionat" + (count === 1 ? "o" : "i") : "Nessun file selezionato";
+    if (count) {
+      clearUploadFeedback();
+      status("Hai selezionato " + count + " immagini. Premi «Carica e genera link» per iniziare.");
+    }
   }
-  async function upload() {
+async function upload() {
     if (!authorized || busy || selected.length === 0) return;
     busy = true;
     const btn = $("hostingUploadBtn");
     btn.disabled = true;
+    btn.textContent = "Caricamento in corso…";
     $("hostingRefresh").disabled = true;
     $("hostingResults").replaceChildren();
     let success = 0;
     let failed = 0;
     const files = selected.slice();
+    uploadFeedback("loading", "Caricamento avviato", "0 di " + files.length + " immagini elaborate", 0, files.length);
     try {
       for (let i = 0; i < files.length; i++) {
         const file = files[i];
         status("Caricamento " + (i + 1) + "/" + files.length + ": " + file.name);
-        if (!Object.prototype.hasOwnProperty.call(TYPES, file.type)) {
+        try {
+          if (!Object.prototype.hasOwnProperty.call(TYPES, file.type)) {
+            failed++;
+            resultItem(file.name, null, "Formato non consentito. Usa JPG, PNG, WEBP o GIF.");
+          } else if (!file.size || file.size > MAX_BYTES) {
+            failed++;
+            resultItem(file.name, null, "Il file è vuoto oppure supera 10 MB.");
+          } else {
+            const path = makePath(file);
+            const result = await db.storage.from(BUCKET).upload(path, file, {
+              cacheControl: "3600", contentType: file.type, upsert: false
+            });
+            if (result.error) {
+              failed++;
+              resultItem(file.name, null, niceError(result.error));
+            } else {
+              success++;
+              resultItem(file.name, publicUrl(path), null);
+            }
+          }
+        } catch (error) {
           failed++;
-          resultItem(file.name, null, "Formato non consentito. Usa JPG, PNG, WEBP o GIF.");
-          continue;
+          resultItem(file.name, null, niceError(error));
         }
-        if (!file.size || file.size > MAX_BYTES) {
-          failed++;
-          resultItem(file.name, null, "Il file è vuoto oppure supera 10 MB.");
-          continue;
-        }
-        const path = makePath(file);
-        const result = await db.storage.from(BUCKET).upload(path, file, {
-          cacheControl:"3600", contentType:file.type, upsert:false
-        });
-        if (result.error) {
-          failed++;
-          resultItem(file.name, null, niceError(result.error));
-        } else {
-          success++;
-          resultItem(file.name, publicUrl(path), null);
-        }
+        uploadFeedback("loading", "Caricamento in corso…", (i + 1) + " di " + files.length + " immagini elaborate · " + success + " riuscite", i + 1, files.length);
       }
       selected = [];
       $("hostingFile").value = "";
       $("hostingSelection").textContent = "Nessun file selezionato";
+      const title = failed === 0 ? "✅ Caricamento completato!" : success ? "⚠️ Caricamento parziale" : "❌ Nessuna immagine caricata";
+      const description = success + " immagin" + (success === 1 ? "e caricata" : "i caricate") + " · " + failed + " non caricate. " + (success ? "Usa «Copia link» per inserire le immagini dove vuoi." : "Controlla i messaggi qui sotto.");
+      uploadFeedback(failed === 0 ? "success" : success ? "warning" : "error", title, description, files.length, files.length);
+      status(description, failed > 0);
       if (success) {
         page = 0;
-        await loadGallery();
+        try {
+          await loadGallery();
+        } catch (err) {
+          status("Upload riuscito, ma non è stato possibile aggiornare la galleria: " + niceError(err), true);
+        }
       }
-      status(success + " immagini caricate, " + failed + " non caricate.", failed > 0);
     } catch (error) {
+      uploadFeedback("error", "❌ Errore di caricamento", niceError(error), 0, 0);
       status(niceError(error), true);
     } finally {
       busy = false;
+      btn.textContent = "Carica e genera link";
       btn.disabled = selected.length === 0;
       $("hostingRefresh").disabled = false;
     }
   }
+  
   function imageLabel(name) {
     return name.replace(/^[0-9a-f]{8}-(?:[0-9a-f]{4}-){3}[0-9a-f]{12}-/,"").replace(/\.[a-z0-9]+$/,"").replace(/-/g," ");
   }
@@ -218,7 +283,8 @@
     body.appendChild(meta);
     const actions = document.createElement("div");
     actions.className = "hosting-card-actions";
-    actions.appendChild(actionButton("Copia link", e => copyLink(link, e.currentTarget)));
+    actions.appendChild(actionButton("🔗 Usa immagine · Copia link", e => copyLink(link, e.currentTarget)));
+    actions.appendChild(actionButton("Copia HTML", e => copyLink(htmlForImage(link, imageLabel(item.name)), e.currentTarget)));
     actions.appendChild(actionButton("Elimina", () => removeImage(path), "hosting-danger"));
     body.appendChild(actions);
     card.appendChild(body);
