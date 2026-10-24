@@ -2,29 +2,46 @@
 
 **URL:** https://lostcountryrp.github.io/Lost-Country/amministrazione.html
 
-## Accesso
-- Il pannello si apre con Supabase Auth e accetta solo utenti per cui `public.is_sheriff_admin()` restituisce `true`.
-- Al 24 ottobre 2026 gli account riconosciuti come amministratori Sceriffi sono Mineko e Diego.
-- Chi non è amministratore può vedere la pagina di accesso, ma non i contenuti gestionali. La sicurezza effettiva delle operazioni è data dalle policy RLS su Supabase, non dai pulsanti nascosti.
+## Accesso e sicurezza
+- La console usa Supabase Auth e consente l'accesso ai soli account che superano \`public.is_sheriff_admin()\` (attualmente Mineko e Diego).
+- Le verifiche effettive di scrittura avvengono in Supabase tramite Row Level Security, non tramite pulsanti nascosti.
+- Non sono presenti chiavi di servizio o token GitHub nel browser. L'account del pannello non sostituisce il login amministrativo di GitHub o Supabase.
+- Il registro medico rimane protetto dai permessi medici specifici; il pannello gestisce solo l'assegnazione e sospensione del ruolo.
 
-## Funzionalità
-- Panoramica conteggi: `frontier_news`, `commercial_registry`, `frontier_events`, immagini `lc-image-hosting` (prime 100: il valore `100+` è indicativo).
-- Link indipendenti a: Sceriffi, gestione account, Medici, Redazione, Ufficio Civico, Hosting immagini, GitHub e Supabase.
-- Moderazione degli ultimi 100 contenuti per sezione:
-  - Giornale: titolo, categoria, testo; pubblicazione/non pubblicazione.
-  - Commercio: dati dell'attività, stato ATTIVA/SOSPESA/CHIUSA.
-  - Eventi: dati evento, orari, annullamento/ripristino.
-- Gestione ruoli: elenco medici e giornalisti, sospensione/riattivazione, assegnazione ruolo a un utente Supabase **già esistente** identificato dal suo User UID.
-- Non sono stati aggiunti pulsanti per eliminare definitivamente articoli, attività, eventi o utenti.
+## Sezioni gestibili
+- **Giornale:** revisione di titolo/rubrica/testo, pubblicazione o ritiro di articoli.
+- **Attività commerciali:** aggiornamento dati e stato ATTIVA/SOSPESA/CHIUSA.
+- **Eventi:** modifica e annullamento/ripristino.
+- **Utenti medici e giornalisti:** assegnazione ad account Supabase già esistenti tramite UID, sospensione e riattivazione.
+- **Sceriffi:** collegamento al portale Sceriffi e alla gestione dedicata degli account (con ulteriori verifiche lato server).
+- **Immagini:** accesso all'hosting e galleria separati.
+- **Gestione tecnica:** link a repository GitHub, workflow di backup, console Supabase.
 
-## Separazione degli accessi
-- Un amministratore può gestire gli account di personale medico e giornalistico. Per leggere cartelle cliniche deve essere anche abilitato come medico: la console non mostra direttamente i referti.
-- L'amministrazione degli account Sceriffo utilizza ancora `admin-sceriffi.html` e la Edge Function `manage-sheriffs`, che possono applicare ulteriori restrizioni lato server.
-- Il caricamento delle immagini utilizza il pannello indipendente `hosting-immagini.html`; le foto sono pubbliche per chi ne conosce il link, ma la galleria è accessibile solo agli amministratori.
-- Il pannello tecnico NON fornisce credenziali amministrative Supabase né token di GitHub. Sono richiesti accessi separati alle console ufficiali.
+## Editor delle pagine informative (nuovo 24 ottobre 2026)
+È disponibile nella console la sezione **Editor dei testi del sito**.
+- Regolamento: 15 blocchi \`.rule-content\`.
+- Approfondimenti: 18 blocchi \`.deep-dive-content\`.
+- Codice Penale: 70 blocchi di descrizione/preambolo. **Non modifica gli importi delle pene**, che devono restare coerenti con le tabelle dei reati e il codice usato dall'ufficio Sceriffi.
+- È possibile cercare un blocco, editarne l'HTML semplice, vedere l'anteprima, pubblicare e ripristinare il testo statico originale.
+- Le revisioni vengono conservate nel registro delle modifiche. L'editor consente di caricare il testo precedente e ripubblicarlo.
+- L'HTML dinamico viene filtrato lato client da \`lc-cms-core.js\`: nessuno script, stile iniettato o evento HTML è ammesso. Non modificare la whitelist senza analisi di sicurezza.
+- I contenuti originali restano nei file HTML su GitHub. In caso di errore di rete o di database, le pagine pubbliche continuano a mostrare il testo originale.
+- **Limite**: le pagine sono statiche e non esiste un editor visuale per tutta la struttura grafica, per le immagini della Lore o per aggiungere sezioni nuove. Tali modifiche richiedono ancora GitHub. I riferimenti ai blocchi \`data-lc-edit\` devono restare stabili nel tempo.
 
-## Sicurezza e deploy
-- Gli accessi diretti alle tabelle sono filtrati da policy RLS. I nomi delle policy sono versionati in `sql/admin-console.sql` (già applicate, non rieseguire senza controllare).
-- Le modifiche nei registri sono aggiornamenti, non cancellazioni; il repository conserva il codice in GitHub.
-- I nuovi endpoint e le policy sono stati verificati staticamente. Serve comunque un test da browser con sessione Mineko/Diego e uno con account non autorizzato.
-- Le pagine GitHub Pages sono statiche: la console è raggiungibile anche da chi conosce l'URL, ma le operazioni e i dati amministrativi richiedono autorizzazione Supabase.
+## Registro attività
+La tabella \`lc_admin_history\` registra da quando è stata installata la funzionalità:
+- Modifiche ai testi \`lc_site_edits\`;
+- inserimenti/aggiornamenti su giornale, attività ed eventi;
+- inserimenti/aggiornamenti delle abilitazioni mediche e giornalistiche.
+Sono registrati orario, autore identificato dalla sessione Supabase, origine, ID record, valore prima e dopo (accessibile solo agli amministratori).
+**Non è uno storico retroattivo.** Le modifiche agli account Sceriffo gestiti via Edge Function e i cambi nei file GitHub non vengono ancora raccolti qui.
+
+## Deploy
+- I file statici sono serviti da GitHub Pages dal branch principale.
+- La struttura database per questa funzionalità è già stata installata su Supabase; non rilanciare automaticamente le DDL senza verificarne lo stato.
+- Files: \`amministrazione-contenuti.js\`, \`lc-cms-core.js\`, \`lc-cms-public.js\`, \`amministrazione.html\`, \`amministrazione.js\`, \`amministrazione.css\`.
+- Test database in transazione con rollback: inserimento -> modifica di testo -> incremento versione e due voci audit correttamente generati.
+- Controllo statico della sintassi JS effettuato. Restano raccomandati test da browser autentico con account autorizzato e account non autorizzato.
+
+## Note sui permessi
+Non è stata introdotta una nuova classe universale di \"super admin\" o una delega generalizzata ai responsabili di sezione. Per ora la console **rispetta gli amministratori preesistenti** per non alterare in modo rischioso le autorizzazioni degli uffici. La gestione gerarchica dei permessi va progettata coordinando anche la Edge Function degli Sceriffi.
