@@ -78,7 +78,7 @@
     $("hubWorkspace").hidden=false;
     $("hubIdentity").textContent=result.data.user.email||"Amministratore";
     $status("");
-    await Promise.all([stats(),loadData(),staffPermissions()]);
+    await Promise.all([stats(),loadData(),staffPermissions(),loadStaff()]);
   }
   async function login(e) {
     e.preventDefault();
@@ -289,16 +289,95 @@
     }catch(err){$status("Operazione non riuscita: "+err.message,true)}
     finally{busy=false;}
   }
+
+  const staffConfig = {
+    medical:{table:"medical_staff",name:"display_name",target:"hubStaffMedical"},
+    journalist:{table:"journalist_staff",name:"pen_name",target:"hubStaffJournalist"}
+  };
+  let staffBusy=false;
+  async function loadStaff() {
+    if(!isAdmin)return;
+    await Promise.all(Object.entries(staffConfig).map(async([type,cfg])=>{
+      const box=$(cfg.target);
+      box.replaceChildren(node("div","hub-empty","Caricamento personale…"));
+      const r=await db.from(cfg.table).select("user_id,"+cfg.name+",active").order(cfg.name,{ascending:true});
+      box.replaceChildren();
+      if(r.error) {
+        box.appendChild(node("div","hub-empty","Errore: "+r.error.message));
+        return;
+      }
+      if(!r.data.length) {
+        box.appendChild(node("div","hub-empty","Nessun account assegnato a questo ufficio."));
+        return;
+      }
+      for(const user of r.data){
+        const entry=node("article","hub-staff-entry");
+        const description=node("div","hub-staff-person");
+        description.appendChild(node("strong","",user[cfg.name]));
+        const uid=node("small","",user.user_id);
+        uid.title="ID account Supabase";
+        description.appendChild(uid);
+        const state=node("span","hub-item-status",user.active?"Attivo":"Sospeso");
+        state.dataset.state=user.active?"live":"off";
+        description.appendChild(state);
+        const button=action(user.active?"Sospendi":"Riattiva",()=>toggleStaff(type,user));
+        entry.append(description,button);
+        box.appendChild(entry);
+      }
+    }));
+  }
+  async function toggleStaff(type,person) {
+    if(!isAdmin||staffBusy)return;
+    const cfg=staffConfig[type];
+    const word=person.active?"sospendere":"riattivare";
+    if(!window.confirm("Confermi di "+word+" il ruolo per "+person[cfg.name]+"?\n\nL'accesso dell'utente all'ufficio cambierà immediatamente alla prossima verifica."))return;
+    staffBusy=true;
+    try {
+      const r=await db.from(cfg.table).update({active:!person.active})
+        .eq("user_id",person.user_id).select("user_id");
+      if(r.error)throw r.error;
+      if(!r.data?.length)throw Error("Nessuna autorizzazione modificata.");
+      $status("Ruolo "+(person.active?"sospeso":"riattivato")+" per "+person[cfg.name]+".");
+      await Promise.all([loadStaff(),staffPermissions()]);
+    }catch(e){$status("Impossibile aggiornare il ruolo: "+e.message,true);}
+    finally{staffBusy=false;}
+  }
+  async function createStaff(e) {
+    e.preventDefault();
+    if(!isAdmin||staffBusy)return;
+    const cfg=staffConfig[$("hubStaffRole").value];
+    if(!cfg)return;
+    const name=$("hubStaffName").value.trim();
+    const uid=$("hubStaffUid").value.trim().toLowerCase();
+    if(name.length<2||!(/^[0-9a-f]{8}-(?:[0-9a-f]{4}-){3}[0-9a-f]{12}$/.test(uid))) {
+      $status("Inserisci un nome e uno User UID validi.",true);return;
+    }
+    if(!window.confirm("Assegnare l'abilitazione "+$("hubStaffRole").selectedOptions[0].text+" a "+name+"?\n\nL'account deve già esistere in Supabase."))return;
+    staffBusy=true;$("hubStaffCreateSubmit").disabled=true;
+    try {
+      const r=await db.from(cfg.table).insert({user_id:uid,[cfg.name]:name,active:true}).select("user_id");
+      if(r.error)throw r.error;
+      if(!r.data?.length)throw Error("L'assegnazione non è stata confermata.");
+      $("hubStaffCreateForm").reset();
+      $status("Ruolo assegnato correttamente a "+name+".");
+      await Promise.all([loadStaff(),staffPermissions()]);
+    }catch(err){
+      $status("Impossibile assegnare il ruolo: "+err.message+". Verifica che l'account esista e non sia già assegnato.",true);
+    }finally{staffBusy=false;$("hubStaffCreateSubmit").disabled=false;}
+  }
   document.addEventListener("DOMContentLoaded",()=>{
     $("hubLoginForm").addEventListener("submit",login);
     $("hubSignout").addEventListener("click",logout);
     $("hubDeniedLogout").addEventListener("click",logout);
-    $("hubReload").addEventListener("click",async()=>{await Promise.all([loadData(),stats(),staffPermissions()]);$status("Dati aggiornati.")});
+    $("hubReload").addEventListener("click",async()=>{await Promise.all([loadData(),stats(),staffPermissions(),loadStaff()]);$status("Dati aggiornati.")});
     $("hubFilter").addEventListener("input",renderList);
     $("hubRefreshList").addEventListener("click",loadData);
     document.querySelectorAll(".hub-tab").forEach(btn=>btn.addEventListener("click",()=>setSection(btn.dataset.section)));
     $("hubEditCancel").addEventListener("click",()=>{selected=null;$("hubEditPanel").hidden=true});
     $("hubEditForm").addEventListener("submit",save);
+    $("hubStaffMedicRefresh").addEventListener("click",loadStaff);
+    $("hubStaffJournalRefresh").addEventListener("click",loadStaff);
+    $("hubStaffCreateForm").addEventListener("submit",createStaff);
     db.auth.onAuthStateChange((_e,session)=>{
       if(!session){goLogin();return;}
       if(!isAdmin)setTimeout(()=>{checkPermission().catch(e=>$status(e.message,true))},0);
