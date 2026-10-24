@@ -15,6 +15,7 @@ function showAuth(ok){
  if(field){field.readOnly=true;field.setAttribute("aria-readonly","true");field.title="Nome assegnato automaticamente dall’account sceriffo";field.autocomplete="off";field.value=ok?(state.officerName||"Caricamento nome sceriffo..."):"";}
  const save=$("#saveCaseBtn");if(save)save.disabled=!ok||!state.officerName;
  const adminBtn=$("#adminBtn");if(adminBtn){adminBtn.classList.toggle("hidden",!(ok&&state.isAdmin));adminBtn.hidden=!(ok&&state.isAdmin);}
+ const hostingBtn=$("#imageHostingBtn");if(hostingBtn){hostingBtn.classList.toggle("hidden",!(ok&&state.isAdmin));hostingBtn.hidden=!(ok&&state.isAdmin);}
  if(ok&&state.session?.user)$("#sessionUser").textContent=state.session.user.email||"Utente autenticato";
 }
 async function loadOfficerName(){
