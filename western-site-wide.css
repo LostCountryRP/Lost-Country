@@ -40,8 +40,9 @@ body .lore-book-wrap,
 body .hosting,
 body .admin-hub{min-width:0}
 body .site-main{overflow-wrap:break-word}
-body .site-main img,body .site-main video,body .site-main svg{max-width:100%}
-body .site-main img,body .site-main video{height:auto}
+/* Keep specialized image sizing (notably Lore's 3D page spreads) intact. */
+body .site-main video,body .site-main iframe{max-width:100%;height:auto}
+body .parchment-content > img{max-width:100%;height:auto}
 body .site-main table{max-width:100%}
 body :is(.app-card,.auth-card,.admin-card,.law-card,.rule-section,.hub-service,.hub-item,.news-archive-card,.medical-folder-detail){
   min-width:0;
@@ -560,4 +561,14 @@ body.page-admin .hub-item-title{overflow-wrap:anywhere}
 }
 @media(prefers-reduced-motion:reduce){
   body :is(button,a,.btn-primary,.btn-secondary){transition:none!important}
+}
+
+
+/* Lore depends on full-height, non-clamped page images for the 3D flipbook. */
+body.page-lore .spread-crop img{
+  position:absolute;
+  width:auto;
+  height:100%;
+  max-width:none;
+  object-fit:contain;
 }
