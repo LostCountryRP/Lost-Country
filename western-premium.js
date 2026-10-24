@@ -70,7 +70,60 @@
     });
   }
 
-  function initializePremium(){addMasthead();refinePremiumNavigation();}
+  
+  /* V3 - accessible public sidebar / real destinations */
+  function organizePublicSidebar(){
+    const file=(location.pathname.split('/').pop()||'index.html').toLowerCase();
+    const eligible=new Set(['index.html','approfondimenti.html','codice-penale.html','lore.html','voce-della-frontiera.html','attivita-commerciali.html','eventi.html']);
+    if(!eligible.has(file))return;
+    const aside=document.querySelector('.western-sidebar');
+    const localNav=aside?.querySelector('.side-nav');
+    if(!aside||!localNav||aside.querySelector('.lc-premium-side-nav'))return;
+    const sections=[
+      ['index.html','HOME','⌂'],
+      ['index.html#regole-oro','REGOLAMENTO','✦'],
+      ['lore.html','LORE','▤'],
+      ['codice-penale.html','CODICE PENALE','⚖'],
+      ['voce-della-frontiera.html','LA VOCE DELLA FRONTIERA','▣'],
+      ['medico.html','REGISTRO MEDICO','✚'],
+      ['eventi.html','EVENTI','▦'],
+      ['attivita-commerciali.html','ATTIVITÀ COMMERCIALI','♜']
+    ];
+    const nav=document.createElement('nav');
+    nav.className='lc-premium-side-nav';
+    nav.setAttribute('aria-label','Sezioni principali di Lost Country');
+    sections.forEach(([url,title,symbol])=>{
+      const a=document.createElement('a');
+      a.href=url;
+      const ico=document.createElement('span');
+      ico.className='lc-premium-side-icon';
+      ico.textContent=symbol;
+      ico.setAttribute('aria-hidden','true');
+      const lab=document.createElement('span');
+      lab.textContent=title;
+      a.append(ico,lab);
+      const target=url.split('#')[0];
+      if(file===target&&(file!=='index.html'||url==='index.html')){
+        a.classList.add('is-active');
+        a.setAttribute('aria-current','page');
+      }
+      nav.append(a);
+    });
+    const details=document.createElement('details');
+    details.className='lc-premium-page-index';
+    const summary=document.createElement('summary');
+    summary.textContent='Indice della pagina';
+    summary.setAttribute('aria-label','Mostra i collegamenti interni alla pagina');
+    localNav.before(details);
+    details.append(summary,localNav);
+    aside.querySelector('.sidebar-brand')?.after(nav);
+    const emblem=document.createElement('div');
+    emblem.className='lc-premium-side-emblem';
+    emblem.setAttribute('aria-hidden','true');
+    aside.append(emblem);
+  }
+
+  function initializePremium(){addMasthead();refinePremiumNavigation();organizePublicSidebar();}
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',initializePremium,{once:true});
   else initializePremium();
 })();
