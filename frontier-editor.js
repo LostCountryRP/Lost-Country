@@ -12,7 +12,7 @@ async function publish(e){
  let row;
  if(mode==="news")row={title:val("portalTitle"),body:val("portalBody"),category:val("portalCategory")||"Cronaca",author_name:x.data,created_by:data.session.user.id};
  else if(mode==="business")row={business_name:val("portalTitle"),category:val("portalCategory"),town:val("portalTown"),owner_name:val("portalOwner"),description:val("portalBody"),created_by:data.session.user.id};
- else row={title:val("portalTitle"),description:val("portalBody"),town:val("portalTown"),location_name:val("portalLocation"),organizer:val("portalOwner"),starts_at:new Date(val("portalStart")).toISOString(),created_by:data.session.user.id};
+ else {if(!val("portalStart")||Number.isNaN(Date.parse(val("portalStart"))))throw Error("Data evento non valida.");row={title:val("portalTitle"),description:val("portalBody"),town:val("portalTown"),location_name:val("portalLocation"),organizer:val("portalOwner"),starts_at:new Date(val("portalStart")).toISOString(),created_by:data.session.user.id};}
  if(!row[mode==="business"?"business_name":"title"]||!val("portalBody"))throw Error("Compila titolo e descrizione.");
  if(mode==="news"&&row.body.length<20)throw Error("Articolo troppo breve (minimo 20 caratteri).");
  if(mode==="events"&&(!val("portalStart")||Number.isNaN(Date.parse(val("portalStart")))))throw Error("Data evento non valida.");
