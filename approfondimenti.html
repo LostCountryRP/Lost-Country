@@ -7,6 +7,10 @@
 <title>Approfondimenti - Lost Country</title>
 <link rel="stylesheet" href="style.css?v=20261024-prime-tre-uniformi-2">
 <script defer src="site-enhancements.js?v=20261024-prime-tre-uniformi-2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-config.js"></script>
+<script defer src="lc-cms-core.js?v=20261024-1"></script>
+<script defer src="lc-cms-public.js?v=20261024-1"></script>
 </head>
 <body class="page-approfondimenti">
 <div class="site-shell">
@@ -23,21 +27,21 @@
 <div class="deep-dive-list">
 <section class="deep-dive-section" id="bolla">
 <h2>⭕ Azioni in bolla</h2>
-<div class="deep-dive-content">
+<div class="deep-dive-content" data-lc-edit="deep-001">
 <p>Divieto di iniziare azioni illegali mentre si è in bolla o di usarla per impedire la reazione altrui.</p>
 </div>
 </section>
 
 <section class="deep-dive-section">
 <h2>🖥️ Malfunzionamenti</h2>
-<div class="deep-dive-content">
+<div class="deep-dive-content" data-lc-edit="deep-002">
 <p>Con Desync e problemi tecnici c’è l’obbligo di andare in assistenza e avere una clip; divieto di sfruttare il desync.</p>
 </div>
 </section>
 
 <section class="deep-dive-section" id="proprieta">
 <h2>🏘️ Difesa della Proprietà privata</h2>
-<div class="deep-dive-content">
+<div class="deep-dive-content" data-lc-edit="deep-003">
 <p>I proprietari hanno il diritto di proteggere il proprio terreno e proprietà privata.</p>
 <p>In caso di intrusione con comportamento ostile palese, si può aprire il fuoco. L'aggressore abbattuto rischia il Permadeath immediato (dopo valutazione dello Staff).</p>
 </div>
@@ -45,7 +49,7 @@
 
 <section class="deep-dive-section" id="legge">
 <h2>🚔 Collaborazione Legge-Criminalità-Civili</h2>
-<div class="deep-dive-content">
+<div class="deep-dive-content" data-lc-edit="deep-004">
 <p>Vietata qualsiasi alleanza tra uomini di legge e criminali.</p>
 <p>No spionaggio/favoritismi: un criminale non può favorire la legge (e viceversa).<br>Le due realtà devono restare distinte e contrapposte.<br>Quando scoppia un'azione criminale o senti spari:</p>
 <p>Devi metterti al riparo o allontanarti in modo realistico.</p>
@@ -55,35 +59,35 @@
 
 <section class="deep-dive-section">
 <h2>⚔️ Scontri tra banditi e legge</h2>
-<div class="deep-dive-content">
+<div class="deep-dive-content" data-lc-edit="deep-005">
 <p>Dopo la vittoria di una parte, si procede con l’ arresto, interrogatorio o allontanamento veloce dalla scena.</p>
 </div>
 </section>
 
 <section class="deep-dive-section" id="fairplay">
 <h2>🫶 Fair Play</h2>
-<div class="deep-dive-content">
+<div class="deep-dive-content" data-lc-edit="deep-006">
 <p>Divieto esplicito di insultare o provocare chi è atterrato o svenuto; divieto di mosse finali non autorizzate.</p>
 </div>
 </section>
 
 <section class="deep-dive-section">
 <h2>🔺 Intervento di terze parti negli scontri</h2>
-<div class="deep-dive-content">
+<div class="deep-dive-content" data-lc-edit="deep-007">
 <p>Divieto assoluto a civili, bande e gruppi estranei di intervenire in uno scontro già iniziato.</p>
 </div>
 </section>
 
 <section class="deep-dive-section">
 <h2>⛺ Camperaggio</h2>
-<div class="deep-dive-content">
+<div class="deep-dive-content" data-lc-edit="deep-008">
 <p>Sono vietate le Ronde e gli Appostamenti alle porte delle città: divieto di camperaggio e distanza minima di 500 metri dalle città.</p>
 </div>
 </section>
 
 <section class="deep-dive-section" id="sceriffi">
 <h2>👮 Uomini di legge</h2>
-<div class="deep-dive-content">
+<div class="deep-dive-content" data-lc-edit="deep-009">
 <p>Gli sceriffi non possono infrangere la legge senza autorizzazione dello Staff/Team Lore. Qualsiasi reato comportail licenziamento immediato.</p>
 <p>Durante il servizio è obbligatorio essere identificabili con distintivo e divisa.</p>
 <p>Dopo le dimissioni vige l’obbligo di riconsegnare la dotazione. Vietato unirsi a bande criminali senza Ticket Lore (rischio patibolo).</p>
@@ -96,7 +100,7 @@
 
 <section class="deep-dive-section" id="attivita">
 <h2>🏪 Attività commerciali</h2>
-<div class="deep-dive-content">
+<div class="deep-dive-content" data-lc-edit="deep-010">
 <p>Il titolare è responsabile dell'operato dei dipendenti.</p>
 <p>Le assunzioni devono avvenire in RP e i dipendenti devono essere identificati.</p>
 <p>Inattività e assenze prolungate del titolare portano alla riassegnazione dell'attività.<br>Se direttore o vicedirettore commette reati gravi, l'attività può essere confiscata dalla legge e riassegnata dallo staff.<br>L’uso sconsiderato dello strillone sarà punito: è tollerato un messaggio ogni 20 minuti.</p>
@@ -106,7 +110,7 @@
 
 <section class="deep-dive-section" id="rapine">
 <h2>💰 Rapine</h2>
-<div class="deep-dive-content">
+<div class="deep-dive-content" data-lc-edit="deep-011">
 <p>Senza ostaggi: gli sceriffi possono irrompere dopo una sola e chiara dichiarazione di intenti.</p>
 <p>Con ostaggi: La protezione vale solo per i banditi dentro l'edificio.<br>Un bandito catturato all'esterno deve essere usato come merce di scambio per liberare l’ostaggio.</p>
 <p>La sosta vicino alle porte è permessa solo per trattare; se esci possono catturarti</p>
@@ -123,7 +127,7 @@
 
 <section class="deep-dive-section" id="cavalli">
 <h2>🐴 Cavalli</h2>
-<div class="deep-dive-content">
+<div class="deep-dive-content" data-lc-edit="deep-012">
 <p>Puoi controllare il cavallo altrui, ma solo se presente in scena.</p>
 <p>Non mandare via il cavallo per evitare i controlli.</p>
 <p>Non puoi riconoscere i player dal cavallo.</p>
@@ -133,7 +137,7 @@
 
 <section class="deep-dive-section" id="riconoscimento">
 <h2>🎭 Riconoscimento</h2>
-<div class="deep-dive-content">
+<div class="deep-dive-content" data-lc-edit="deep-013">
 <p>Maschera/bandana: nessuno ti riconosce.</p>
 <p>Se porti sempre gli stessi colori/vestiti soprattutto in gruppo, è lecito sospettare.</p>
 <p>Se qualcuno ti vede in faccia, puoi metterti una maschera ma se nn cambi vestiti, verrai comunque riconosciuto.</p>
@@ -144,7 +148,7 @@
 
 <section class="deep-dive-section">
 <h2>🪦 Sciacallaggio</h2>
-<div class="deep-dive-content">
+<div class="deep-dive-content" data-lc-edit="deep-014">
 <p>Vietato il loot di giocatori a terra non coinvolti nella tua azione.</p>
 <p>Puoi sottrarre oggetti solo a chi è stato abbattuto dai partecipanti all'azione.</p>
 <p>Altrimenti puoi solo soccorrerlo o abbandonarlo.</p>
@@ -153,7 +157,7 @@
 
 <section class="deep-dive-section" id="permadeath">
 <h2>💀 Permadeath</h2>
-<div class="deep-dive-content">
+<div class="deep-dive-content" data-lc-edit="deep-015">
 <p>Va richiesto tramite ticket. Servono almeno 5 motivazioni valide con prove video obbligatorie.</p>
 <p>Può essere richiesto per sé o verso altri. Una volta approvato, va eseguito entro 7 giorni.</p>
 <p>Il richiedente deve partecipare fisicamente all'azione.</p>
@@ -172,7 +176,7 @@
 
 <section class="deep-dive-section">
 <h2>🚫 Bait, Revenge Kill e Bug</h2>
-<div class="deep-dive-content">
+<div class="deep-dive-content" data-lc-edit="deep-016">
 <p>Bait: non provocare gli sceriffi solo per farti inseguire.</p>
 <p>Revenge Kill: se muori, non puoi tornare subito sul posto per vendicarti.</p>
 <p>Bug: se trovi un bug che ti dà vantaggio, non usarlo. Segnalalo allo staff.</p>
@@ -181,14 +185,14 @@
 
 <section class="deep-dive-section" id="integrita">
 <h2>📁 Integrità File</h2>
-<div class="deep-dive-content">
+<div class="deep-dive-content" data-lc-edit="deep-017">
 <p>È vietato modificare i file contenuti nella cartella Citizen/ o nei file .rpf. Questi file influenzano il gameplay, quindi toccarli significa alterare il gioco in modo non consentito.<br>È vietato usare: Macro Wallhack Aimbot ReShade modificata.<br>Combat logging, bug ed exploit.</p>
 </div>
 </section>
 
 <section class="deep-dive-section" id="assistenza">
 <h2>🎟️ Regole durante l'Assistenza</h2>
-<div class="deep-dive-content">
+<div class="deep-dive-content" data-lc-edit="deep-018">
 <p>Vietato registrare/streammare le conversazioni con lo staff.</p>
 <p>Vietato diffondere la voce dello staff senza permesso.</p>
 <p>Rispetto obbligatorio!<br>Chi alza i toni o manca di rispetto viene disconnesso e sanzionato.</p>
