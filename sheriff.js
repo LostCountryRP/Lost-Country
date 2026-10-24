@@ -34,7 +34,7 @@ async function loadOfficerName(){
 }
 function bind(){
  $("#loginForm").addEventListener("submit",login);$("#logoutBtn").addEventListener("click",()=>state.db.auth.signOut());
- const adminBtn=$("#adminBtn");if(adminBtn)adminBtn.addEventListener("click",()=>{if(state.session&&state.isAdmin)window.location.href="admin-sceriffi.html";});
+ const adminBtn=$("#adminBtn");if(adminBtn)adminBtn.addEventListener("click",()=>{if(state.session&&state.isAdmin)window.location.href="amministrazione.html";});
  $("#offenseSearch").addEventListener("input",populateOffenseSelect);
  $("#addOffenseBtn").addEventListener("click",addOffense);$("#saveCaseBtn").addEventListener("click",saveCase);$("#refreshBtn").addEventListener("click",loadAll);
  $("#fedinaCitizen").addEventListener("change",renderFedinaFromSearch);$("#fedinaSearchBtn").addEventListener("click",renderFedinaFromSearch);$("#wantedSearch").addEventListener("input",renderWanted);
