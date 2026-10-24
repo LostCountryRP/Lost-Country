@@ -38,13 +38,15 @@ do $$ declare t text; begin
  foreach t in array array['frontier_news','commercial_registry','frontier_events'] loop
   execute format('alter table public.%I enable row level security',t);
   execute format('grant select on public.%I to anon, authenticated',t);
-  execute format('grant insert,update on public.%I to authenticated',t);
+  execute format('revoke insert,update,delete,truncate,references,trigger on public.%I from anon',t);
+  execute format('revoke update,delete,truncate,references,trigger on public.%I from authenticated',t);
+  execute format('grant insert on public.%I to authenticated',t);
  end loop;
 end $$;
 drop policy if exists frontier_news_public on public.frontier_news;
-create policy frontier_news_public on public.frontier_news for select to anon,authenticated using (is_published or (auth.uid()=created_by and nullif(trim(public.current_sheriff_name()),'') is not null));
-drop policy if exists frontier_news_write on public.frontier_news;
-create policy frontier_news_write on public.frontier_news for insert to authenticated with check(created_by=auth.uid() and author_name=public.current_sheriff_name());
+create policy frontier_news_public on public.frontier_news for select to anon,authenticated using (is_published);
+-- La scrittura del giornale è gestita esclusivamente da journalist-staff.sql.
+-- Non sovrascrivere le policy della redazione quando questo script viene rieseguito.
 drop policy if exists commercial_public on public.commercial_registry;
 create policy commercial_public on public.commercial_registry for select to anon,authenticated using(true);
 drop policy if exists commercial_write on public.commercial_registry;
@@ -53,5 +55,5 @@ drop policy if exists events_public on public.frontier_events;
 create policy events_public on public.frontier_events for select to anon,authenticated using(true);
 drop policy if exists events_write on public.frontier_events;
 create policy events_write on public.frontier_events for insert to authenticated with check(created_by=auth.uid() and nullif(trim(public.current_sheriff_name()),'') is not null);
--- Prima versione: inserimenti riservati agli Sceriffi; niente modifiche per evitare alterazioni non tracciate.
+-- Attività ed eventi riservati agli Sceriffi; giornale alla redazione.
 revoke update on public.frontier_news,public.commercial_registry,public.frontier_events from authenticated;
