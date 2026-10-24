@@ -402,3 +402,184 @@
 @media(max-width:600px){
   .book-spine{width:9px}
 }
+
+/* ===== COPERTINA E RETROCOPERTINA — 24-10-2026 ===== */
+.book-cover{
+  position:absolute;
+  top:0;
+  left:25%;
+  width:50%;
+  height:100%;
+  z-index:12;
+  opacity:0;
+  pointer-events:none;
+  transform-style:preserve-3d;
+  backface-visibility:hidden;
+}
+.book-front-cover{
+  overflow:hidden;
+  background:#c99a61;
+  border:1px solid rgba(67,28,8,.44);
+  box-shadow:
+    inset 0 0 28px rgba(70,28,8,.13),
+    0 16px 34px rgba(22,7,2,.30);
+  transform-origin:left center;
+}
+.book-front-cover .cover-image{
+  position:absolute;
+  inset:0;
+}
+.book-front-cover::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  box-shadow:
+    inset 12px 0 22px rgba(48,17,4,.16),
+    inset -8px 0 14px rgba(255,229,177,.05);
+}
+.book-back-cover{
+  display:flex;
+  align-items:stretch;
+  justify-content:stretch;
+  background:
+    radial-gradient(circle at 30% 22%,rgba(121,74,35,.13),transparent 30%),
+    linear-gradient(145deg,#6f3c1c,#4b240f 52%,#2f1508);
+  border:2px solid rgba(30,11,3,.62);
+  box-shadow:
+    inset 0 0 0 8px rgba(177,112,54,.09),
+    inset 0 0 32px rgba(12,4,1,.36),
+    0 16px 34px rgba(22,7,2,.30);
+}
+.back-cover-inner{
+  width:100%;
+  height:100%;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:13px;
+  padding:26px;
+  text-align:center;
+  color:#d6aa6c;
+  border:1px solid rgba(218,169,101,.20);
+  font-family:"Special Elite",monospace;
+  text-shadow:0 2px 3px rgba(0,0,0,.42);
+}
+.back-cover-inner strong{
+  color:#e1b572;
+  font-family:"Rye",Georgia,serif;
+  font-size:clamp(1.15rem,2vw,1.7rem);
+  letter-spacing:.09em;
+}
+.back-cover-inner small{
+  max-width:220px;
+  color:#c8985b;
+  font-size:.68rem;
+  letter-spacing:.10em;
+  line-height:1.5;
+}
+.back-cover-mark{
+  font-size:2.2rem;
+  opacity:.72;
+}
+
+.cover-front-state .book-front-cover,
+.cover-back-state .book-back-cover{
+  opacity:1;
+}
+.cover-front-state .book-half,
+.cover-front-state .book-spine,
+.cover-back-state .book-half,
+.cover-back-state .book-spine{
+  opacity:0;
+}
+.cover-front-state .book-shadow,
+.cover-back-state .book-shadow{
+  inset:6% 25% -2%;
+}
+
+.cover-opening-front .book-front-cover{
+  opacity:1;
+  animation:lcCoverOpenFront .72s cubic-bezier(.32,.70,.34,1) forwards;
+}
+.cover-opening-front .book-half,
+.cover-opening-front .book-spine{
+  animation:lcBookAppear .72s ease forwards;
+}
+.cover-closing-front .book-front-cover{
+  opacity:1;
+  animation:lcCoverCloseFront .72s cubic-bezier(.32,.70,.34,1) forwards;
+}
+.cover-closing-front .book-half,
+.cover-closing-front .book-spine{
+  animation:lcBookDisappear .72s ease forwards;
+}
+
+.cover-closing-back .book-back-cover{
+  opacity:1;
+  animation:lcBackCoverIn .72s ease forwards;
+}
+.cover-closing-back .book-half,
+.cover-closing-back .book-spine{
+  animation:lcBookDisappear .72s ease forwards;
+}
+.cover-opening-back .book-back-cover{
+  opacity:1;
+  animation:lcBackCoverOut .72s ease forwards;
+}
+.cover-opening-back .book-half,
+.cover-opening-back .book-spine{
+  animation:lcBookAppear .72s ease forwards;
+}
+
+@keyframes lcCoverOpenFront{
+  0%{left:25%;transform:rotateY(0deg);filter:brightness(.98)}
+  48%{filter:brightness(.72)}
+  100%{left:50%;transform:rotateY(-178deg);filter:brightness(.88)}
+}
+@keyframes lcCoverCloseFront{
+  0%{left:50%;transform:rotateY(-178deg);filter:brightness(.88)}
+  52%{filter:brightness(.72)}
+  100%{left:25%;transform:rotateY(0deg);filter:brightness(.98)}
+}
+@keyframes lcBackCoverIn{
+  0%{opacity:0;transform:scale(.94);filter:brightness(.82)}
+  100%{opacity:1;transform:scale(1);filter:brightness(1)}
+}
+@keyframes lcBackCoverOut{
+  0%{opacity:1;transform:scale(1);filter:brightness(1)}
+  100%{opacity:0;transform:scale(.94);filter:brightness(.82)}
+}
+@keyframes lcBookAppear{
+  0%{opacity:0}
+  35%{opacity:.18}
+  100%{opacity:1}
+}
+@keyframes lcBookDisappear{
+  0%{opacity:1}
+  70%{opacity:.18}
+  100%{opacity:0}
+}
+
+.flipbook .book-half,
+.flipbook .book-spine{
+  transition:opacity .18s ease;
+}
+
+@media(max-width:600px){
+  .book-cover{
+    left:25%;
+    width:50%;
+  }
+  .back-cover-inner{
+    padding:14px;
+    gap:8px;
+  }
+  .back-cover-inner strong{
+    font-size:.95rem;
+  }
+  .back-cover-inner small{
+    font-size:.54rem;
+  }
+}
