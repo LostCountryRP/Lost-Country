@@ -100,6 +100,7 @@
   let searchTerm = '';
   let activeIndex = 0;
   let zoom = 1;
+  let viewerOpener = null;
 
   const issueIndex = (id) => ISSUES.findIndex(issue => issue.id === id);
 
@@ -156,8 +157,7 @@
   }
 
   function visibleIssues() {
-    return ISSUES.filter((issue, index) => {
-      if (index === 0) return false;
+    return ISSUES.filter(issue => {
       const filterOk = activeFilter === 'all' || issue.type === activeFilter;
       const haystack = [issue.title, issue.paper, issue.dateLabel, issue.excerpt, issue.typeLabel].join(' ').toLocaleLowerCase('it');
       const searchOk = !searchTerm || haystack.includes(searchTerm);
@@ -213,7 +213,9 @@
     img.src = issue.image;
     img.alt = issue.title;
     img.dataset.archiveImage = issue.id;
-    img.style.transform = 'scale(' + zoom + ')';
+    img.style.transform = 'none';
+    const baseWidth = window.innerWidth <= 820 ? window.innerWidth * .92 : Math.min(760, window.innerWidth * .82);
+    img.style.width = Math.round(baseWidth * zoom) + 'px';
     const existing = $('.news-viewer-paper .news-image-missing');
     if (existing) existing.remove();
     img.onerror = () => imageFallback(img, issue);
@@ -227,6 +229,7 @@
   function openViewer(id) {
     const index = issueIndex(id);
     if (index < 0) return;
+    viewerOpener = document.activeElement;
     activeIndex = index;
     zoom = 1;
     const modal = $('#newsArchiveModal');
@@ -240,6 +243,7 @@
     const modal = $('#newsArchiveModal');
     modal.hidden = true;
     document.body.classList.remove('news-modal-open');
+    viewerOpener?.focus();
   }
 
   function moveViewer(step) {
