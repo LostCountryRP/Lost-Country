@@ -96,3 +96,10 @@
 .hub-audit-entry{background:rgba(255,247,225,.66);border:1px solid #b8a07a;border-radius:8px;padding:12px 14px;overflow-wrap:anywhere}
 #cmsStatus[data-error=true]{color:#982f26}
 #cmsCode{font-family:ui-monospace,monospace;overflow-wrap:anywhere}
+
+/* Permessi per la nuova direzione: hidden prevale sugli stili dei menu. */
+.page-admin [hidden]{display:none!important}
+.hub-roles-form{margin-bottom:18px}
+#hubRolesList .hub-staff-entry small{max-width:100%;overflow-wrap:anywhere}
+#hubRoleLabel{display:inline-block;margin-left:9px;font-weight:bold}
+#hubRolesStatus[data-error="true"]{color:#982f26}
