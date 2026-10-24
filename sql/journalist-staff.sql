@@ -1,3 +1,9 @@
+-- Solo installazione iniziale; protegge i grant della console.
+do $$ begin
+ if to_regclass('public.lc_admin_assignments') is not null then
+ raise exception 'Console gia installata: usare migrazioni incrementali, non journalist-staff.sql';
+ end if;
+end $$;
 -- Ruolo autonomo per la redazione di La Voce della Frontiera.
 create table if not exists public.journalist_staff (
  user_id uuid primary key references auth.users(id) on delete cascade,

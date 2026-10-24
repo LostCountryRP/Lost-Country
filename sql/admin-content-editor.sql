@@ -28,7 +28,9 @@ grant select on public.lc_site_edits to anon,authenticated;
 grant insert,update on public.lc_site_edits to authenticated;
 
 create policy lc_site_edits_public_read on public.lc_site_edits
- for select to anon,authenticated using (enabled or (select public.is_sheriff_admin()));
+ for select to anon,authenticated using (enabled);
+create policy lc_site_edits_admin_read on public.lc_site_edits
+ for select to authenticated using ((select public.is_sheriff_admin()));
 create policy lc_site_edits_admin_insert on public.lc_site_edits
  for insert to authenticated with check ((select public.is_sheriff_admin()));
 create policy lc_site_edits_admin_update on public.lc_site_edits

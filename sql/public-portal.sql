@@ -1,3 +1,9 @@
+-- Solo installazione iniziale; impedisce revoche accidentali dopo la console.
+do $$ begin
+ if to_regclass('public.lc_admin_assignments') is not null then
+ raise exception 'Console gia installata: usare migrazioni incrementali, non public-portal.sql';
+ end if;
+end $$;
 -- Portale pubblico Lost Country: giornale, imprese ed eventi. 
 create table if not exists public.frontier_news (
  id uuid primary key default gen_random_uuid(),

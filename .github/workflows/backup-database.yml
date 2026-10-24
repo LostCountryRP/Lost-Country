@@ -2,6 +2,10 @@ name: Lost Country - Backup database cifrato
 on:
   schedule:
     - cron: '40 3 * * 1'
+  push:
+    paths:
+      - '.github/workflows/backup-database.yml'
+      - 'scripts/backup-storage.py'
   workflow_dispatch:
 permissions:
   contents: read
@@ -11,7 +15,12 @@ jobs:
     env:
       SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
       BACKUP_AGE_RECIPIENT: ${{ vars.BACKUP_AGE_RECIPIENT }}
+      SUPABASE_URL: https://rzwgfjejnuwqsypbhnmk.supabase.co
+      SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
     steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
       - name: Controlla prerequisiti
         id: prereq
         shell: bash
@@ -40,7 +49,7 @@ jobs:
         if: steps.prereq.outputs.ready == 'true'
         run: |
           sudo apt-get update -qq
-          sudo apt-get install -y age
+          sudo apt-get install -y age postgresql-client
       - name: Esporta, cifra e rimuovi copie in chiaro
         if: steps.prereq.outputs.ready == 'true'
         shell: bash
@@ -52,7 +61,8 @@ jobs:
           supabase db dump --db-url "$SUPABASE_DB_URL" -f temp_backup/roles.sql --role-only
           supabase db dump --db-url "$SUPABASE_DB_URL" -f temp_backup/schema.sql
           supabase db dump --db-url "$SUPABASE_DB_URL" -f temp_backup/data.sql --data-only --use-copy
-          tar -C temp_backup -cf - roles.sql schema.sql data.sql | age -r "$BACKUP_AGE_RECIPIENT" -o "backup_output/lost-country-$(date -u +%Y-%m-%d).tar.age"
+          python3 scripts/backup-storage.py
+          tar -C temp_backup -cf - roles.sql schema.sql data.sql storage | age -r "$BACKUP_AGE_RECIPIENT" -o "backup_output/lost-country-$(date -u +%Y-%m-%d).tar.age"
           test -s backup_output/*.age
       - name: Archivia il backup cifrato
         if: steps.prereq.outputs.ready == 'true'
