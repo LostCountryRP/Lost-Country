@@ -180,19 +180,28 @@
   }
 
   function enhanceMainTitles() {
+    const cleanTextNodes=(root)=>{
+      const walker=document.createTreeWalker(root,NodeFilter.SHOW_TEXT);
+      const nodes=[];
+      while(walker.nextNode()) nodes.push(walker.currentNode);
+      nodes.forEach(node=>{
+        node.textContent=node.textContent
+          .replace(/[\p{Extended_Pictographic}\uFE0F\u200D]/gu,'')
+          .replace(/\s{2,}/g,' ');
+      });
+    };
+
     document.querySelectorAll('.main-title, .app-title').forEach(title=>{
       if(title.closest('.page-home .hero')) return;
       if(title.dataset.lcMainIcon==='1') return;
+
       const clean=stripLeadingEmoji(textOf(title));
       if(!clean) return;
       const key=iconKeyFor(clean,document.body.className);
-      title.textContent='';
+
+      cleanTextNodes(title);
       title.classList.add('lc-main-title-with-icon');
-      title.append(makeIcon(key,'lc-icon-main'));
-      const label=document.createElement('span');
-      label.className='lc-main-title-text';
-      label.textContent=clean;
-      title.append(label);
+      title.prepend(makeIcon(key,'lc-icon-main'));
       title.dataset.lcMainIcon='1';
       title.setAttribute('aria-label',clean);
     });
