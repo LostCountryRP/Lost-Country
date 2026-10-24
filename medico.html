@@ -1,1 +1,187 @@
-<!doctype html><html lang="it"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Registro Medico — Lost Country RP</title><link rel="stylesheet" href="style.css?v=20261024-evoluzione-completa"><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="supabase-config.js"></script><script defer src="medico.js?v=1"></script></head><body class="page-sceriffi"><div class="site-shell"><aside class="western-sidebar"><a class="sidebar-brand" href="index.html"><img src="logo.png" alt="Lost Country RP"><span>Lost Country RP</span></a><nav class="side-nav"><a href="index.html">Regolamento</a><a href="medico.html">Registro medico</a></nav></aside><main class="site-main"><section class="parchment-page"><div class="parchment-content"><h1 class="app-title">✚ Registro Medico</h1><p>Archivio riservato al personale sanitario di Lost Country. Solo documentazione immaginaria RP.</p><div id="medicAuth" class="app-card"><h2>Accesso personale medico</h2><form id="medicLogin" class="form-grid"><div><label>Email</label><input id="medicEmail" type="email" required autocomplete="username"></div><div><label>Password</label><input id="medicPassword" type="password" required autocomplete="current-password"></div><div class="full"><button class="btn-primary" type="submit">Accedi</button></div></form></div><section id="medicPanel" hidden><div class="app-card"><p>Medico: <strong id="medicUser"></strong> <button id="medicLogout" class="btn-secondary" type="button">Esci</button></p><h2>Nuovo referto RP</h2><form id="medicForm" class="form-grid"><div><label>Paziente</label><input id="medicPatient" minlength="3" maxlength="150" required></div><div><label>Motivo visita</label><input id="medicReason" minlength="5" maxlength="300" required></div><div class="full"><label>Referto</label><textarea id="medicFindings" minlength="5" maxlength="4000" required></textarea></div><div class="full"><label>Trattamento</label><textarea id="medicTreatment" maxlength="4000"></textarea></div><div class="full"><label>Note riservate</label><textarea id="medicNotes" maxlength="3000"></textarea></div><div class="full"><button id="medicSave" class="btn-primary" type="submit">Registra referto</button></div></form><hr><label>Cerca paziente</label><input id="medicSearch" type="search" placeholder="Nome personaggio"><button id="medicRefresh" class="btn-secondary" type="button">Aggiorna</button><div id="medicList"></div></div></section><p id="medicNotice" role="status"></p></div></section></main></div></body></html>
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Registro Medico — Lost Country RP</title>
+  <link rel="stylesheet" href="style.css?v=20261024-cartelle-mediche">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-config.js"></script>
+  <script defer src="medico.js?v=20261024-cartelle-mediche"></script>
+  <script defer src="site-enhancements.js?v=20261024-cartelle-mediche"></script>
+</head>
+<body class="page-sceriffi page-medico">
+  <div class="site-shell">
+    <aside class="western-sidebar">
+      <a class="sidebar-brand" href="index.html">
+        <img src="logo.png" alt="Lost Country RP">
+        <span>Lost Country RP</span>
+      </a>
+      <nav class="side-nav" aria-label="Registro medico">
+        <a href="#medicOverview">Archivio cartelle</a>
+        <a href="#medicNewReport">Nuovo referto</a>
+        <a href="#medicFolders">Cartelle cliniche</a>
+      </nav>
+    </aside>
+
+    <main class="site-main">
+      <nav class="top-nav" aria-label="Navigazione principale">
+        <a href="index.html">Regolamento</a>
+        <a href="approfondimenti.html">Approfondimenti</a>
+        <a href="codice-penale.html">Codice Penale</a>
+        <a href="lore.html">Lore</a>
+        <a href="sceriffi.html">Gestione Sceriffi</a>
+        <a class="active-page" href="medico.html">Registro Medico</a>
+        <a href="voce-della-frontiera.html">La Voce della Frontiera</a>
+        <a href="attivita-commerciali.html">Attività commerciali</a>
+        <a href="eventi.html">Eventi</a>
+      </nav>
+
+      <section class="parchment-page">
+        <div class="parchment-content">
+          <div class="medical-shell">
+            <header class="medical-hero">
+              <p class="medical-kicker">SERVIZIO SANITARIO DELLA FRONTIERA</p>
+              <h1 class="app-title">Registro Medico</h1>
+              <p class="app-subtitle">Archivio riservato delle cartelle cliniche e dei referti RP</p>
+            </header>
+
+            <section id="medicAuth" class="app-card medical-login-card">
+              <h2>Accesso personale medico</h2>
+              <p>Le cartelle cliniche sono consultabili esclusivamente dal personale sanitario autorizzato.</p>
+              <form id="medicLogin" class="form-grid">
+                <div>
+                  <label for="medicEmail">Email</label>
+                  <input id="medicEmail" type="email" required autocomplete="username">
+                </div>
+                <div>
+                  <label for="medicPassword">Password</label>
+                  <input id="medicPassword" type="password" required autocomplete="current-password">
+                </div>
+                <div class="full">
+                  <button class="btn-primary" type="submit">Accedi al registro</button>
+                </div>
+              </form>
+            </section>
+
+            <section id="medicPanel" hidden>
+              <section class="medical-userbar" id="medicOverview">
+                <div>
+                  <span class="medical-user-label">MEDICO IN SERVIZIO</span>
+                  <strong id="medicUser"></strong>
+                </div>
+                <button id="medicLogout" class="btn-secondary" type="button">Esci</button>
+              </section>
+
+              <section class="medical-stats" aria-label="Riepilogo archivio">
+                <article>
+                  <span>Cartelle cliniche</span>
+                  <strong id="medicStatPatients">0</strong>
+                </article>
+                <article>
+                  <span>Referti archiviati</span>
+                  <strong id="medicStatRecords">0</strong>
+                </article>
+                <article>
+                  <span>Ultima registrazione</span>
+                  <strong id="medicStatLatest">—</strong>
+                </article>
+              </section>
+
+              <section class="app-card medical-new-report" id="medicNewReport">
+                <div class="medical-card-heading">
+                  <div>
+                    <p class="medical-section-kicker">REGISTRAZIONE SANITARIA</p>
+                    <h2>Nuovo referto RP</h2>
+                  </div>
+                  <button id="medicClearPatient" class="btn-secondary" type="button" hidden>Cambia paziente</button>
+                </div>
+
+                <form id="medicForm" class="form-grid">
+                  <div>
+                    <label for="medicPatient">Paziente</label>
+                    <input id="medicPatient" minlength="3" maxlength="150" required autocomplete="off" placeholder="Nome e cognome del personaggio">
+                  </div>
+                  <div>
+                    <label for="medicReason">Motivo visita</label>
+                    <input id="medicReason" minlength="5" maxlength="300" required placeholder="Es. Ferita da arma da fuoco">
+                  </div>
+                  <div class="full">
+                    <label for="medicFindings">Referto</label>
+                    <textarea id="medicFindings" minlength="5" maxlength="4000" rows="5" required placeholder="Condizioni riscontrate, ferite, sintomi..."></textarea>
+                  </div>
+                  <div class="full">
+                    <label for="medicTreatment">Trattamento</label>
+                    <textarea id="medicTreatment" maxlength="4000" rows="4" placeholder="Cure effettuate, medicazioni, prescrizioni..."></textarea>
+                  </div>
+                  <div class="full">
+                    <label for="medicNotes">Note riservate</label>
+                    <textarea id="medicNotes" maxlength="3000" rows="3" placeholder="Annotazioni visibili solo al personale medico"></textarea>
+                  </div>
+                  <div class="full medical-form-actions">
+                    <button id="medicSave" class="btn-primary" type="submit">Registra nella cartella clinica</button>
+                  </div>
+                </form>
+              </section>
+
+              <section class="medical-archive" id="medicFolders">
+                <div class="medical-archive-heading">
+                  <div>
+                    <p class="medical-section-kicker">ARCHIVIO SANITARIO</p>
+                    <h2>Cartelle cliniche</h2>
+                  </div>
+                  <button id="medicRefresh" class="btn-secondary" type="button">Aggiorna archivio</button>
+                </div>
+
+                <div class="medical-tools">
+                  <div class="medical-search">
+                    <label for="medicSearch">Cerca una cartella</label>
+                    <input id="medicSearch" type="search" placeholder="Paziente, motivo, medico o contenuto del referto">
+                  </div>
+                  <div class="medical-sort">
+                    <label for="medicSort">Ordina per</label>
+                    <select id="medicSort">
+                      <option value="recent">Ultima visita</option>
+                      <option value="name">Nome paziente</option>
+                      <option value="records">Numero referti</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div id="medicFolderList" class="medical-folder-grid" aria-live="polite"></div>
+              </section>
+
+              <section id="medicFolderDetail" class="medical-folder-detail" hidden aria-labelledby="medicFolderName">
+                <div class="medical-folder-toolbar">
+                  <button id="medicFolderBack" class="btn-secondary" type="button">← Tutte le cartelle</button>
+                  <button id="medicFolderNewReport" class="btn-primary" type="button">+ Nuovo referto</button>
+                </div>
+
+                <header class="medical-folder-header">
+                  <div class="medical-folder-mark" aria-hidden="true">
+                    <span></span>
+                    <span></span>
+                  </div>
+                  <div>
+                    <p>CARTELLA CLINICA</p>
+                    <h2 id="medicFolderName">Paziente</h2>
+                    <div class="medical-folder-summary">
+                      <span id="medicFolderCount">0 referti</span>
+                      <span id="medicFolderFirst">Prima visita: —</span>
+                      <span id="medicFolderLatest">Ultima visita: —</span>
+                    </div>
+                  </div>
+                </header>
+
+                <div id="medicTimeline" class="medical-timeline"></div>
+              </section>
+            </section>
+
+            <p id="medicNotice" class="medical-notice" role="status"></p>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+</body>
+</html>
