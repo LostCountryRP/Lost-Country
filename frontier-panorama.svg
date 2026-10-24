@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 460" preserveAspectRatio="xMidYMid slice">
+<defs>
+<linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#191921"/><stop offset=".3" stop-color="#614239"/><stop offset=".66" stop-color="#e08a46"/><stop offset="1" stop-color="#eec27f"/></linearGradient>
+<radialGradient id="sun"><stop stop-color="#fff1bc"/><stop offset=".18" stop-color="#ffdf9b"/><stop offset=".44" stop-color="#f8b064" stop-opacity=".78"/><stop offset="1" stop-color="#e48b44" stop-opacity="0"/></radialGradient>
+<linearGradient id="water" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#d98b59"/><stop offset=".5" stop-color="#ab633c"/><stop offset="1" stop-color="#322c27"/></linearGradient>
+<linearGradient id="shade" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#120f10" stop-opacity=".9"/><stop offset=".26" stop-color="#180d0b" stop-opacity=".32"/><stop offset=".58" stop-color="#1b100d" stop-opacity=".1"/><stop offset="1" stop-color="#100c0c" stop-opacity=".77"/></linearGradient>
+<filter id="grain"><feTurbulence type="fractalNoise" baseFrequency=".009 .03" numOctaves="3" seed="9" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter>
+<pattern id="buildings" width="33" height="35" patternUnits="userSpaceOnUse"><rect x="2" y="15" width="26" height="20" fill="#241d1c"/><path d="M0 16 15 4 31 16" fill="#201819"/><rect x="9" y="22" width="4" height="5" fill="#e4a15d"/><rect x="20" y="23" width="3" height="4" fill="#c5793a"/></pattern>
+</defs>
+<rect width="1600" height="460" fill="url(#sky)"/>
+<ellipse cx="1120" cy="175" rx="500" ry="190" fill="url(#sun)"/>
+<circle cx="1155" cy="186" r="28" fill="#ffe4a1" opacity=".9"/>
+<path d="M0 196 82 108 141 156 220 60 283 129 355 88 430 175 510 101 583 168 668 120 761 197 851 130 930 174 1050 111 1179 211 1295 136 1390 164 1500 104 1600 166V460H0Z" fill="#4b4141" opacity=".81"/>
+<path d="M0 239 135 132 227 209 322 118 431 235 575 155 662 243 797 170 924 226 1055 163 1125 229 1210 170 1294 230 1398 153 1480 208 1585 142 1600 460H0Z" fill="#272b2f"/>
+<path d="M0 246 80 230 195 237 287 213 385 239 490 218 615 255 714 211 810 247 961 201 1060 244 1207 215 1350 257 1451 222 1600 250V460H0Z" fill="#5e3b30"/>
+<path d="M0 282Q240 258 465 278T897 271Q1113 257 1339 281T1600 272V460H0Z" fill="#744730" opacity=".82"/>
+<path d="M716 272C870 303 952 300 1080 301s246 5 382 38c-105-8-231-10-352 13-174 35-216 58-394 108h-246c196-51 322-92 416-110 90-18 129-25 70-38-57-11-154-19-240-40Z" fill="url(#water)" opacity=".85"/>
+<path d="M750 280c124 21 253 29 352 29m-147 18c183 8 362 17 477 28m-556-8c111 0 253-18 355-18m-548 85c178-50 334-78 482-82" fill="none" stroke="#ffd395" stroke-width="4" opacity=".33"/>
+<path d="M0 300 94 277 161 296 263 260 387 317 495 286 575 338 640 318 708 353 764 350 806 398 0 460Z" fill="#281d1d"/>
+<path d="M1600 286 1485 261 1405 280 1348 268 1291 299 1229 310 1171 343 1131 365 1047 392 998 460H1600Z" fill="#201b1b"/>
+<!-- Railway-like old western town in the middle distance -->
+<path d="M891 293h500v70H891z" fill="url(#buildings)" opacity=".91"/>
+<path d="M885 294v69m31-78v79m32-68v69m24-75v76m34-81v82m31-68v68m55-78v79m28-69v67m40-78v80m35-75v74" stroke="#151514" stroke-width="6" opacity=".7"/>
+<g fill="#f5ba73" opacity=".62"><circle cx="910" cy="328" r="2"/><circle cx="981" cy="341" r="2"/><circle cx="1039" cy="321" r="3"/><circle cx="1124" cy="340" r="2"/><circle cx="1204" cy="317" r="2"/><circle cx="1280" cy="336" r="3"/><circle cx="1350" cy="332" r="2"/></g>
+<!-- Trees of the western frontier -->
+<g fill="#151719" stroke="#171718" stroke-linejoin="round">
+<path d="M47 350v-92m-40 77 40-72 42 72m-75-30 32-64 36 64M97 347v-67m-30 62 28-64 31 64"/>
+<path d="M241 355v-118m-45 114 43-102 49 102m-85-42 36-92 43 92"/>
+<path d="M1473 363V228m-47 118 46-106 49 106m-84-46 34-83 39 83"/>
+<path d="M1535 365V250m-36 103 36-97 43 97"/>
+</g>
+<!-- silhouette rider and horse at the right edge -->
+<g fill="#101113" stroke="#101113" stroke-linecap="round" stroke-linejoin="round">
+<path d="M1447 356c-31-5-46-23-55-38 1-9 15-11 32-9 18 3 31 4 44-4 22-12 42-10 51 4l12 5-2 13-13 5c-7 16-25 29-42 31l-9-5-19 1z"/>
+<path d="m1407 351-12 42-7 1 7-44m27 5-4 49-8 0-2-47m74-3 13 46 7 0-8-51m17-14 17 33 6-4-10-40" stroke-width="7" fill="none"/>
+<path d="M1509 313c15-6 18-17 14-28l-13-11 4-8 16 13c19 18 18 32 2 48z"/>
+<path d="M1466 306c-2-21-11-35-7-52l22-2c3 11 8 20 14 40l-4 21z"/>
+<path d="M1458 250q-14-14-7-29h32q12 16-1 29z"/>
+<path d="M1438 222q26-14 57 0l-2 7q-23 4-55-1z"/>
+<path d="M1468 243q-14-10-17 14l1 23" fill="none" stroke-width="8"/>
+</g>
+<rect width="1600" height="460" fill="url(#shade)"/>
+<rect width="1600" height="460" filter="url(#grain)" opacity=".12"/>
+</svg>
