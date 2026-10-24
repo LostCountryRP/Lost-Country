@@ -308,3 +308,97 @@
     aspect-ratio:1.18 / 1;
   }
 }
+
+/* ===== RIFINITURA GRAFICA LIBRO — 24-10-2026 ===== */
+.flipbook{
+  filter:drop-shadow(0 10px 18px rgba(28,9,2,.10));
+}
+.book-shadow{
+  inset:7% 3% -4%;
+  background:rgba(31,10,3,.38);
+  filter:blur(30px);
+  transform:translateY(16px);
+}
+.book-half::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  z-index:4;
+}
+.book-left::after{
+  background:
+    linear-gradient(90deg,
+      rgba(45,16,4,.09) 0%,
+      transparent 9%,
+      transparent 72%,
+      rgba(40,13,3,.12) 93%,
+      rgba(25,8,2,.22) 100%);
+  box-shadow:
+    inset 10px 0 16px rgba(80,35,10,.06),
+    inset -9px 0 18px rgba(40,13,3,.12);
+}
+.book-right::after{
+  background:
+    linear-gradient(90deg,
+      rgba(25,8,2,.22) 0%,
+      rgba(40,13,3,.12) 7%,
+      transparent 28%,
+      transparent 91%,
+      rgba(45,16,4,.09) 100%);
+  box-shadow:
+    inset 9px 0 18px rgba(40,13,3,.12),
+    inset -10px 0 16px rgba(80,35,10,.06);
+}
+.book-spine{
+  width:14px;
+  opacity:.88;
+  background:
+    linear-gradient(90deg,
+      rgba(24,7,2,.15) 0%,
+      rgba(19,6,2,.64) 36%,
+      rgba(255,226,176,.12) 49%,
+      rgba(255,238,203,.17) 50%,
+      rgba(255,226,176,.10) 51%,
+      rgba(19,6,2,.64) 64%,
+      rgba(24,7,2,.15) 100%);
+  box-shadow:
+    -10px 0 18px rgba(20,7,2,.18),
+     10px 0 18px rgba(20,7,2,.18);
+}
+.leaf-face{
+  box-shadow:inset 0 0 18px rgba(56,22,5,.08);
+}
+.flipbook-arrow{
+  border-color:rgba(75,33,11,.42);
+  box-shadow:
+    inset 0 1px 0 rgba(255,226,170,.09),
+    0 8px 18px rgba(28,9,2,.18);
+}
+.flipbook-toolbar button{
+  background:
+    linear-gradient(180deg,rgba(247,213,158,.62),rgba(211,155,86,.42));
+  border:1px solid rgba(82,37,13,.36);
+  box-shadow:
+    inset 0 1px 0 rgba(255,244,214,.25),
+    0 2px 6px rgba(40,14,3,.07);
+  transition:transform .14s ease,filter .14s ease;
+}
+.flipbook-toolbar button:hover{
+  transform:translateY(-1px);
+  filter:brightness(1.04);
+}
+#pageCounter{
+  padding:6px 10px;
+  background:rgba(236,200,143,.22);
+  border:1px solid rgba(82,37,13,.18);
+}
+.flipbook-dot{
+  transition:transform .15s ease,background .15s ease,box-shadow .15s ease;
+}
+.flipbook-dot.active{
+  box-shadow:0 0 0 3px rgba(110,40,24,.10);
+}
+@media(max-width:600px){
+  .book-spine{width:9px}
+}
