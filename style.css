@@ -1224,3 +1224,57 @@ button{border:none;border-radius:7px;padding:10px 14px;cursor:pointer;font-famil
     font-size:1rem !important;
   }
 }
+
+/* ===== RIMOZIONE RIGHE ORIZZONTALI GLOBALI — 24-10-2026 ===== */
+/* Mantiene i pannelli, ma elimina l'effetto a righe tra paragrafi e contenuti consecutivi. */
+.page-home .rule-section > p,
+.page-home .rule-section > ul,
+.page-home .rule-section > ol,
+.page-approfondimenti .deep-dive-content p,
+.page-penale .law-section > p,
+.page-penale .law-card p,
+.page-sceriffi .app-card p,
+.page-sceriffi .case-card p,
+.page-sceriffi .wanted-card p,
+.page-admin .admin-card p{
+  border-top:0 !important;
+  border-bottom:0 !important;
+  box-shadow:none !important;
+}
+
+/* Il contenitore mantiene il bordo esterno, il testo interno no. */
+.page-approfondimenti .deep-dive-content,
+.page-penale .law-card,
+.page-sceriffi .app-card,
+.page-sceriffi .auth-card,
+.page-sceriffi .case-card,
+.page-sceriffi .wanted-card,
+.page-admin .admin-card{
+  overflow:hidden;
+}
+
+/* Nessuna linea decorativa orizzontale nel corpo delle pagine. */
+.parchment-content hr,
+.lc-paper hr,
+.page-home .hero-rule{
+  border:0 !important;
+}
+
+/* Nel Regolamento i paragrafi non devono sembrare tante strisce separate. */
+.page-home .rule-section > p{
+  border-left:1px solid var(--lc-body-border) !important;
+  border-right:1px solid var(--lc-body-border) !important;
+}
+.page-home .rule-section > p:first-of-type{
+  border-top:1px solid var(--lc-body-border) !important;
+}
+.page-home .rule-section > p:last-of-type{
+  border-bottom:1px solid var(--lc-body-border) !important;
+}
+
+/* Approfondimenti: nessun separatore interno. */
+.page-approfondimenti .deep-dive-content p + p{
+  border-top:0 !important;
+}
+
+/* Tabelle e griglie operative mantengono le linee necessarie alla leggibilità. */
