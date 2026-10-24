@@ -2037,3 +2037,184 @@ button{border:none;border-radius:7px;padding:10px 14px;cursor:pointer;font-famil
     gap:9px !important;
   }
 }
+
+/* ===== CHECK GENERALE FORMATTAZIONE — 24-10-2026 ===== */
+
+/* Utility semantica: titoli accessibili che non devono alterare il layout. */
+.visually-hidden{
+  position:absolute !important;
+  width:1px !important;
+  height:1px !important;
+  padding:0 !important;
+  margin:-1px !important;
+  overflow:hidden !important;
+  clip:rect(0,0,0,0) !important;
+  white-space:nowrap !important;
+  border:0 !important;
+}
+
+/* Navigazione globale: stessa struttura e stessi otto collegamenti in ogni pagina. */
+.lc-topbar .lc-global-nav,
+.site-main > .top-nav.lc-global-nav{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-wrap:nowrap;
+  gap:6px;
+  width:100%;
+  min-width:0;
+}
+.lc-topbar .lc-global-nav a,
+.site-main > .top-nav.lc-global-nav a{
+  flex:1 1 0;
+  max-width:158px;
+  min-width:104px;
+  padding-left:7px;
+  padding-right:7px;
+  font-size:.66rem;
+}
+@media(max-width:1200px){
+  .lc-topbar .lc-global-nav,
+  .site-main > .top-nav.lc-global-nav{
+    justify-content:flex-start;
+    overflow-x:auto;
+    overflow-y:hidden;
+    scrollbar-width:thin;
+    scrollbar-color:#8d5b2d rgba(48,19,7,.55);
+    scroll-snap-type:x proximity;
+  }
+  .lc-topbar .lc-global-nav a,
+  .site-main > .top-nav.lc-global-nav a{
+    flex:0 0 138px;
+    min-width:138px;
+    scroll-snap-align:start;
+  }
+}
+
+/* Titoli principali: stessa logica delle icone di sezione, senza emoji colorate. */
+.lc-main-title-with-icon{
+  display:flex !important;
+  align-items:center;
+  justify-content:center;
+  flex-wrap:wrap;
+  gap:12px;
+}
+.lc-icon-main{
+  width:34px;
+  height:34px;
+  color:#111;
+}
+.lc-main-title-text{
+  min-width:0;
+}
+.page-admin .lc-icon-main,
+.page-portal .lc-icon-main{
+  width:31px;
+  height:31px;
+}
+
+/* Codice Penale: badge sanzioni nello stesso linguaggio grafico SVG. */
+.page-penale .lc-badge-with-icon{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+}
+.page-penale .lc-icon-badge{
+  width:15px;
+  height:15px;
+  color:currentColor;
+}
+.page-penale .badge{
+  line-height:1.2;
+}
+
+/* Le tre pagine della Frontiera sono portali editoriali, non schermate operative. */
+.page-portal .sheriff-shell{
+  max-width:960px;
+  margin:0 auto;
+}
+.page-portal .app-title{
+  margin-bottom:10px;
+}
+.page-portal .app-subtitle{
+  max-width:720px;
+  margin:0 auto 22px !important;
+}
+.page-portal .app-card{
+  margin-top:0;
+}
+.page-portal #items{
+  margin-top:14px;
+}
+.page-portal .parchment-content > .sheriff-shell > p:last-child{
+  margin-top:22px;
+  text-align:center;
+}
+
+/* Uniformità verticale: niente titoli attaccati ai pannelli o margini eccessivi. */
+.page-approfondimenti .deep-dive-list,
+.page-penale .law-section,
+.page-sceriffi .tab-panel,
+.page-admin .admin-shell{
+  min-width:0;
+}
+.page-penale .law-section > h2:first-child,
+.page-approfondimenti .deep-dive-section:first-child > h2{
+  margin-top:0 !important;
+}
+.page-penale .law-card:last-child,
+.page-approfondimenti .deep-dive-content p:last-child,
+.page-sceriffi .app-card > *:last-child,
+.page-admin .admin-card > *:last-child{
+  margin-bottom:0;
+}
+
+/* Focus tastiera coerente su tutta l'interfaccia. */
+.lc-global-nav a:focus-visible,
+.lc-sidebar-menu a:focus-visible,
+.western-sidebar .side-nav a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible{
+  outline:2px solid rgba(57,20,5,.78) !important;
+  outline-offset:2px;
+}
+
+/* Responsive: topbar compatta e titoli proporzionati. */
+@media(max-width:820px){
+  .lc-topbar,
+  .site-main > .top-nav{
+    min-height:74px;
+    padding:8px 7px;
+  }
+  .lc-topbar .lc-global-nav a,
+  .site-main > .top-nav.lc-global-nav a{
+    flex-basis:128px;
+    min-width:128px;
+    height:44px;
+    min-height:44px;
+    font-size:.62rem;
+  }
+  .lc-icon-main{
+    width:26px;
+    height:26px;
+  }
+  .lc-main-title-with-icon{
+    gap:9px;
+  }
+  .page-portal .app-subtitle{
+    margin-bottom:16px !important;
+  }
+}
+
+/* Su monitor larghi il contenuto resta leggibile: non si allungano troppo le righe. */
+@media(min-width:1500px){
+  .page-home .rule-section,
+  .page-approfondimenti .deep-dive-list,
+  .page-penale .law-section{
+    max-width:1120px;
+    margin-left:auto;
+    margin-right:auto;
+  }
+}
