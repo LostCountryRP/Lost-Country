@@ -18,7 +18,8 @@ jobs:
         run: |
           if [[ -z "$SUPABASE_DB_URL" || -z "$BACKUP_AGE_RECIPIENT" ]]; then
             echo "ready=false" >> "$GITHUB_OUTPUT"
-            echo "::warning::Backup non configurato: imposta SUPABASE_DB_URL (secret) e BACKUP_AGE_RECIPIENT (variable)."
+            echo "::error::Backup non configurato: imposta SUPABASE_DB_URL (secret) e BACKUP_AGE_RECIPIENT (variable)."
+            exit 1
           else
             if [[ ! "$BACKUP_AGE_RECIPIENT" =~ ^age1[023456789acdefghjklmnpqrstuvwxyz]+$ ]]; then
               echo "::error::BACKUP_AGE_RECIPIENT non e una chiave pubblica age valida. Inserisci la stringa che inizia con age1, non il comando PowerShell."
