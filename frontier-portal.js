@@ -8,7 +8,7 @@ const cfg={
 };
 async function load(kind){
  const c=cfg[kind],e=$("#items"),status=$("#message");status.textContent="";
- let q=db.from(c.table).select("*").order(c.order,{ascending:kind!=="events"});
+ let q=db.from(c.table).select("*").order(c.order,{ascending:kind==="events"});
  if(kind==="news")q=q.eq("is_published",true);
  if(kind==="events")q=q.eq("is_cancelled",false);
  const {data,error}=await q.limit(100);if(error){status.textContent="Archivio non ancora disponibile. È necessario eseguire la migrazione SQL.";return}
