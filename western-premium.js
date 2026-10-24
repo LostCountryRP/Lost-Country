@@ -152,6 +152,7 @@
     emblem.className='lc-premium-side-emblem';
     emblem.setAttribute('aria-hidden','true');
     aside.append(emblem);
+    document.body.classList.add('lc-premium-sidebar-ready');
   }
 
 
