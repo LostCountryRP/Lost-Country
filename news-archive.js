@@ -9,7 +9,7 @@
       paper:'Lost Country',
       title:'Ricercata — Ophelia White',
       dateLabel:'Ultima pubblicazione',
-      image:'ARCHIVIO_GIORNALI/01-ricercata-ophelia-white.webp',
+      image:'ARCHIVIO_GIORNALI/01-ricercata-ophelia-white.webp?v=20261024-1',
       aspect:'300 / 450',
       excerpt:'Manifesto di ricerca per la giovane Ophelia White, 6 anni. Si offre ricompensa per informazioni utili al suo ritrovamento.'
     },
@@ -20,7 +20,7 @@
       paper:'The Blackwater Ledger',
       title:'Addio al vicesceriffo Simon Riley',
       dateLabel:'21/09/1885',
-      image:'ARCHIVIO_GIORNALI/02-ledger-21-09-1885.webp',
+      image:'ARCHIVIO_GIORNALI/02-ledger-21-09-1885.webp?v=20261024-1',
       aspect:'300 / 450',
       excerpt:'Blackwater saluta il vicesceriffo Simon Riley. Nello stesso numero: ippodromo, intossicazioni e notizie da Armadillo.'
     },
@@ -31,7 +31,7 @@
       paper:'The Blackwater Ledger',
       title:'Notizie dalla Contea',
       dateLabel:'18/09/1885',
-      image:'ARCHIVIO_GIORNALI/03-ledger-18-09-1885.webp',
+      image:'ARCHIVIO_GIORNALI/03-ledger-18-09-1885.webp?v=20261024-1',
       aspect:'300 / 449',
       excerpt:'Aggiornamenti da Armadillo e Blackwater, visita del Governatore Caldwell, incendio nelle Tall Trees e assalti al treno.'
     },
@@ -42,7 +42,7 @@
       paper:'The Blackwater Ledger',
       title:'Ritrovata la piccola Ofelia',
       dateLabel:'14/09/1885',
-      image:'ARCHIVIO_GIORNALI/04-ledger-14-09-1885.webp',
+      image:'ARCHIVIO_GIORNALI/04-ledger-14-09-1885.webp?v=20261024-1',
       aspect:'300 / 351',
       excerpt:'La bambina è stata ritrovata sana e salva. Le ricerche proseguono per rintracciare i genitori.'
     },
@@ -53,7 +53,7 @@
       paper:'The Blackwater Ledger',
       title:'Che fine ha fatto la bambina?',
       dateLabel:'12/09/1885',
-      image:'ARCHIVIO_GIORNALI/05-ledger-12-09-1885.webp',
+      image:'ARCHIVIO_GIORNALI/05-ledger-12-09-1885.webp?v=20261024-1',
       aspect:'300 / 450',
       excerpt:'Blackwater in ansia per la scomparsa della piccola Ofelia. Gli sceriffi lavorano senza sosta e la città si mobilita.'
     },
@@ -64,7 +64,7 @@
       paper:'La Voce della Frontiera',
       title:'Voci dalle città',
       dateLabel:'Edizione speciale',
-      image:'ARCHIVIO_GIORNALI/06-voci-dalle-citta.webp',
+      image:'ARCHIVIO_GIORNALI/06-voci-dalle-citta.webp?v=20261024-1',
       aspect:'300 / 375',
       excerpt:'Cronache economiche da Blackwater e Strawberry e una domanda che corre lungo la frontiera: dov’è il Sindaco?'
     },
@@ -75,7 +75,7 @@
       paper:'La Voce della Frontiera',
       title:'Dalla Frontiera',
       dateLabel:'Edizione speciale',
-      image:'ARCHIVIO_GIORNALI/07-dalla-frontiera.webp',
+      image:'ARCHIVIO_GIORNALI/07-dalla-frontiera.webp?v=20261024-1',
       aspect:'300 / 375',
       excerpt:'Una disputa tra gli sceriffi di Strawberry e Blackwater accende la frontiera: la guerra del gilet rosso.'
     },
@@ -86,7 +86,7 @@
       paper:'La Voce della Frontiera',
       title:'La notizia della settimana — Epidemia',
       dateLabel:'20/08/1885 · N.1',
-      image:'ARCHIVIO_GIORNALI/08-voce-frontiera-n1.webp',
+      image:'ARCHIVIO_GIORNALI/08-voce-frontiera-n1.webp?v=20261024-1',
       aspect:'300 / 375',
       excerpt:'Il primo numero conservato nell’emeroteca: l’epidemia di Blackwater e l’intervento del reparto medico congiunto.'
     }
