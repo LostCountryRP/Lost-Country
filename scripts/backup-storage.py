@@ -12,11 +12,17 @@ QUERY = """select coalesce(json_agg(x order by bucket_id,name),'[]'::json)::text
  from storage.objects o join storage.buckets b on b.id=o.bucket_id) x;"""
 
 def inventory():
-    env = dict(os.environ, PGDATABASE=os.environ['SUPABASE_DB_URL'])
-    result = subprocess.run(['psql', '-X', '-A', '-t', '-v', 'ON_ERROR_STOP=1', '-c', QUERY],
+    env = dict(os.environ)
+    result = subprocess.run(['psql', '--dbname', os.environ['SUPABASE_DB_URL'], '-X', '-A', '-t', '-v', 'ON_ERROR_STOP=1', '-c', QUERY],
                             env=env, capture_output=True, text=True)
     if result.returncode:
-        raise RuntimeError('Impossibile leggere inventario Storage; dettagli connessione omessi.')
+        detail = result.stderr
+        uri = os.environ['SUPABASE_DB_URL']
+        detail = detail.replace(uri, '[connessione]')
+        password = urllib.parse.urlsplit(uri).password
+        if password:
+            detail = detail.replace(password, '[omessa]').replace(urllib.parse.unquote(password), '[omessa]')
+        raise RuntimeError('Inventario Storage: ' + detail[:1000])
     return json.loads(result.stdout)
 
 def download(objects, folder, base_url, key=''):
