@@ -155,7 +155,7 @@
       }
       selected = [];
       $("hostingFile").value = "";
-      chooseFiles([]);
+      $("hostingSelection").textContent = "Nessun file selezionato";
       if (success) {
         page = 0;
         await loadGallery();
