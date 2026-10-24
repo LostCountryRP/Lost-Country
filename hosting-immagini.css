@@ -46,3 +46,25 @@
 .hosting-back{margin:24px 0 0}
 [hidden]{display:none!important}
 @media(max-width:650px){.hosting-heading{align-items:flex-start}.hosting-icon{display:none}.hosting-drop{padding:30px 14px}.hosting-grid{grid-template-columns:repeat(auto-fill,minmax(155px,1fr))}}
+
+
+/* Esito upload: chiaro e vicino al pulsante, senza scorrere a fondo pagina */
+.hosting-upload-feedback{margin:18px 0 14px;padding:18px 20px;border:2px solid #826b3e;border-left-width:7px;border-radius:12px;background:#f3e2bb;box-shadow:0 4px 12px rgba(61,30,12,.11)}
+.hosting-upload-feedback strong{display:block;font-size:1.22rem;line-height:1.35}
+.hosting-upload-feedback p{margin:7px 0 0;font-size:1rem;line-height:1.45}
+.hosting-upload-feedback[data-state="success"]{border-color:#447241;background:#e4efda;color:#22411d}
+.hosting-upload-feedback[data-state="error"]{border-color:#a3382f;background:#f8e4de;color:#71241d}
+.hosting-upload-feedback[data-state="warning"]{border-color:#ae7e2c;background:#f8ebc9;color:#67450b}
+.hosting-upload-feedback[data-state="loading"]{border-color:#8d6632;background:#f3e2bb}
+.hosting-upload-progress{display:block;width:100%;height:13px;margin-top:14px;accent-color:#536e35}
+.hosting-result.success{background:rgba(75,126,62,.12);border:2px solid #62864f}
+.hosting-result.error{border-width:2px}
+.hosting-result-title{display:block;font-size:1.1rem;margin-bottom:9px}
+.hosting-result-preview{display:block;object-fit:contain;max-width:100%;width:280px;max-height:220px;border-radius:8px;margin:10px 0;background:rgba(255,248,231,.67)}
+.hosting-result-link{display:block;width:100%;max-width:100%;padding:10px;border:1px solid rgba(77,53,25,.5);border-radius:7px;background:#fff9e9;color:#342010;font:14px/1.3 monospace}
+.hosting-result-actions{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-top:11px}
+.hosting-result-actions a{font-size:.87rem;font-weight:bold}
+.hosting-result-actions .hosting-copy:first-child{background:#335e30;color:#fff7e6;border:1px solid #254921;padding:10px 14px}
+.hosting-result-actions .hosting-copy:first-child:hover{background:#254921}
+.hosting-card-actions button:first-child{background:#335e30;color:#fff7e6;border-color:#254921}
+.hosting-card-actions button:first-child:hover{background:#254921}
