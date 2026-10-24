@@ -74,3 +74,8 @@ L'editor del Codice Penale modifica solamente le descrizioni: multe, durata del 
 - Simulazione di assegnazione tramite RPC come Super Amministratore: riuscita, quindi annullata con `ROLLBACK`.
 - Test statico sintassi degli script JavaScript. Resta da verificare manualmente l'interfaccia in browser con account autentici dopo pubblicazione GitHub Pages.
 
+
+## Recupero della gerarchia
+- `sql/admin-role-hierarchy.sql`: schema, policy e assegnazioni iniziali (già applicati).
+- `sql/admin-role-functions.sql`: copie estratte dal database delle cinque funzioni di autorizzazione effettivamente installate.
+- Le istruzioni di recupero non vanno eseguite sul database di produzione senza verifica preventiva. L'ordine corretto è tabella → funzioni → policy, poi ruoli iniziali e trigger.
