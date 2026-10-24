@@ -160,7 +160,8 @@
       ['voce-della-frontiera.html','La Voce della Frontiera'],
       ['attivita-commerciali.html','Attività commerciali'],
       ['eventi.html','Eventi'],
-      ['hosting-immagini.html','Hosting immagini']
+      ['hosting-immagini.html','Hosting immagini'],
+      ['amministrazione.html','Amministrazione']
     ];
     const activeFor=(href)=>{
       if(file==='admin-sceriffi.html') return href==='sceriffi.html';
@@ -174,6 +175,7 @@
         a.href=href;
         a.textContent=label;
         if(href==='hosting-immagini.html') a.classList.add('lc-hosting-nav-btn');
+        if(href==='amministrazione.html') a.classList.add('lc-admin-nav-btn');
         if(activeFor(href)){
           a.classList.add(nav.matches('.top-nav')?'active-page':'active');
           a.setAttribute('aria-current','page');
