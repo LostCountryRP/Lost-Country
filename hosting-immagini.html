@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <title>Archivio immagini | Lost Country RP</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="hosting-immagini.css?v=1">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-config.js"></script>
+  <script defer src="hosting-immagini.js?v=1"></script>
+</head>
+<body class="page-sceriffi">
+<div class="site-shell">
+  <aside class="western-sidebar">
+    <a class="sidebar-brand" href="index.html"><img src="logo.png" alt="Lost Country RP"><span>Lost Country RP</span></a>
+    <nav class="side-nav">
+      <a href="index.html">Torna al sito</a>
+      <a href="sceriffi.html">Ufficio Sceriffi</a>
+    </nav>
+  </aside>
+  <main class="site-main">
+    <section class="parchment-page">
+      <div class="parchment-content hosting">
+        <div class="hosting-heading">
+          <div>
+            <p class="hosting-kicker">Strumento riservato allo staff</p>
+            <h1 class="app-title">Archivio immagini</h1>
+            <p>Carica le immagini una sola volta, copia il collegamento e usalo nel giornale, nei documenti o nelle pagine di Lost Country.</p>
+          </div>
+          <span class="hosting-icon" aria-hidden="true">▣</span>
+        </div>
+        <div class="hosting-note" role="note"><strong>Link permanenti e non elencati:</strong> soltanto gli amministratori possono vedere l'archivio o caricare immagini. Chi conosce il link diretto può visualizzare la singola immagine. Non caricare documenti riservati.</div>
+        <section id="hostingLogin" class="app-card hosting-login">
+          <h2>Accesso amministratori</h2>
+          <p>Accedi con l'account staff abilitato alla gestione Sceriffi.</p>
+          <form id="hostingLoginForm" class="form-grid">
+            <div><label for="hostingEmail">Email</label><input id="hostingEmail" type="email" autocomplete="username" required></div>
+            <div><label for="hostingPassword">Password</label><input id="hostingPassword" type="password" autocomplete="current-password" required></div>
+            <div class="full"><button class="btn-primary" id="hostingLoginBtn" type="submit">Accedi all'archivio</button></div>
+          </form>
+        </section>
+        <section id="hostingPanel" hidden>
+          <div class="hosting-toolbar app-card">
+            <span>Accesso autorizzato: <strong id="hostingUser"></strong></span>
+            <button class="btn-secondary" id="hostingLogout" type="button">Esci</button>
+          </div>
+          <section class="app-card hosting-upload">
+            <h2>Carica immagini</h2>
+            <div id="hostingDrop" class="hosting-drop" role="button" tabindex="0" aria-label="Scegli o trascina immagini">
+              <span class="hosting-drop-symbol" aria-hidden="true">⬆</span>
+              <strong>Trascina qui le immagini</strong>
+              <span>Oppure clicca per scegliere file dal computer</span>
+              <small>JPG, PNG, WEBP o GIF · massimo 10 MB per file</small>
+            </div>
+            <input id="hostingFile" class="hosting-file-input" type="file" accept="image/jpeg,image/png,image/webp,image/gif" multiple>
+            <div class="hosting-actions"><button class="btn-primary" id="hostingUploadBtn" type="button" disabled>Carica e genera link</button><span id="hostingSelection" aria-live="polite">Nessun file selezionato</span></div>
+            <div id="hostingResults" class="hosting-results" aria-live="polite"></div>
+          </section>
+          <section class="app-card hosting-library">
+            <div class="hosting-library-heading"><div><h2>Le immagini caricate</h2><p>La galleria è visibile solo agli amministratori.</p></div><button id="hostingRefresh" class="btn-secondary" type="button">Aggiorna</button></div>
+            <label for="hostingSearch" class="hosting-search-label">Cerca tra le immagini visualizzate</label>
+            <input id="hostingSearch" type="search" placeholder="Cerca per nome file...">
+            <div id="hostingGrid" class="hosting-grid" aria-live="polite"></div>
+            <div class="hosting-pagination"><button id="hostingPrev" class="btn-secondary" type="button" disabled>← Precedenti</button><span id="hostingPageLabel">Pagina 1</span><button id="hostingNext" class="btn-secondary" type="button" disabled>Successive →</button></div>
+          </section>
+        </section>
+        <p id="hostingStatus" class="hosting-status" role="status" aria-live="polite"></p>
+        <p class="hosting-back"><a href="index.html">← Torna a Lost Country</a></p>
+      </div>
+    </section>
+  </main>
+</div>
+</body>
+</html>
