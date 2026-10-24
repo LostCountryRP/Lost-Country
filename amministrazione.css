@@ -80,3 +80,19 @@
 .hub-systems strong{font-size:1.07rem}
 .hub-systems span{font-size:.86rem;color:#775037}
 @media(max-width:720px){.hub-systems{grid-template-columns:1fr}}
+
+/* Editor centrale dei contenuti e storico verificabile */
+.hub-cms-controls{margin-bottom:12px}
+.hub-cms-toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:10px 0 16px}
+.hub-cms-editor{border-top:2px solid #94612e;margin-top:28px;padding-top:20px}
+.hub-cms-editor h3{margin:0 0 6px}
+.hub-cms-editor textarea{display:block;width:100%;min-height:230px;font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:.88rem;line-height:1.5;box-sizing:border-box}
+.hub-cms-preview{border:1px solid #b89560;border-radius:10px;background:#fff3d7;min-height:90px;padding:16px 19px;line-height:1.6;overflow-wrap:anywhere}
+.hub-cms-original{white-space:pre-wrap;overflow-wrap:anywhere;max-height:250px;overflow-y:auto}
+.hub-cms-editor details{margin:18px 0}
+.hub-cms-editor h4{margin:19px 0 10px}
+.hub-cms-editor .hub-staff-entry{margin:8px 0}
+.hub-audit-list{display:grid;gap:8px;max-height:700px;overflow-y:auto}
+.hub-audit-entry{background:rgba(255,247,225,.66);border:1px solid #b8a07a;border-radius:8px;padding:12px 14px;overflow-wrap:anywhere}
+#cmsStatus[data-error=true]{color:#982f26}
+#cmsCode{font-family:ui-monospace,monospace;overflow-wrap:anywhere}
