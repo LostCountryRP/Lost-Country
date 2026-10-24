@@ -18,6 +18,7 @@
       <a href="index.html">← Sito principale</a>
       <a href="#adminOverview">Panoramica</a>
       <a href="#adminServices">Gestione degli uffici</a>
+      <a href="#adminStaff">Personale e ruoli</a>
       <a href="#adminModeration">Controllo pubblicazioni</a>
       <a href="hosting-immagini.html">Archivio immagini</a>
     </nav>
@@ -60,6 +61,29 @@
             <article class="hub-service"><div class="hub-service-icon">✒</div><h3>Redazione</h3><p>Pubblica nuovi articoli e gestisci il giornale della frontiera.</p><span id="hubJournalPermission" class="hub-access">Verifica autorizzazione…</span><a class="btn-primary" href="redazione.html">Apri Redazione →</a></article>
             <article class="hub-service"><div class="hub-service-icon">♜</div><h3>Ufficio Civico</h3><p>Pubblica nuove attività commerciali e organizza gli eventi.</p><a class="btn-primary" href="ufficio-civico.html">Apri Ufficio Civico →</a></article>
             <article class="hub-service"><div class="hub-service-icon">▣</div><h3>Hosting immagini</h3><p>Carica, consulta e copia i link delle immagini non elencate pubblicamente.</p><a class="btn-primary" href="hosting-immagini.html">Gestisci immagini →</a></article>
+          </div>
+        </section>
+        <section id="adminStaff" class="hub-section">
+          <div class="hub-heading"><h2>Personale e autorizzazioni</h2><p>Abilita o sospendi il personale medico e i giornalisti senza eliminarne i dati. Per aggiungere un account, recupera prima l'UID da Supabase → Authentication → Users.</p></div>
+          <div class="hub-staff-grid">
+            <div class="app-card">
+              <div class="hub-staff-head"><h3>✚ Personale medico</h3><button id="hubStaffMedicRefresh" class="btn-secondary" type="button">Aggiorna</button></div>
+              <div id="hubStaffMedical" class="hub-staff-list"></div>
+            </div>
+            <div class="app-card">
+              <div class="hub-staff-head"><h3>✒ Redazione giornalistica</h3><button id="hubStaffJournalRefresh" class="btn-secondary" type="button">Aggiorna</button></div>
+              <div id="hubStaffJournalist" class="hub-staff-list"></div>
+            </div>
+          </div>
+          <div class="app-card hub-staff-create">
+            <h3>Assegna un ruolo a un account esistente</h3>
+            <p>Non crea un account Supabase: assegna soltanto l'abilitazione a un utente già registrato.</p>
+            <form id="hubStaffCreateForm" class="form-grid">
+              <div><label for="hubStaffRole">Ufficio</label><select id="hubStaffRole"><option value="medical">Personale medico</option><option value="journalist">Giornalista</option></select></div>
+              <div><label for="hubStaffName">Nome RP / firma giornalistica</label><input id="hubStaffName" maxlength="120" minlength="2" required></div>
+              <div class="full"><label for="hubStaffUid">User UID dell'account Supabase</label><input id="hubStaffUid" type="text" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" required pattern="[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}"></div>
+              <div class="full"><button id="hubStaffCreateSubmit" class="btn-primary" type="submit">Assegna ruolo</button></div>
+            </form>
           </div>
         </section>
         <section id="adminModeration" class="hub-section">
