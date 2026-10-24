@@ -7,7 +7,8 @@
     'approfondimenti.html':'Approfondimenti',
     'codice-penale.html':'Codice penale (descrizioni)'
   };
-  let authorized=false, page='index.html', originals=[], overrides=new Map(), selected=null, working=false;
+  let authorized=false, canReadAudit=false, page='index.html', originals=[], overrides=new Map(), selected=null, working=false;
+  let pageRequest=0, auditRequest=0, historyRequest=0;
   const db=()=>window.LC_ADMIN_DB;
   function el(tag,cls,text) {
     const e=document.createElement(tag);
@@ -52,6 +53,7 @@
   }
   async function loadPage() {
     if(!authorized)return;
+    const request=++pageRequest;
     selected=null;$('cmsEditor').hidden=true;status('Caricamento dei testi…');
     const target=$('cmsBlocks');target.replaceChildren(el('div','hub-empty','Caricamento in corso…'));
     try {
@@ -61,6 +63,7 @@
         fetch(page,{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('Pagina non disponibile');return r.text()}),
         db().from('lc_site_edits').select('page,block_key,html,enabled,version,updated_at').eq('page',page)
       ]);
+      if(!authorized||request!==pageRequest)return;
       if(res.error)throw res.error;
       const doc=new DOMParser().parseFromString(html,'text/html');
       originals=[...doc.querySelectorAll('[data-lc-edit]')].map(elem=>({
@@ -71,6 +74,7 @@
       status(originals.length?'Seleziona un blocco da modificare. Il testo originale non sarà cancellato.':'Nessun blocco modificabile trovato.');
       renderList();
     }catch(err) {
+      if(!authorized||request!==pageRequest)return;
       originals=[];overrides=new Map();renderList();
       status('Impossibile caricare la pagina: '+err.message,true);
     }
@@ -159,6 +163,8 @@
   }
   async function loadVersions() {
     if(!selected||!authorized)return;
+    const request=++historyRequest;
+    const selectedAtRequest=selected;
     if(!['super_admin','admin'].includes(window.LC_ADMIN_ROLE?.())) {
       $('cmsVersions').textContent='Lo storico delle versioni è consultabile dalla Direzione.';
       return;
@@ -168,6 +174,7 @@
       .select('id,changed_at,changed_by,action,before_value')
       .eq('section','lc_site_edits').eq('entity_id',key)
       .order('changed_at',{ascending:false}).limit(15);
+    if(request!==historyRequest||!authorized||selected!==selectedAtRequest)return;
     if(result.error){$('cmsVersions').textContent='Storico non disponibile: '+result.error.message;return;}
     versionActions(result.data||[]);
   }
@@ -181,11 +188,13 @@
     lc_admin_assignments:'Ruoli amministrativi'
   };
   async function loadAudit() {
-    if(!authorized)return;
+    if(!canReadAudit)return;
+    const request=++auditRequest;
     const box=$('cmsAuditRows');box.replaceChildren(el('p','hub-empty','Caricamento attività…'));
     const result=await db().from('lc_admin_history')
       .select('id,changed_at,changed_by,section,entity_id,action')
       .order('changed_at',{ascending:false}).limit(70);
+    if(!canReadAudit||request!==auditRequest)return;
     box.replaceChildren();
     if(result.error) {
       box.append(el('p','hub-empty','Impossibile leggere il registro: '+result.error.message));return;
@@ -236,9 +245,18 @@
   document.addEventListener('lc-admin-state',e=>{
     const sections=e.detail?.sections||[];
     const root=['super_admin','admin'].includes(e.detail?.role);
-    authorized=Boolean(e.detail?.allowed)&&sections.includes('content');
+    const allowed=Boolean(e.detail?.allowed);
+    // Revoca le risposte di rete ancora in volo per la sessione precedente.
+    pageRequest++;auditRequest++;historyRequest++;
+    authorized=allowed&&sections.includes('content');
+    canReadAudit=allowed&&root;
+    selected=null; originals=[]; overrides=new Map();
+    $('cmsEditor').hidden=true;
+    $('cmsBlocks').replaceChildren();
+    $('cmsVersions').replaceChildren();
+    $('cmsAuditRows').replaceChildren();
+    $('cmsStatus').textContent='';
     if(authorized)loadPage();
-    if(root)loadAudit();
-    if(!authorized){selected=null;originals=[];overrides=new Map();$('cmsEditor').hidden=true;}
+    if(canReadAudit)loadAudit();
   });
 })();
