@@ -5,10 +5,10 @@
   <meta name="robots" content="noindex,nofollow,noarchive">
   <title>Console Amministratori | Lost Country RP</title>
   <link rel="stylesheet" href="style.css?v=20261024-console-admin">
-  <link rel="stylesheet" href="amministrazione.css?v=4">
+  <link rel="stylesheet" href="amministrazione.css?v=5">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="supabase-config.js"></script>
-  <script defer src="lc-cms-core.js?v=20261024-1"></script><script defer src="amministrazione.js?v=4"></script><script defer src="amministrazione-contenuti.js?v=20261024-1"></script>
+  <script defer src="lc-cms-core.js?v=20261024-1"></script><script defer src="amministrazione.js?v=5"></script><script defer src="amministrazione-contenuti.js?v=20261024-2"></script><script defer src="amministrazione-ruoli.js?v=1"></script>
 </head>
 <body class="page-admin page-admin-hub">
 <div class="site-shell">
@@ -18,7 +18,7 @@
       <a href="index.html">← Sito principale</a>
       <a href="#adminOverview">Panoramica</a>
       <a href="#adminServices">Gestione degli uffici</a>
-      <a href="#adminPages">Editor dei testi</a><a href="#adminStaff">Personale e ruoli</a><a href="#adminAudit">Registro attività</a>
+      <a href="#adminPages">Editor dei testi</a><a href="#adminRoles">Ruoli amministrativi</a><a href="#adminStaff">Personale e ruoli</a><a href="#adminAudit">Registro attività</a>
       <a href="#adminSystem">Sistema e backup</a>
       <a href="#adminModeration">Controllo pubblicazioni</a>
       <a href="hosting-immagini.html">Archivio immagini</a>
@@ -43,7 +43,7 @@
       </section>
       <div id="hubDenied" class="app-card" hidden><h2>Accesso non consentito</h2><p>Questo account non dispone dei permessi di amministrazione di Lost Country RP.</p><button type="button" id="hubDeniedLogout" class="btn-secondary">Esci dall'account</button></div>
       <div id="hubWorkspace" hidden>
-        <div class="hub-userbar"><div><span class="hub-user-dot"></span> Amministratore connesso: <strong id="hubIdentity">—</strong></div><div class="hub-user-actions"><button id="hubReload" class="btn-secondary" type="button">Aggiorna</button><button id="hubSignout" class="btn-secondary" type="button">Disconnetti</button></div></div>
+        <div class="hub-userbar"><div><span class="hub-user-dot"></span> Amministratore connesso: <strong id="hubIdentity">—</strong> <span id="hubRoleLabel" class="hub-access"></span></div><div class="hub-user-actions"><button id="hubReload" class="btn-secondary" type="button">Aggiorna</button><button id="hubSignout" class="btn-secondary" type="button">Disconnetti</button></div></div>
         <section id="adminOverview">
           <div class="hub-heading"><h2>Panoramica del territorio</h2><p>Dati in tempo reale dal database. Alcuni archivi riservati mantengono i propri permessi.</p></div>
           <div class="hub-stats">
@@ -56,17 +56,21 @@
         <section id="adminServices" class="hub-section">
           <div class="hub-heading"><h2>Uffici e strumenti di gestione</h2><p>Ogni ufficio mantiene la sua pagina e le proprie autorizzazioni.</p></div>
           <div class="hub-service-grid">
-            <article class="hub-service"><div class="hub-service-icon">⚖</div><h3>Ufficio Sceriffi</h3><p>Verbali, ricercati, anagrafe, seriali armi, licenze e sequestri.</p><a class="btn-primary" href="sceriffi.html">Apri Ufficio Sceriffi →</a></article>
-            <article class="hub-service"><div class="hub-service-icon">⚙</div><h3>Gestione account</h3><p>Gestisci gli account e le credenziali del personale Sceriffo.</p><a class="btn-primary" href="admin-sceriffi.html">Gestisci account →</a></article>
+            <article class="hub-service" data-legacy-admin><div class="hub-service-icon">⚖</div><h3>Ufficio Sceriffi</h3><p>Verbali, ricercati, anagrafe, seriali armi, licenze e sequestri.</p><a class="btn-primary" href="sceriffi.html">Apri Ufficio Sceriffi →</a></article>
+            <article class="hub-service" data-legacy-admin><div class="hub-service-icon">⚙</div><h3>Gestione account</h3><p>Gestisci gli account e le credenziali del personale Sceriffo.</p><a class="btn-primary" href="admin-sceriffi.html">Gestisci account →</a></article>
             <article class="hub-service"><div class="hub-service-icon">✚</div><h3>Registro Medico</h3><p>Referti e cartelle cliniche. Accesso con abilitazione medica specifica.</p><span id="hubMedicalPermission" class="hub-access">Verifica autorizzazione…</span><a class="btn-primary" href="medico.html">Apri Registro Medico →</a></article>
             <article class="hub-service"><div class="hub-service-icon">✒</div><h3>Redazione</h3><p>Pubblica nuovi articoli e gestisci il giornale della frontiera.</p><span id="hubJournalPermission" class="hub-access">Verifica autorizzazione…</span><a class="btn-primary" href="redazione.html">Apri Redazione →</a></article>
             <article class="hub-service"><div class="hub-service-icon">♜</div><h3>Ufficio Civico</h3><p>Pubblica nuove attività commerciali e organizza gli eventi.</p><a class="btn-primary" href="ufficio-civico.html">Apri Ufficio Civico →</a></article>
-            <article class="hub-service"><div class="hub-service-icon">▣</div><h3>Hosting immagini</h3><p>Carica, consulta e copia i link delle immagini non elencate pubblicamente.</p><a class="btn-primary" href="hosting-immagini.html">Gestisci immagini →</a></article>
+            <article class="hub-service" data-legacy-admin><div class="hub-service-icon">▣</div><h3>Hosting immagini</h3><p>Carica, consulta e copia i link delle immagini non elencate pubblicamente.</p><a class="btn-primary" href="hosting-immagini.html">Gestisci immagini →</a></article>
             <article class="hub-service"><div class="hub-service-icon">📜</div><h3>Regolamento e Codice Penale</h3><p>Modifica i testi di regolamento, approfondimenti e descrizioni delle norme senza intervenire sul codice.</p><a class="btn-primary" href="#adminPages">Apri editor testi →</a></article>
             <article class="hub-service"><div class="hub-service-icon">📖</div><h3>Lore e storia</h3><p>Consulta il libro della Lore. Le pagine illustrate richiedono ancora la gestione dei file originali.</p><a class="btn-primary" href="lore.html">Apri Lore →</a></article>
           </div>
         </section>
-        <section id="adminPages" class="hub-section"><div class="hub-heading"><h2>Editor dei testi del sito</h2><p>Modifica regolamento, approfondimenti e descrizioni del codice penale. I testi originali sono sempre recuperabili.</p></div><div id="cmsRoot" class="app-card"></div></section><section id="adminStaff" class="hub-section">
+        <section id="adminPages" class="hub-section"><div class="hub-heading"><h2>Editor dei testi del sito</h2><p>Modifica regolamento, approfondimenti e descrizioni del codice penale. I testi originali sono sempre recuperabili.</p></div><div id="cmsRoot" class="app-card"></div></section><section id="adminRoles" class="hub-section" hidden>
+          <div class="hub-heading"><h2>Ruoli e responsabilità</h2><p>Solo il Super Amministratore può nominare o sospendere gli amministratori del portale e i responsabili delle singole sezioni. Gli account devono già esistere in Supabase. Gli accessi a Sceriffi e cartelle cliniche restano gestiti dai rispettivi sistemi.</p></div>
+          <div id="hubRolesPanel" class="app-card"></div>
+        </section>
+        <section id="adminStaff" class="hub-section">
           <div class="hub-heading"><h2>Personale e autorizzazioni</h2><p>Abilita o sospendi il personale medico e i giornalisti senza eliminarne i dati. Per aggiungere un account, recupera prima l'UID da Supabase → Authentication → Users.</p></div>
           <div class="hub-staff-grid">
             <div class="app-card">
