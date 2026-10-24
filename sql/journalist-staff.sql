@@ -6,6 +6,7 @@ create table if not exists public.journalist_staff (
 );
 alter table public.journalist_staff enable row level security;
 revoke all on public.journalist_staff from anon;
+revoke insert,update,delete,truncate,references,trigger on public.journalist_staff from authenticated;
 grant select on public.journalist_staff to authenticated;
 drop policy if exists journalist_staff_self on public.journalist_staff;
 create policy journalist_staff_self on public.journalist_staff for select to authenticated using(user_id=auth.uid());
@@ -20,3 +21,10 @@ with check(created_by=auth.uid() and public.is_journalist_staff()
 and author_name=(select pen_name from public.journalist_staff where user_id=auth.uid() and active));
 -- Autorizzazione giornalista (inserire un ID reale da Authentication > Users):
 -- insert into public.journalist_staff(user_id,pen_name) values ('UUID-UTENTE','Nome giornalista RP');
+
+-- Corregge la lettura pubblica senza dipendere dai permessi Sceriffo.
+-- Non modifica articoli o autorizzazioni di scrittura.
+drop policy if exists frontier_news_public on public.frontier_news;
+create policy frontier_news_public on public.frontier_news for select to anon,authenticated using (is_published);
+drop policy if exists frontier_news_author_read on public.frontier_news;
+create policy frontier_news_author_read on public.frontier_news for select to authenticated using (created_by=(select auth.uid()) and exists (select 1 from public.journalist_staff where user_id=(select auth.uid()) and active));
