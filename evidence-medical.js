@@ -55,8 +55,6 @@ document.addEventListener("DOMContentLoaded",()=>{
  if(!$("#evidenceForm")||!window.supabase||!window.LC_SUPABASE_URL)return;
  db=window.supabase.createClient(window.LC_SUPABASE_URL,window.LC_SUPABASE_KEY,{auth:{persistSession:true,autoRefreshToken:true}});
  $("#evidenceForm").addEventListener("submit",addProof);$("#evidenceSearch").addEventListener("input",showProofs);
- $("#medicalForm").addEventListener("submit",addMedical);$("#medicalSearch").addEventListener("input",showMedical);
- $("#evidenceRefresh").addEventListener("click",loadProofs);$("#medicalRefresh").addEventListener("click",loadMedical);
- db.auth.onAuthStateChange(()=>setTimeout(()=>{loadProofs();loadMedical()},0));loadProofs();loadMedical();
+ db.auth.onAuthStateChange(()=>setTimeout(loadProofs,0));loadProofs();
 });
 })();
