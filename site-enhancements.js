@@ -88,7 +88,7 @@
     if (/codice penale/.test(t)) return 'scales';
     if (/ufficio dello sceriffo|gestione sceriffi/.test(t)) return 'star';
     if (/gestione account/.test(t)) return 'gear';
-    if (/voce della frontiera|giornale|gazzetta/.test(t)) return 'newspaper';
+    if (/voce della frontiera|giornale|gazzetta|archivio|emeroteca|ultima uscita|tutte le uscite|cronache|redazione/.test(t)) return 'newspaper';
     if (/event/.test(t)) return 'calendar';
     if (/lore|libro lore/.test(t)) return 'book';
     if (/admin|gestione account/.test(t)) return 'gear';
