@@ -2218,3 +2218,10 @@ textarea:focus-visible{
     margin-right:auto;
   }
 }
+
+/* Mantiene intatta la struttura interna dei titoli multilinea. */
+.lc-main-title-content{
+  display:inline-block;
+  min-width:0;
+  text-align:center;
+}
