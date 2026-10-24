@@ -200,8 +200,11 @@
       const key=iconKeyFor(clean,document.body.className);
 
       cleanTextNodes(title);
+      const content=document.createElement('span');
+      content.className='lc-main-title-content';
+      while(title.firstChild) content.appendChild(title.firstChild);
       title.classList.add('lc-main-title-with-icon');
-      title.prepend(makeIcon(key,'lc-icon-main'));
+      title.append(makeIcon(key,'lc-icon-main'),content);
       title.dataset.lcMainIcon='1';
       title.setAttribute('aria-label',clean);
     });
