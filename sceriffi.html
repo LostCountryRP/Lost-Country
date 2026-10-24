@@ -14,7 +14,7 @@
 <script defer src="city-bans.js?v=20261023-bandi1"></script>
 <script defer src="sheriff.js?v=20261024-image-hosting-2"></script>
 <script defer>document.addEventListener("DOMContentLoaded",()=>{const m={"#newCaseTab":"newCaseTab","#fedinaTab":"fedinaTab","#wantedTab":"wantedTab","#bansTab":"bansTab","#licensesTab":"licensesTab","#registryTab":"registryTab","#weaponsTab":"weaponsTab","#evidenceTab":"evidenceTab"};document.querySelectorAll(".side-nav a").forEach(a=>{const tab=m[a.getAttribute("href")];if(!tab)return;a.addEventListener("click",e=>{const b=document.querySelector(`.tab-btn[data-tab="${tab}"]`);if(b){e.preventDefault();b.click();document.getElementById(tab)?.scrollIntoView({behavior:"smooth",block:"start"});}});});});</script>
-<script defer src="site-enhancements.js?v=20261024-check-generale"></script>
+<script defer src="site-enhancements.js?v=20261024-hosting-separato"></script>
 </head>
 <body class="page-sceriffi">
 <div class="site-shell">
@@ -72,7 +72,6 @@ Connesso come: <strong id="sessionUser"></strong>
 </div>
 <div>
 <button class="btn-secondary btn-small hidden" id="adminBtn" type="button">⚙️ Pannello Admin</button>
-<a class="btn-secondary btn-small hidden" id="imageHostingBtn" href="hosting-immagini.html" hidden>🖼️ Hosting immagini</a>
 <button class="btn-secondary btn-small" id="refreshBtn" type="button">Aggiorna</button>
 <button class="btn-danger btn-small" id="logoutBtn" type="button">Esci</button>
 </div>
