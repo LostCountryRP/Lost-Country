@@ -86,3 +86,25 @@ drop policy if exists weapon_history_read on public.weapon_registry_history;
 create policy weapon_history_read on public.weapon_registry_history for select to authenticated using(nullif(trim(public.current_sheriff_name()),'') is not null);
 drop policy if exists weapon_history_write on public.weapon_registry_history;
 create policy weapon_history_write on public.weapon_registry_history for insert to authenticated with check(changed_by=auth.uid() and changed_by_name=public.current_sheriff_name());
+
+-- Modifiche delle armi solo tramite procedura con motivazione verificabile.
+revoke update on public.weapon_registry from authenticated;
+create or replace function public.update_weapon_registry(p_weapon_id uuid,p_owner_id uuid,p_status text,p_reason text)
+returns void language plpgsql security definer set search_path=public,pg_temp as $$
+declare w public.weapon_registry%rowtype;
+begin
+ if auth.uid() is null or nullif(trim(public.current_sheriff_name()),'') is null then
+  raise exception 'Sceriffo non autorizzato';
+ end if;
+ if nullif(trim(p_reason),'') is null or length(trim(p_reason))<5 then raise exception 'Motivazione obbligatoria'; end if;
+ if p_status not in ('REGOLARE','RUBATA','SEQUESTRATA','SMARRITA') then raise exception 'Stato non valido'; end if;
+ if not exists(select 1 from public.citizen_registry where id=p_owner_id) then raise exception 'Intestatario non trovato'; end if;
+ select * into w from public.weapon_registry where id=p_weapon_id for update;
+ if not found then raise exception 'Arma non trovata'; end if;
+ if w.owner_id=p_owner_id and w.status=p_status then raise exception 'Nessuna variazione'; end if;
+ perform set_config('app.weapon_change_reason',trim(p_reason),true);
+ update public.weapon_registry set owner_id=p_owner_id,status=p_status,updated_by=auth.uid(),updated_at=now() where id=p_weapon_id;
+end $$;
+revoke all on function public.update_weapon_registry(uuid,uuid,text,text) from public;
+grant execute on function public.update_weapon_registry(uuid,uuid,text,text) to authenticated;
+revoke insert on public.weapon_registry_history from authenticated;
