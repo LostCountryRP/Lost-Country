@@ -58,6 +58,8 @@
     if (/legge.*civili|ordine pubblico/.test(t)) return 'scales';
     if (/fair play/.test(t)) return 'handshake';
     if (/uomini di legge|accesso|federal/.test(t)) return 'star';
+    if (/banditi dalla città|bando cittadino|bandit/.test(t)) return 'alert';
+    if (/prove|sequestri/.test(t)) return 'chest';
     if (/attivit|commercial/.test(t)) return 'store';
     if (/cavall/.test(t)) return 'horseshoe';
     if (/riconosc/.test(t)) return 'eye';
@@ -82,6 +84,10 @@
     if (/armi|arma/.test(t)) return 'revolver';
     if (/frontiera|mappa/.test(t)) return 'map';
 
+    if (/approfondimenti/.test(t)) return 'book';
+    if (/codice penale/.test(t)) return 'scales';
+    if (/ufficio dello sceriffo|gestione sceriffi/.test(t)) return 'star';
+    if (/gestione account/.test(t)) return 'gear';
     if (/voce della frontiera|giornale|gazzetta/.test(t)) return 'newspaper';
     if (/event/.test(t)) return 'calendar';
     if (/lore|libro lore/.test(t)) return 'book';
@@ -139,6 +145,76 @@
         link.appendChild(txt);
       }
     }
+  }
+
+  function normalizeTopNavigation() {
+    const file=(location.pathname.split('/').pop()||'index.html').toLowerCase();
+    const entries=[
+      ['index.html','Regolamento'],
+      ['approfondimenti.html','Approfondimenti'],
+      ['codice-penale.html','Codice Penale'],
+      ['lore.html','Lore'],
+      ['sceriffi.html','Gestione Sceriffi'],
+      ['voce-della-frontiera.html','La Voce della Frontiera'],
+      ['attivita-commerciali.html','Attività commerciali'],
+      ['eventi.html','Eventi']
+    ];
+    const activeFor=(href)=>{
+      if(file==='admin-sceriffi.html') return href==='sceriffi.html';
+      return file===href;
+    };
+    const navs=[...document.querySelectorAll('.lc-topbar nav, .site-main > .top-nav')];
+    navs.forEach(nav=>{
+      nav.classList.add('lc-global-nav');
+      nav.replaceChildren(...entries.map(([href,label])=>{
+        const a=document.createElement('a');
+        a.href=href;
+        a.textContent=label;
+        if(activeFor(href)){
+          a.classList.add(nav.matches('.top-nav')?'active-page':'active');
+          a.setAttribute('aria-current','page');
+        }
+        return a;
+      }));
+    });
+  }
+
+  function enhanceMainTitles() {
+    document.querySelectorAll('.main-title, .app-title').forEach(title=>{
+      if(title.closest('.page-home .hero')) return;
+      if(title.dataset.lcMainIcon==='1') return;
+      const clean=stripLeadingEmoji(textOf(title));
+      if(!clean) return;
+      const key=iconKeyFor(clean,document.body.className);
+      title.textContent='';
+      title.classList.add('lc-main-title-with-icon');
+      title.append(makeIcon(key,'lc-icon-main'));
+      const label=document.createElement('span');
+      label.className='lc-main-title-text';
+      label.textContent=clean;
+      title.append(label);
+      title.dataset.lcMainIcon='1';
+      title.setAttribute('aria-label',clean);
+    });
+  }
+
+  function enhancePenalBadges() {
+    document.querySelectorAll('.page-penale .sanctions .badge').forEach(badge=>{
+      if(badge.dataset.lcSvgReady==='1') return;
+      const clean=stripLeadingEmoji(textOf(badge));
+      let key='seal';
+      if(badge.classList.contains('fine')) key='money';
+      else if(badge.classList.contains('jail')) key='gavel';
+      else if(badge.classList.contains('no-jail')) key='badge';
+      else if(badge.classList.contains('capital')) key='scales';
+      badge.textContent='';
+      badge.classList.add('lc-badge-with-icon');
+      badge.append(makeIcon(key,'lc-icon-badge'));
+      const span=document.createElement('span');
+      span.textContent=clean;
+      badge.append(span);
+      badge.dataset.lcSvgReady='1';
+    });
   }
 
   function enhanceSideNavigation() {
@@ -289,9 +365,12 @@
 
   function init() {
     document.documentElement.classList.add('lc-enhanced');
+    normalizeTopNavigation();
     enhanceSideNavigation();
     enhanceSectionHeadings();
+    enhanceMainTitles();
     formatPenalArticles();
+    enhancePenalBadges();
     revealStaticSections();
     decorateMainTitles();
   }
