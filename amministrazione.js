@@ -4,6 +4,8 @@
   const db = window.supabase.createClient(window.LC_SUPABASE_URL, window.LC_SUPABASE_KEY, {
     auth:{persistSession:true,autoRefreshToken:true}
   });
+  window.LC_ADMIN_DB = db;
+  const announce = allowed => document.dispatchEvent(new CustomEvent("lc-admin-state",{detail:{allowed}}));
   const config = {
     news:{
       table:"frontier_news",label:"Articoli del giornale",singular:"articolo",
@@ -56,12 +58,14 @@
   let isAdmin=false, section="news", rows=[], selected=null, busy=false;
   function goLogin() {
     isAdmin=false;
+    announce(false);
     $("hubWorkspace").hidden=true;
     $("hubLoginPanel").hidden=false;
     $("hubDenied").hidden=true;
   }
   function goDenied() {
     isAdmin=false;
+    announce(false);
     $("hubWorkspace").hidden=true;
     $("hubLoginPanel").hidden=true;
     $("hubDenied").hidden=false;
@@ -77,6 +81,7 @@
     $("hubDenied").hidden=true;
     $("hubWorkspace").hidden=false;
     $("hubIdentity").textContent=result.data.user.email||"Amministratore";
+    announce(true);
     $status("");
     await Promise.all([stats(),loadData(),staffPermissions(),loadStaff()]);
   }
