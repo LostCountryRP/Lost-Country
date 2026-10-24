@@ -177,7 +177,8 @@
     commercial_registry:'Attività commerciali',
     frontier_events:'Eventi',
     medical_staff:'Ruoli medici',
-    journalist_staff:'Ruoli giornalisti'
+    journalist_staff:'Ruoli giornalisti',
+    lc_admin_assignments:'Ruoli amministrativi'
   };
   async function loadAudit() {
     if(!authorized)return;
