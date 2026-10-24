@@ -20,6 +20,14 @@ jobs:
             echo "ready=false" >> "$GITHUB_OUTPUT"
             echo "::warning::Backup non configurato: imposta SUPABASE_DB_URL (secret) e BACKUP_AGE_RECIPIENT (variable)."
           else
+            if [[ ! "$BACKUP_AGE_RECIPIENT" =~ ^age1[023456789acdefghjklmnpqrstuvwxyz]+$ ]]; then
+              echo "::error::BACKUP_AGE_RECIPIENT non e una chiave pubblica age valida. Inserisci la stringa che inizia con age1, non il comando PowerShell."
+              exit 1
+            fi
+            if [[ ! "$SUPABASE_DB_URL" =~ ^postgres(ql)?:// ]]; then
+              echo "::error::SUPABASE_DB_URL deve essere una URI PostgreSQL che inizia con postgresql://. Non stampare la connessione nei log."
+              exit 1
+            fi
             echo "ready=true" >> "$GITHUB_OUTPUT"
           fi
       - name: Installa Supabase CLI
