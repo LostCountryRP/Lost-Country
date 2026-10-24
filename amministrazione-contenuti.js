@@ -159,6 +159,10 @@
   }
   async function loadVersions() {
     if(!selected||!authorized)return;
+    if(!['super_admin','admin'].includes(window.LC_ADMIN_ROLE?.())) {
+      $('cmsVersions').textContent='Lo storico delle versioni è consultabile dalla Direzione.';
+      return;
+    }
     const key=page+':'+selected;
     const result=await db().from('lc_admin_history')
       .select('id,changed_at,changed_by,action,before_value')
@@ -229,8 +233,11 @@
     $('cmsAuditRefresh').addEventListener('click',loadAudit);
   });
   document.addEventListener('lc-admin-state',e=>{
-    authorized=Boolean(e.detail?.allowed);
-    if(authorized){loadPage();loadAudit();}
-    else {selected=null;originals=[];overrides=new Map();$('cmsEditor').hidden=true;}
+    const sections=e.detail?.sections||[];
+    const root=['super_admin','admin'].includes(e.detail?.role);
+    authorized=Boolean(e.detail?.allowed)&&sections.includes('content');
+    if(authorized)loadPage();
+    if(root)loadAudit();
+    if(!authorized){selected=null;originals=[];overrides=new Map();$('cmsEditor').hidden=true;}
   });
 })();
