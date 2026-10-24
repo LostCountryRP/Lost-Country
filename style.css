@@ -3693,3 +3693,202 @@ body.news-modal-open{
   background:linear-gradient(150deg,#a36a31,#623717);
   color:#fff9e7;
 }
+
+
+/* === BACHECA DI LEGNO — navigazione globale più leggibile (24-10-2026) === */
+:root{--lc-bar-height:206px}
+
+/* Cornice di legno reale del sito, con venature e profondità: nessun HTML da cambiare. */
+.lc-topbar,
+.site-main > .top-nav{
+  position:sticky;
+  top:0;
+  z-index:30;
+  isolation:isolate;
+  width:100%;
+  height:auto;
+  min-height:var(--lc-bar-height);
+  padding:22px 24px 24px;
+  border:7px solid #301507;
+  border-radius:0 0 13px 13px;
+  background-color:#64391b;
+  background-image:
+    linear-gradient(180deg,rgba(255,217,144,.22),rgba(58,24,7,.08) 34%,rgba(25,9,3,.48)),
+    repeating-linear-gradient(0deg,transparent 0 34px,rgba(30,11,3,.18) 35px,rgba(255,190,108,.05) 38px,transparent 40px),
+    url('barra-legno-unica.png');
+  background-position:center,center,center;
+  background-repeat:no-repeat,repeat,no-repeat;
+  background-size:100% 100%,auto,cover;
+  box-shadow:
+    inset 0 0 0 2px rgba(208,151,81,.5),
+    inset 0 5px 11px rgba(255,210,140,.13),
+    inset 0 -8px 14px rgba(21,7,2,.40),
+    0 9px 18px rgba(11,4,1,.46);
+}
+
+/* Chiodi bruniti sulla tavola. */
+.lc-topbar::before,
+.lc-topbar::after,
+.site-main > .top-nav::before,
+.site-main > .top-nav::after{
+  content:"";
+  display:block;
+  position:absolute;
+  top:11px;
+  width:11px;
+  height:11px;
+  border:1px solid #322010;
+  border-radius:50%;
+  background:radial-gradient(circle at 36% 31%,#e3c08b 0 16%,#94724b 28%,#3b2a1b 64%,#221409 100%);
+  box-shadow:0 1px 2px rgba(0,0,0,.5);
+  pointer-events:none;
+  z-index:1;
+}
+.lc-topbar::before,
+.site-main > .top-nav::before{left:10px}
+.lc-topbar::after,
+.site-main > .top-nav::after{right:10px}
+
+/* Le 11 sezioni sono tutte visibili e distribuite in due file su desktop. */
+.lc-topbar .lc-global-nav,
+.site-main > .top-nav.lc-global-nav{
+  display:grid;
+  grid-template-columns:repeat(6,minmax(0,1fr));
+  align-items:stretch;
+  justify-content:center;
+  flex-wrap:initial;
+  gap:12px;
+  width:100%;
+  min-width:0;
+  padding:0;
+  margin:0;
+  overflow:visible;
+  scroll-snap-type:none;
+}
+
+.lc-topbar .lc-global-nav a,
+.site-main > .top-nav.lc-global-nav a{
+  display:flex;
+  flex:none;
+  align-items:center;
+  justify-content:center;
+  width:100%;
+  max-width:none;
+  min-width:0;
+  height:72px;
+  min-height:72px;
+  margin:0;
+  padding:9px 10px;
+  border:2px solid #8c5a2d;
+  border-radius:7px;
+  color:#381b0b;
+  background:
+    linear-gradient(155deg,rgba(255,250,221,.76),rgba(237,202,143,.38) 64%,rgba(161,107,54,.30)),
+    url('sfondo.png') center/cover;
+  box-shadow:
+    inset 0 1px 0 rgba(255,252,229,.82),
+    inset 0 -3px 7px rgba(94,48,17,.18),
+    0 4px 6px rgba(21,8,2,.34);
+  font-family:'Rye',Georgia,serif;
+  font-size:clamp(.75rem,.82vw,.88rem);
+  font-weight:700;
+  line-height:1.28;
+  letter-spacing:.1px;
+  text-align:center;
+  text-transform:uppercase;
+  text-decoration:none;
+  white-space:normal;
+  text-shadow:0 1px 0 rgba(255,247,217,.65);
+  opacity:1;
+  filter:none;
+  clip-path:none;
+  transition:background .18s ease,transform .18s ease,box-shadow .18s ease;
+}
+.lc-topbar .lc-global-nav a:hover,
+.site-main > .top-nav.lc-global-nav a:hover{
+  transform:translateY(-2px);
+  filter:none;
+  background:linear-gradient(160deg,#fff4d2,#d8a66c);
+  box-shadow:inset 0 1px 0 #fff6dc,0 7px 11px rgba(20,7,2,.43);
+}
+.lc-topbar .lc-global-nav a.active,
+.site-main > .top-nav.lc-global-nav a.active-page{
+  border-color:#dfb26b;
+  background:linear-gradient(160deg,#f4d79e,#c58c4d);
+  color:#2b1005;
+  filter:none;
+  box-shadow:inset 0 0 0 2px rgba(101,48,12,.35),0 0 0 2px rgba(240,192,105,.38),0 4px 7px rgba(0,0,0,.30);
+}
+.lc-topbar .lc-global-nav a:focus-visible,
+.site-main > .top-nav.lc-global-nav a:focus-visible{
+  outline:3px solid #ffdf89;
+  outline-offset:3px;
+}
+
+/* La console amministratori rimane distinta dalle targhette pubbliche. */
+.lc-topbar .lc-global-nav a.lc-admin-nav-btn,
+.site-main > .top-nav.lc-global-nav a.lc-admin-nav-btn{
+  color:#fff0d1;
+  border-color:#d6aa65;
+  background:linear-gradient(155deg,#956132,#552b12);
+  text-shadow:0 1px 2px #211006;
+}
+
+/* Schermi medi: quattro targhette per fila, senza rimpicciolire i testi. */
+@media (min-width:1050px) and (max-width:1349px){
+  :root{--lc-bar-height:300px}
+  .lc-topbar .lc-global-nav,
+  .site-main > .top-nav.lc-global-nav{
+    grid-template-columns:repeat(4,minmax(0,1fr));
+  }
+}
+
+/* Tablet e telefono: bacheca alta e targhette grandi, scorribili in orizzontale. */
+@media (max-width:1049px){
+  :root{--lc-bar-height:121px}
+  .lc-topbar,
+  .site-main > .top-nav{
+    min-height:var(--lc-bar-height);
+    padding:19px 17px 18px;
+    border-width:5px;
+  }
+  .lc-topbar .lc-global-nav,
+  .site-main > .top-nav.lc-global-nav{
+    display:flex;
+    flex-wrap:nowrap;
+    justify-content:flex-start;
+    gap:11px;
+    overflow-x:auto;
+    overflow-y:hidden;
+    -webkit-overflow-scrolling:touch;
+    scroll-snap-type:x proximity;
+    scrollbar-width:thin;
+    scrollbar-color:#b68d54 rgba(33,13,4,.45);
+  }
+  .lc-topbar .lc-global-nav a,
+  .site-main > .top-nav.lc-global-nav a{
+    flex:0 0 171px;
+    width:171px;
+    max-width:none;
+    min-width:171px;
+    height:72px;
+    min-height:72px;
+    padding:8px 11px;
+    font-size:.80rem;
+    scroll-snap-align:start;
+  }
+}
+@media (max-width:520px){
+  .lc-topbar,
+  .site-main > .top-nav{padding:16px 11px 15px}
+  .lc-topbar .lc-global-nav a,
+  .site-main > .top-nav.lc-global-nav a{
+    flex-basis:156px;
+    min-width:156px;
+    width:156px;
+    height:68px;
+    min-height:68px;
+    font-size:.74rem;
+  }
+}
+
