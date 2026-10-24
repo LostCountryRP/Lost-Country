@@ -3694,201 +3694,168 @@ body.news-modal-open{
   color:#fff9e7;
 }
 
+/* === INSEGNA DI LEGNO — navigazione western pulita (24-10-2026) === */
+:root{--lc-bar-height:154px}
 
-/* === BACHECA DI LEGNO — navigazione globale più leggibile (24-10-2026) === */
-:root{--lc-bar-height:206px}
-
-/* Cornice di legno reale del sito, con venature e profondità: nessun HTML da cambiare. */
+/* Una sola tavola, non una griglia di grosse card. */
 .lc-topbar,
 .site-main > .top-nav{
   position:sticky;
   top:0;
   z-index:30;
-  isolation:isolate;
+  display:flex;
   width:100%;
-  height:auto;
   min-height:var(--lc-bar-height);
-  padding:22px 24px 24px;
-  border:7px solid #301507;
-  border-radius:0 0 13px 13px;
-  background-color:#64391b;
-  background-image:
-    linear-gradient(180deg,rgba(255,217,144,.22),rgba(58,24,7,.08) 34%,rgba(25,9,3,.48)),
-    repeating-linear-gradient(0deg,transparent 0 34px,rgba(30,11,3,.18) 35px,rgba(255,190,108,.05) 38px,transparent 40px),
-    url('barra-legno-unica.png');
-  background-position:center,center,center;
-  background-repeat:no-repeat,repeat,no-repeat;
-  background-size:100% 100%,auto,cover;
-  box-shadow:
-    inset 0 0 0 2px rgba(208,151,81,.5),
-    inset 0 5px 11px rgba(255,210,140,.13),
-    inset 0 -8px 14px rgba(21,7,2,.40),
-    0 9px 18px rgba(11,4,1,.46);
+  height:auto;
+  align-items:center;
+  justify-content:center;
+  margin:0;
+  padding:14px 20px;
+  gap:0;
+  border:4px solid #2b1409;
+  border-top:0;
+  border-radius:0 0 7px 7px;
+  background:#4b2814 url('barra-legno-unica.png') center center / 100% 100% no-repeat;
+  box-shadow:inset 0 0 0 2px rgba(194,132,64,.28),
+             inset 0 -5px 12px rgba(26,10,3,.28),
+             0 6px 12px rgba(15,5,1,.4);
 }
-
-/* Chiodi bruniti sulla tavola. */
 .lc-topbar::before,
 .lc-topbar::after,
 .site-main > .top-nav::before,
 .site-main > .top-nav::after{
-  content:"";
-  display:block;
-  position:absolute;
-  top:11px;
-  width:11px;
-  height:11px;
-  border:1px solid #322010;
-  border-radius:50%;
-  background:radial-gradient(circle at 36% 31%,#e3c08b 0 16%,#94724b 28%,#3b2a1b 64%,#221409 100%);
-  box-shadow:0 1px 2px rgba(0,0,0,.5);
-  pointer-events:none;
-  z-index:1;
+  content:none;
+  display:none;
 }
-.lc-topbar::before,
-.site-main > .top-nav::before{left:10px}
-.lc-topbar::after,
-.site-main > .top-nav::after{right:10px}
+.lc-topbar>.ornament{display:none}
 
-/* Le 11 sezioni sono tutte visibili e distribuite in due file su desktop. */
+/* Sei targhette per fila, 11 sezioni su due file ordinati. */
 .lc-topbar .lc-global-nav,
 .site-main > .top-nav.lc-global-nav{
   display:grid;
   grid-template-columns:repeat(6,minmax(0,1fr));
-  align-items:stretch;
+  align-items:center;
   justify-content:center;
-  flex-wrap:initial;
-  gap:12px;
+  gap:9px;
   width:100%;
   min-width:0;
-  padding:0;
   margin:0;
+  padding:0;
   overflow:visible;
   scroll-snap-type:none;
 }
-
 .lc-topbar .lc-global-nav a,
 .site-main > .top-nav.lc-global-nav a{
   display:flex;
   flex:none;
   align-items:center;
   justify-content:center;
-  width:100%;
-  max-width:none;
   min-width:0;
-  height:72px;
-  min-height:72px;
+  max-width:none;
+  width:100%;
+  height:54px;
+  min-height:54px;
+  padding:5px 8px;
   margin:0;
-  padding:9px 10px;
-  border:2px solid #8c5a2d;
-  border-radius:7px;
-  color:#381b0b;
-  background:
-    linear-gradient(155deg,rgba(255,250,221,.76),rgba(237,202,143,.38) 64%,rgba(161,107,54,.30)),
-    url('sfondo.png') center/cover;
-  box-shadow:
-    inset 0 1px 0 rgba(255,252,229,.82),
-    inset 0 -3px 7px rgba(94,48,17,.18),
-    0 4px 6px rgba(21,8,2,.34);
+  border:1px solid rgba(224,177,106,.32);
+  border-radius:3px;
+  background:linear-gradient(180deg,rgba(22,10,4,.19),rgba(33,13,4,.41));
+  color:#fae7be;
   font-family:'Rye',Georgia,serif;
-  font-size:clamp(.75rem,.82vw,.88rem);
+  font-size:clamp(.78rem,.9vw,.93rem);
   font-weight:700;
-  line-height:1.28;
-  letter-spacing:.1px;
+  line-height:1.23;
+  letter-spacing:0;
   text-align:center;
   text-transform:uppercase;
   text-decoration:none;
   white-space:normal;
-  text-shadow:0 1px 0 rgba(255,247,217,.65);
+  text-shadow:0 2px 2px rgba(19,7,2,.9);
   opacity:1;
   filter:none;
   clip-path:none;
-  transition:background .18s ease,transform .18s ease,box-shadow .18s ease;
+  box-shadow:inset 0 1px 0 rgba(255,234,182,.07);
+  transition:background .16s ease,border-color .16s ease,transform .16s ease;
 }
 .lc-topbar .lc-global-nav a:hover,
 .site-main > .top-nav.lc-global-nav a:hover{
-  transform:translateY(-2px);
+  transform:translateY(-1px);
   filter:none;
-  background:linear-gradient(160deg,#fff4d2,#d8a66c);
-  box-shadow:inset 0 1px 0 #fff6dc,0 7px 11px rgba(20,7,2,.43);
+  color:#fff6dd;
+  background:rgba(118,67,29,.58);
+  border-color:#c99d60;
 }
 .lc-topbar .lc-global-nav a.active,
 .site-main > .top-nav.lc-global-nav a.active-page{
-  border-color:#dfb26b;
-  background:linear-gradient(160deg,#f4d79e,#c58c4d);
-  color:#2b1005;
+  color:#fff2cb;
   filter:none;
-  box-shadow:inset 0 0 0 2px rgba(101,48,12,.35),0 0 0 2px rgba(240,192,105,.38),0 4px 7px rgba(0,0,0,.30);
+  background:rgba(139,86,37,.65);
+  border-color:#e3b976;
+  box-shadow:inset 0 0 0 1px rgba(255,225,162,.2),0 1px 5px rgba(17,6,1,.2);
 }
 .lc-topbar .lc-global-nav a:focus-visible,
 .site-main > .top-nav.lc-global-nav a:focus-visible{
-  outline:3px solid #ffdf89;
-  outline-offset:3px;
+  outline:2px solid #f7d48f;
+  outline-offset:2px;
 }
-
-/* La console amministratori rimane distinta dalle targhette pubbliche. */
 .lc-topbar .lc-global-nav a.lc-admin-nav-btn,
 .site-main > .top-nav.lc-global-nav a.lc-admin-nav-btn{
-  color:#fff0d1;
-  border-color:#d6aa65;
-  background:linear-gradient(155deg,#956132,#552b12);
-  text-shadow:0 1px 2px #211006;
+  color:#fbe8b7;
+  background:linear-gradient(180deg,rgba(126,67,21,.88),rgba(81,37,12,.85));
+  border:1px solid #c9a06a;
+  text-shadow:0 2px 2px #231006;
+}
+.lc-topbar .lc-global-nav a.lc-admin-nav-btn:hover,
+.site-main > .top-nav.lc-global-nav a.lc-admin-nav-btn:hover{
+  background:linear-gradient(180deg,#965b2a,#683618);
 }
 
-/* Schermi medi: quattro targhette per fila, senza rimpicciolire i testi. */
-@media (min-width:1050px) and (max-width:1349px){
-  :root{--lc-bar-height:300px}
-  .lc-topbar .lc-global-nav,
-  .site-main > .top-nav.lc-global-nav{
-    grid-template-columns:repeat(4,minmax(0,1fr));
-  }
-}
-
-/* Tablet e telefono: bacheca alta e targhette grandi, scorribili in orizzontale. */
-@media (max-width:1049px){
-  :root{--lc-bar-height:121px}
+/* Quando manca spazio non si rimpiccioliscono più le scritte: si sfogliano le voci. */
+@media (max-width:1150px){
+  :root{--lc-bar-height:90px}
   .lc-topbar,
   .site-main > .top-nav{
     min-height:var(--lc-bar-height);
-    padding:19px 17px 18px;
-    border-width:5px;
+    padding:12px 12px;
   }
   .lc-topbar .lc-global-nav,
   .site-main > .top-nav.lc-global-nav{
     display:flex;
     flex-wrap:nowrap;
     justify-content:flex-start;
-    gap:11px;
+    gap:8px;
     overflow-x:auto;
     overflow-y:hidden;
     -webkit-overflow-scrolling:touch;
-    scroll-snap-type:x proximity;
     scrollbar-width:thin;
-    scrollbar-color:#b68d54 rgba(33,13,4,.45);
+    scrollbar-color:#d6a363 rgba(32,13,5,.65);
+    scroll-snap-type:x proximity;
   }
   .lc-topbar .lc-global-nav a,
   .site-main > .top-nav.lc-global-nav a{
-    flex:0 0 171px;
-    width:171px;
+    flex:0 0 162px;
+    width:162px;
+    min-width:162px;
     max-width:none;
-    min-width:171px;
-    height:72px;
-    min-height:72px;
-    padding:8px 11px;
-    font-size:.80rem;
+    min-height:56px;
+    height:56px;
+    font-size:.83rem;
     scroll-snap-align:start;
   }
 }
-@media (max-width:520px){
+@media(max-width:520px){
   .lc-topbar,
-  .site-main > .top-nav{padding:16px 11px 15px}
+  .site-main > .top-nav{
+    padding:10px 9px;
+  }
   .lc-topbar .lc-global-nav a,
   .site-main > .top-nav.lc-global-nav a{
     flex-basis:156px;
     min-width:156px;
     width:156px;
-    height:68px;
-    min-height:68px;
-    font-size:.74rem;
+    min-height:58px;
+    height:58px;
+    font-size:.8rem;
   }
 }
 
