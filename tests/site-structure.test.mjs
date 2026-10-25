@@ -112,3 +112,30 @@ test('i due PNG approvati sono presenti e la home usa il logo originale', async 
   const css = await readFile(resolve(root,'lc-heritage-theme.css'),'utf8');
   assert.ok(css.includes("url('lc-hero-approved.png')"), 'Sfondo originale non collegato al tema');
 });
+
+test('homepage: navigazione identica alle categorie ufficiali e indirizzi reali', async () => {
+  const html = await readFile(resolve(root,'index.html'),'utf8');
+  const start = html.indexOf('<nav class="lc-map-navbar"');
+  const end = html.indexOf('</nav>',start);
+  assert.ok(start >= 0 && end > start,'Menu homepage non trovato');
+  const nav = html.slice(start,end);
+  const expected = [
+    ['REGOLAMENTO','index.html#regole-oro'],
+    ['CODICE PENALE','codice-penale.html'],
+    ['LORE','lore.html'],
+    ['REGISTRO MEDICO','medico.html'],
+    ['LA VOCE DELLA FRONTIERA','voce-della-frontiera.html'],
+    ['EVENTI','eventi.html']
+  ];
+  for(const [label,href] of expected) {
+    assert.ok(nav.includes('href="'+href+'">'+label+'</a>'), 'Voce mancante: '+label);
+  }
+  assert.ok(nav.includes('ALTRE SEZIONI</summary>'),'Manca il menu delle altre sezioni');
+  for(const href of [
+    'approfondimenti.html','sceriffi.html','attivita-commerciali.html',
+    'hosting-immagini.html','amministrazione.html'
+  ]) assert.ok(nav.includes('href="'+href+'"'),'Collegamento mancante: '+href);
+  const topLinks = [...nav.matchAll(/<a\s+href="[^"]+">[^<]+<\/a>/g)].map(m=>m[0]);
+  assert.equal(topLinks.length,11,'Il menu deve contenere 6 link diretti e 5 nel dropdown');
+  assert.ok(!nav.includes('IL SERVER</a>') && !nav.includes('FAZIONI</a>') && !nav.includes('MEDIA</a>'));
+});
