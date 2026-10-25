@@ -310,3 +310,197 @@ body.page-home .site-shell .rule-section :is(input,select,textarea){max-width:10
   body.page-home .site-shell .rule-section{padding:14px!important}
 }
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}body.page-home .lc-map-landing *{transition:none!important}}
+
+/* LC REAL SITE DESIGN — 2026-10-25 / branch-only graphical alignment */
+/*
+ * Adattamento grafico: SOLO pagine e funzioni realmente esistenti.
+ * Nessuna modifica al DOM o ai binding degli uffici, né introduzione di immagini.
+ * L'origine dell'immagine di sfondo e del logo resta invariata finché
+ * i file originali forniti dall'utente non vengono pubblicati nel repository.
+ */
+:root {
+  --lc-real-gold: #bd8b4f;
+  --lc-real-gold-dim: rgba(189,139,79,.46);
+  --lc-real-ivory: #f1e4cb;
+  --lc-real-muted: #d5c4aa;
+  --lc-real-glass: rgba(8,9,11,.35);
+  --lc-real-glass-strong: rgba(7,8,10,.48);
+  --lc-real-border: rgba(189,139,79,.48);
+}
+
+/* Cornice sottile che richiama l'esempio approvato. */
+body.page-home .lc-map-landing,
+body:not(.page-home) .site-shell {
+  border: 1px solid var(--lc-real-gold) !important;
+  outline: 1px solid rgba(206,161,100,.28);
+  outline-offset: -8px;
+  box-shadow: 0 16px 45px rgba(0,0,0,.43), inset 0 0 0 5px rgba(8,7,6,.2) !important;
+}
+body.page-home .lc-map-landing::before,
+body.page-home .lc-map-landing::after {
+  color: #c99b5f;
+  opacity: .83;
+}
+
+/* Home: non alterare disposizione, ancore e sezioni realmente presenti. */
+body.page-home .lc-map-navbar {
+  background: rgba(5,7,9,.51) !important;
+  border-bottom: 1px solid rgba(194,146,81,.62) !important;
+}
+body.page-home .lc-map-mainlogo {
+  filter: drop-shadow(0 5px 8px rgba(0,0,0,.73));
+}
+body.page-home .lc-map-benefit {
+  background: rgba(7,8,10,.14) !important;
+  border-right-color: var(--lc-real-gold-dim) !important;
+}
+body.page-home .lc-map-benefit:hover,
+body.page-home .lc-map-benefit:focus-visible {
+  background: rgba(16,14,12,.38) !important;
+}
+body.page-home .lc-map-ctas .lc-map-secondary {
+  background: rgba(5,6,8,.38) !important;
+}
+body.page-home .lc-map-tile {
+  background: rgba(7,8,10,.20) !important;
+  border-color: rgba(189,139,79,.55) !important;
+}
+body.page-home .lc-map-tile:hover { background: rgba(7,8,10,.4) !important; }
+body.page-home .lc-map-after-hero,
+body.page-home .lc-map-contact {
+  background-color: rgba(9,10,12,.34) !important;
+}
+body.page-home .site-shell .parchment-page {
+  background: rgba(8,9,11,.38) !important;
+  border-color: rgba(189,139,79,.49) !important;
+  box-shadow: none !important;
+}
+body.page-home .site-shell .rule-section {
+  background: rgba(9,10,12,.31) !important;
+  border: 1px solid rgba(189,139,79,.30) !important;
+}
+
+/* Pagine reali: sostituire i fondi color pergamena con vetro scuro traslucido.
+   Il libro illustrato della Lore conserva le proprie immagini e la logica di sfoglio. */
+body:not(.page-home) .site-shell { background: rgba(9,10,13,.26) !important; }
+body:not(.page-home) .site-main { background: rgba(9,10,13,.16) !important; }
+body:not(.page-home) .site-main > .top-nav,
+body:not(.page-home) .lc-topbar {
+  background: rgba(6,7,9,.67) !important;
+  border-bottom: 1px solid var(--lc-real-gold-dim) !important;
+}
+body:not(.page-home) .site-main > .top-nav a {
+  color: var(--lc-real-ivory) !important;
+  text-shadow: 0 2px 4px rgba(0,0,0,.8);
+}
+body:not(.page-home) .site-main > .top-nav a:is(:hover,:focus-visible,.active-page) {
+  background: rgba(189,139,79,.15) !important;
+  color: #ffe0a0 !important;
+}
+body:not(.page-home) .western-sidebar {
+  background: rgba(7,8,10,.52) !important;
+  border-right: 1px solid var(--lc-real-gold-dim) !important;
+}
+body:not(.page-home) .western-sidebar .sidebar-brand {
+  background: rgba(8,9,12,.25) !important;
+}
+body:not(.page-home) .western-sidebar :is(.side-nav,.lc-premium-side-nav) a {
+  background: rgba(7,8,10,.14) !important;
+  color: var(--lc-real-ivory) !important;
+  border-color: rgba(189,139,79,.22) !important;
+}
+body:not(.page-home) .western-sidebar :is(.side-nav,.lc-premium-side-nav) a:is(:hover,:focus-visible,.is-active,.is-current) {
+  background: rgba(177,119,55,.22) !important;
+  border-color: rgba(209,160,94,.55) !important;
+}
+body:not(.page-home) .parchment-page {
+  background: var(--lc-real-glass) !important;
+  background-image: none !important;
+  color: var(--lc-real-ivory) !important;
+  border: 1px solid rgba(189,139,79,.27) !important;
+  box-shadow: none !important;
+}
+body:not(.page-home) .parchment-page::before,
+body:not(.page-home) .parchment-page::after {
+  background: none !important;
+  box-shadow: none !important;
+  pointer-events: none;
+}
+body:not(.page-home) .parchment-content {
+  color: var(--lc-real-ivory) !important;
+}
+body:not(.page-home) .parchment-page :is(h1,h2,h3,h4,.main-title,.app-title) {
+  color: #f1d7a7 !important;
+  text-shadow: 0 2px 5px rgba(0,0,0,.55) !important;
+}
+body:not(.page-home) .parchment-page :is(p,li,dt,dd,blockquote,legend,label,th,td) {
+  color: var(--lc-real-ivory) !important;
+  text-shadow: none;
+}
+body:not(.page-home) .parchment-page :is(a:not(.btn-primary):not(.btn-secondary)) {
+  color: #e8bf80;
+}
+body:not(.page-home) .parchment-page strong {
+  color: #f3dbaf;
+}
+body:not(.page-home) .parchment-page :is(
+  .app-card,.auth-card,.hub-item,.hub-service,.hub-stat,.hub-panel,
+  .medical-card,.sheriff-card,.rule-section,.rule-content,.deep-dive-content,
+  .news-featured-card,.news-card,.news-archive-card,.law-card,.law-article,
+  .case-card,.portal-card,.panel
+) {
+  background-color: rgba(9,10,12,.36) !important;
+  background-image: none !important;
+  border-color: rgba(189,139,79,.31) !important;
+  color: var(--lc-real-ivory) !important;
+  box-shadow: none !important;
+}
+body:not(.page-home) .parchment-page :is(
+  .app-card,.auth-card,.hub-item,.hub-service,.medical-card,.sheriff-card,
+  .law-card,.news-featured-card,.news-card,.panel
+) :is(h1,h2,h3,h4,p,span,small,li,label) {
+  color: inherit;
+}
+body:not(.page-home) .parchment-page :is(input,select,textarea) {
+  background: rgba(6,7,9,.74) !important;
+  border: 1px solid rgba(189,139,79,.43) !important;
+  color: #fff0d4 !important;
+  color-scheme: dark;
+}
+body:not(.page-home) .parchment-page :is(input,textarea)::placeholder {
+  color: #b8a995;
+  opacity: 1;
+}
+body:not(.page-home) .parchment-page :is(button,a,input,textarea,select):focus-visible {
+  outline: 2px solid #f4ca84 !important;
+  outline-offset: 2px;
+}
+/* Privacy/auth/functionality: visual overrides ONLY. */
+body:not(.page-home) .parchment-page :is(table,.table-wrap) {
+  border-color: rgba(189,139,79,.30);
+}
+body:not(.page-home) .parchment-page tr:nth-child(even) {
+  background-color: rgba(189,139,79,.065);
+}
+
+/* Non intaccare le illustrazioni, dimensioni o animazioni del libro Lore. */
+body.page-lore .flipbook :is(.book-half,.book-leaf,.leaf-face,.spread-crop,img),
+body.page-lore .flipbook-shell :is(.book-half,.book-leaf,.leaf-face,.spread-crop,img) {
+  background-image: initial;
+}
+@media (max-width:1100px) {
+  body:not(.page-home) .western-sidebar {
+    border-right: 0 !important;
+    border-bottom: 1px solid var(--lc-real-gold-dim) !important;
+  }
+  body:not(.page-home) .site-shell {outline-offset:-5px;}
+}
+@media (max-width:850px) {
+  body.page-home .lc-map-navbar {background:rgba(5,7,9,.68)!important;}
+  body.page-home .lc-map-benefit:nth-child(2) {border-right:0!important;}
+}
+@media (prefers-reduced-motion:reduce) {
+  body.page-home .lc-map-landing *, body:not(.page-home) .site-shell * {
+    scroll-behavior:auto;
+  }
+}
