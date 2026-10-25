@@ -1,121 +1,96 @@
-/* Lost Country RP — barra grafica unica e SCORREVOLE, 25/10/2026.
- * Le pagine reali mantengono sidebar, moduli e permessi: cambia solo l'intestazione.
- */
+/* Lost Country RP — navigazione condivisa, desktop e mobile. */
 (() => {
   'use strict';
   const MAIN = [
-    ['index.html','Home'],
     ['regolamento.html','Regolamento'],
     ['approfondimenti.html','Approfondimenti'],
     ['lore.html','Lore'],
     ['voce-della-frontiera.html','La Voce della Frontiera'],
-    ['eventi.html','Eventi'],
+    ['eventi.html','Eventi']
+  ];
+  const SERVICES = [
     ['attivita-commerciali.html','Attività Commerciali'],
-    ['amministrazione.html','Funzioni amministratore'],
     ['codice-penale.html','Codice Penale'],
     ['sceriffi.html','Gestione Sceriffi'],
-    ['medico.html','Registro Medico']
-  ];
-  const EXTRA = [
-    ['hosting-immagini.html','Hosting Immagini'],
+    ['medico.html','Registro Medico'],
     ['ufficio-civico.html','Ufficio Civico'],
     ['redazione.html','Redazione'],
+    ['hosting-immagini.html','Hosting Immagini'],
     ['admin-sceriffi.html','Account Sceriffi']
   ];
   const current = (location.pathname.split('/').pop() || 'index.html').toLowerCase();
   function makeLink(href,label) {
-    const a = document.createElement('a');
-    a.href = href;
-    a.textContent = label;
-    if (current === href) {
-      a.classList.add('active-page');
-      a.setAttribute('aria-current','page');
-    }
+    const a=document.createElement('a');
+    a.href=href;
+    a.textContent=label;
+    if(current===href) a.setAttribute('aria-current','page');
     return a;
   }
-  function makeArrow(symbol,label,offset,viewport) {
-    const button = document.createElement('button');
-    button.type='button';
-    button.className='lc-nav-arrow';
-    button.textContent=symbol;
-    button.setAttribute('aria-label',label);
-    button.title=label;
-    button.addEventListener('click',() => viewport.scrollBy({left:offset,behavior:'smooth'}));
-    return button;
-  }
   function setupBar(nav) {
-    if (nav.dataset.lcUnified === '2') return;
-    nav.dataset.lcUnified='2';
-    nav.classList.add('lc-site-nav');
+    if(nav.dataset.lcUnified==='3')return;
+    nav.dataset.lcUnified='3';
+    nav.classList.add('lc-site-nav','lc-clean-nav');
     nav.setAttribute('aria-label','Navigazione principale Lost Country');
-
-    const viewport=document.createElement('div');
-    viewport.className='lc-nav-viewport';
-    viewport.tabIndex=0;
-    viewport.setAttribute('role','region');
-    viewport.setAttribute('aria-label','Categorie: usa le frecce o scorri orizzontalmente');
-    const track=document.createElement('div');
-    track.className='lc-nav-track';
-    MAIN.forEach(([href,label],i)=>{
-      const a=makeLink(href,label);
-      if(i>=MAIN.length-3)a.classList.add('lc-nav-right-item');
-      track.append(a);
-    });
-    viewport.append(track);
-    // Desktop: i tre servizi richiesti restano a destra, nell'ordine stabilito.
-    const rightGroup=document.createElement('div');
-    rightGroup.className='lc-nav-rightgroup';
-    MAIN.slice(-3).forEach(([href,label])=>rightGroup.append(makeLink(href,label)));
-    const back=makeArrow('‹','Scorri le categorie a sinistra',-290,viewport);
-    const forward=makeArrow('›','Scorri le categorie a destra',290,viewport);
-
-    const more=document.createElement('details');
-    more.className='lc-home-more lc-site-more';
+    const home=makeLink('index.html','Home');
+    home.className='lc-clean-home';
+    const toggle=document.createElement('button');
+    toggle.type='button';
+    toggle.className='lc-clean-toggle';
+    toggle.textContent='Menu ☰';
+    toggle.setAttribute('aria-expanded','false');
+    toggle.setAttribute('aria-controls','lc-main-links');
+    const links=document.createElement('div');
+    links.id='lc-main-links';
+    links.className='lc-clean-links';
+    MAIN.forEach(([href,label])=>links.append(makeLink(href,label)));
+    const services=document.createElement('details');
+    services.className='lc-clean-services';
     const summary=document.createElement('summary');
-    summary.textContent='Altre sezioni';
-    summary.setAttribute('aria-label','Apri le altre sezioni');
+    summary.textContent='Servizi';
+    if(SERVICES.some(([href])=>href===current))services.classList.add('has-current-page');
     const panel=document.createElement('div');
-    panel.className='lc-home-more-menu lc-site-more-menu';
-    EXTRA.forEach(([href,label])=>panel.append(makeLink(href,label)));
-    more.append(summary,panel);
-    nav.replaceChildren(back,viewport,forward,rightGroup,more);
-
-    const update=()=>{
-      document.documentElement.style.setProperty('--lc-nav-height', `${Math.ceil(nav.getBoundingClientRect().height)}px`);
-      const max=viewport.scrollWidth-viewport.clientWidth;
-      const canScroll=max>4;
-      back.hidden=!canScroll;
-      forward.hidden=!canScroll;
-      back.disabled=!canScroll||viewport.scrollLeft<=2;
-      forward.disabled=!canScroll||viewport.scrollLeft>=max-2;
-      viewport.dataset.scrollable=canScroll?'true':'false';
-    };
-    viewport.addEventListener('scroll',update,{passive:true});
-    viewport.addEventListener('keydown',e=>{
-      if(e.target!==viewport || !['ArrowLeft','ArrowRight','Home','End'].includes(e.key))return;
-      e.preventDefault();
-      const max=viewport.scrollWidth-viewport.clientWidth;
-      const left=e.key==='Home'?0:e.key==='End'?max:viewport.scrollLeft+(e.key==='ArrowLeft'?-290:290);
-      viewport.scrollTo({left,behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'});
-    });
-    if(typeof ResizeObserver!=='undefined'){
-      const observer=new ResizeObserver(update);
-      observer.observe(nav);
-      observer.observe(viewport);
-      observer.observe(track);
-    }else window.addEventListener('resize',update,{passive:true});
-    requestAnimationFrame(update);
-    setTimeout(update,200);
-
-    more.addEventListener('toggle',()=>{
-      summary.setAttribute('aria-expanded',String(more.open));
+    panel.className='lc-clean-services-panel';
+    SERVICES.forEach(([href,label])=>panel.append(makeLink(href,label)));
+    services.append(summary,panel);
+    const admin=makeLink('amministrazione.html','Amministrazione');
+    admin.className='lc-clean-admin';
+    admin.setAttribute('aria-label','Funzioni amministratore');
+    links.append(services,admin);
+    nav.replaceChildren(home,toggle,links);
+    const compact=matchMedia('(max-width: 1200px)');
+    function closeMenu(restoreFocus=false) {
+      if(restoreFocus)toggle.focus();
+      nav.classList.remove('is-menu-open');
+      toggle.setAttribute('aria-expanded','false');
+      services.open=false;
+    }
+    toggle.addEventListener('click',()=>{
+      const open=toggle.getAttribute('aria-expanded')!=='true';
+      nav.classList.toggle('is-menu-open',open);
+      toggle.setAttribute('aria-expanded',String(open));
+      if(!open)services.open=false;
     });
     document.addEventListener('click',e=>{
-      if(more.open&&!more.contains(e.target))more.open=false;
+      if(!nav.contains(e.target))closeMenu();
+      else if(!services.contains(e.target))services.open=false;
     });
     document.addEventListener('keydown',e=>{
-      if(e.key==='Escape'&&more.open){more.open=false;summary.focus();}
+      if(e.key!=='Escape')return;
+      if(services.open){services.open=false;summary.focus();}
+      else if(nav.classList.contains('is-menu-open'))closeMenu(true);
     });
+    nav.addEventListener('focusout',()=>{
+      setTimeout(()=>{if(!nav.contains(document.activeElement))closeMenu();},0);
+    });
+    compact.addEventListener('change',()=>{
+      const focus=links.contains(document.activeElement);
+      closeMenu(compact.matches&&focus);
+      if(!compact.matches&&document.activeElement===toggle)home.focus();
+    });
+    const update=()=>document.documentElement.style.setProperty('--lc-nav-height',`${Math.ceil(nav.getBoundingClientRect().height)}px`);
+    if(typeof ResizeObserver!=='undefined')new ResizeObserver(update).observe(nav);
+    else window.addEventListener('resize',update,{passive:true});
+    requestAnimationFrame(update);
   }
   function makeInnerHeader() {
     const header=document.createElement('header');

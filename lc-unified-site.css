@@ -931,3 +931,75 @@ body.page-news .news-cover-frame img {background:transparent!important}
 body.page-news :is(.news-featured-eyebrow, .news-card-meta, .news-issue-date) {
   color:#dfc29a!important;
 }
+
+/* Compact navigation: no horizontal carousel, one set of links at every size. */
+body.lc-layout-unified .lc-site-nav.lc-clean-nav[data-lc-unified="3"] {
+  justify-content:space-between!important;
+  gap:20px!important;
+  padding:10px clamp(14px,2vw,32px)!important;
+  background:rgba(7,9,12,.96)!important;
+  min-height:66px!important;
+}
+body .lc-clean-nav :is(a,summary,button) {
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  width:auto!important;
+  min-width:0!important;
+  min-height:44px!important;
+  height:auto!important;
+  margin:0!important;
+  padding:10px 12px!important;
+  border:0!important;
+  border-bottom:1px solid transparent!important;
+  border-radius:3px!important;
+  background:transparent!important;
+  box-shadow:none!important;
+  color:#ecdec8!important;
+  font:600 .88rem/1.3 Georgia,serif!important;
+  text-transform:none!important;
+  letter-spacing:.01em!important;
+  text-decoration:none!important;
+  white-space:nowrap!important;
+  cursor:pointer;
+}
+body .lc-clean-nav :is(a,summary,button):is(:hover,:focus-visible),
+body .lc-clean-nav a[aria-current],
+body .lc-clean-nav .has-current-page>summary {
+  color:#ffdda3!important;
+  border-bottom-color:#c79a5f!important;
+  background:rgba(195,148,83,.10)!important;
+}
+body .lc-clean-nav .lc-clean-home {flex:0 0 auto;font-size:1rem!important;color:#f2d4a4!important}
+body .lc-clean-nav .lc-clean-links {display:flex;align-items:center;justify-content:flex-end;gap:4px;min-width:0}
+body .lc-clean-nav .lc-clean-admin {margin-left:12px!important;border:1px solid rgba(195,148,83,.55)!important}
+body .lc-clean-nav .lc-clean-toggle {display:none!important}
+body .lc-clean-nav .lc-clean-services {position:relative;margin:0}
+body .lc-clean-nav summary {list-style:none}
+body .lc-clean-nav summary::-webkit-details-marker {display:none}
+body .lc-clean-nav summary::after {content:'⌄';margin-left:8px}
+body .lc-clean-nav .lc-clean-services-panel {
+  position:absolute;right:0;top:calc(100% + 9px);
+  width:260px;max-width:calc(100vw - 32px);
+  max-height:calc(100dvh - var(--lc-nav-height) - 20px);
+  overflow-y:auto;padding:8px;
+  border:1px solid rgba(195,148,83,.5);
+  background:#0d1015;box-shadow:0 16px 36px #0008;
+}
+body .lc-clean-nav .lc-clean-services:not([open])>.lc-clean-services-panel {display:none}
+body .lc-clean-nav .lc-clean-services-panel>a {justify-content:flex-start!important;white-space:normal!important}
+@media(max-width:1200px) {
+  body .lc-clean-nav .lc-clean-toggle {display:flex!important;border:1px solid rgba(195,148,83,.5)!important}
+  body .lc-clean-nav .lc-clean-links {
+    display:none;position:absolute;top:100%;left:0;right:0;
+    max-height:calc(100dvh - var(--lc-nav-height) - 12px);
+    overflow-y:auto;padding:12px;
+    background:#0d1015;border-bottom:1px solid #ac7f47;
+    box-shadow:0 16px 30px #0008;
+  }
+  body .lc-clean-nav.is-menu-open .lc-clean-links {display:flex;flex-direction:column;align-items:stretch;gap:3px}
+  body .lc-clean-nav .lc-clean-links>a,
+  body .lc-clean-nav summary {justify-content:flex-start!important;white-space:normal!important}
+  body .lc-clean-nav .lc-clean-admin {margin:8px 0 0!important}
+  body .lc-clean-nav .lc-clean-services-panel {position:static;width:auto;max-width:none;max-height:none;margin:4px 0 4px 12px;box-shadow:none;border:0;border-left:1px solid #ac7f47}
+}

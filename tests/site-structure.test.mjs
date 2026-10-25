@@ -186,9 +186,10 @@ test('stesse categorie e ordine su tutte le pagine, Regolamento e Approfondiment
   const positions=expected.map(x=>script.indexOf(x));
   assert.ok(positions.every(x=>x>=0),'Mancano categorie nel menu condiviso');
   assert.ok(positions.every((x,i)=>i===0||x>positions[i-1]),'Ordine del menu non corretto');
-  assert.ok(script.includes("viewport.scrollBy({left:offset,behavior:'smooth'})"),'Barra non scorrevole tramite frecce');
-  assert.ok(script.includes("MAIN.slice(-3)"),'I tre servizi devono essere raggruppati sulla destra');
-  assert.ok(script.includes("rightGroup.className='lc-nav-rightgroup'"),'Manca il gruppo dei pulsanti a destra');
+  assert.ok(script.includes("summary.textContent='Servizi'"),'Manca il menu Servizi');
+  assert.ok(script.includes("makeLink('index.html','Home')"),'Manca Home');
+  assert.ok(script.includes("makeLink('amministrazione.html','Amministrazione')"),'Manca Amministrazione');
+  assert.ok(!script.includes('scrollBy'), 'Nessun carosello orizzontale');
 });
 
 test('la homepage non contiene i pulsanti centrali né sezioni inferiori e i servizi sono a destra', async () => {
@@ -201,8 +202,8 @@ test('la homepage non contiene i pulsanti centrali né sezioni inferiori e i ser
   const indexes=right.map(x=>navScript.indexOf(x));
   assert.ok(indexes.every(x=>x>=0));
   assert.ok(indexes[0]<indexes[1] && indexes[1]<indexes[2], 'Ordine servizi a destra errato');
-  assert.ok(css.includes('lc-nav-rightgroup') && css.includes('.lc-nav-track > a.lc-nav-right-item'));
-  assert.ok(css.includes('max-width:920px'), 'Il menu deve poter scorrere anche su schermi larghi');
+  assert.ok(css.includes('.lc-clean-nav.is-menu-open .lc-clean-links'));
+  assert.ok(navScript.includes("toggle.setAttribute('aria-controls','lc-main-links')"));
   assert.ok(home.includes('src="lc-logo-official.png"'));
 });
 
