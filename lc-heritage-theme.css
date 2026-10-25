@@ -1014,3 +1014,110 @@ body.page-home .lc-home-more-menu > a:focus-visible {
     width:min(260px,85vw);
   }
 }
+
+
+/* LC HOME COMPACT NAV — 2026-10-25: more REAL categories, no fixed widths. */
+body.page-home .lc-map-navbar {
+  position:relative !important;
+  top:auto !important;
+  display:grid !important;
+  grid-template-columns:minmax(0,1fr) minmax(0,1fr) !important;
+  column-gap:clamp(202px,18vw,275px) !important;
+  flex:0 0 auto !important;
+  height:auto !important;
+  min-height:64px !important;
+  padding:6px clamp(12px,2.2vw,34px) !important;
+  overflow:visible !important;
+}
+body.page-home .lc-map-navside.lc-map-navleft {
+  display:grid !important;
+  grid-template-columns:repeat(4,minmax(0,1fr)) !important;
+  gap:1px !important;
+  align-items:stretch !important;
+}
+body.page-home .lc-map-navside.lc-map-navright {
+  display:grid !important;
+  grid-template-columns:repeat(6,minmax(0,1fr)) !important;
+  gap:1px !important;
+  align-items:stretch !important;
+}
+body.page-home .lc-map-navside > a,
+body.page-home .lc-map-navside .lc-home-more > summary {
+  min-height:51px !important;
+  height:100% !important;
+  padding:7px 2px !important;
+  font-size:clamp(.66rem,.69vw,.78rem) !important;
+  font-weight:600 !important;
+  line-height:1.2 !important;
+  letter-spacing:0 !important;
+  white-space:normal !important;
+  overflow-wrap:normal !important;
+  hyphens:none;
+}
+body.page-home .lc-home-more > summary {
+  padding:7px 3px !important;
+  border-width:1px !important;
+}
+body.page-home .lc-home-more-menu {min-width:220px;}
+/* A larger menu no longer forces the central logo to overlap it on laptops. */
+@media(max-width:1300px) {
+  body.page-home .lc-map-navbar {
+    column-gap:0 !important;
+    grid-template-columns:40% 60% !important;
+    padding-inline:clamp(10px,2vw,24px) !important;
+  }
+  body.page-home .lc-map-mainlogo {
+    position:relative !important;
+    top:auto !important;
+    left:auto !important;
+    transform:none !important;
+    display:block !important;
+    width:clamp(165px,19vw,235px) !important;
+    height:clamp(165px,19vw,235px) !important;
+    margin:5px auto 0 !important;
+  }
+  body.page-home .lc-map-message {
+    padding-top:clamp(6px,2vw,24px) !important;
+  }
+  body.page-home .lc-map-navside > a,
+  body.page-home .lc-map-navside .lc-home-more > summary {
+    font-size:clamp(.68rem,.86vw,.82rem) !important;
+  }
+}
+@media(max-width:850px) {
+  body.page-home .lc-map-navbar {
+    display:grid !important;
+    grid-template-columns:minmax(0,1fr) !important;
+    gap:3px !important;
+    width:calc(100% + 30px) !important;
+    margin:0 -15px !important;
+    padding:8px 10px !important;
+  }
+  body.page-home .lc-map-navside.lc-map-navleft {
+    grid-template-columns:repeat(4,minmax(0,1fr)) !important;
+    margin:0 !important;
+  }
+  body.page-home .lc-map-navside.lc-map-navright {
+    grid-template-columns:repeat(6,minmax(0,1fr)) !important;
+    margin:0 !important;
+  }
+  body.page-home .lc-map-navside > a,
+  body.page-home .lc-map-navside .lc-home-more > summary {
+    min-height:43px !important;
+    padding:7px 3px !important;
+    font-size:clamp(.64rem,1.25vw,.79rem) !important;
+  }
+}
+@media(max-width:640px) {
+  body.page-home .lc-map-navside.lc-map-navright {
+    grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+  }
+  body.page-home .lc-map-navside.lc-map-navleft {
+    grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+  }
+  body.page-home .lc-map-navside > a,
+  body.page-home .lc-map-navside .lc-home-more > summary {
+    min-height:40px !important;
+    font-size:.73rem !important;
+  }
+}
