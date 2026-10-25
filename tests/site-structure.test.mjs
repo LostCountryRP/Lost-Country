@@ -139,10 +139,11 @@ test('homepage: navigazione identica alle categorie ufficiali e indirizzi reali'
   assert.ok(nav.includes('ALTRE SEZIONI</summary>'),'Manca il menu delle altre sezioni');
   for(const href of [
     'approfondimenti.html','sceriffi.html','attivita-commerciali.html',
-    'hosting-immagini.html','amministrazione.html'
+    'amministrazione.html'
   ]) assert.ok(nav.includes('href="'+href+'"'),'Collegamento mancante: '+href);
   const topLinks = [...nav.matchAll(/<a\s+href="[^"]+">[^<]+<\/a>/g)].map(m=>m[0]);
-  assert.equal(topLinks.length,15,'Il menu deve contenere 11 collegamenti diretti e 4 nel menu extra');
+  assert.equal(topLinks.length,13,'Il menu deve contenere 11 collegamenti diretti e 2 uffici');
+  assert.ok(!nav.includes('hosting-immagini.html') && !nav.includes('admin-sceriffi.html'));
   const visible = nav.split('<details class="lc-home-more">')[0];
   assert.equal([...visible.matchAll(/<a\s+href=/g)].length,11,'Devono comparire 11 categorie nella barra principale');
   assert.ok(!nav.includes('IL SERVER</a>') && !nav.includes('FAZIONI</a>') && !nav.includes('MEDIA</a>'));
@@ -186,13 +187,13 @@ test('stesse categorie e ordine su tutte le pagine, Regolamento e Approfondiment
   const positions=expected.map(x=>script.indexOf(x));
   assert.ok(positions.every(x=>x>=0),'Mancano categorie nel menu condiviso');
   assert.ok(positions.every((x,i)=>i===0||x>positions[i-1]),'Ordine del menu non corretto');
-  assert.ok(script.includes("summary.textContent='Servizi'"),'Manca il menu Servizi');
+  assert.ok(!script.includes("['hosting-immagini.html','Hosting Immagini']"), 'Hosting riservato alla console');
   assert.ok(script.includes("makeLink('index.html','Home')"),'Manca Home');
   assert.ok(script.includes("makeLink('amministrazione.html','Amministrazione')"),'Manca Amministrazione');
-  assert.ok(!script.includes('scrollBy'), 'Nessun carosello orizzontale');
+  assert.ok(script.includes('scrollBy'), 'Scorrimento mobile disponibile');
 });
 
-test('la homepage non contiene i pulsanti centrali né sezioni inferiori e i servizi sono a destra', async () => {
+test('la homepage preserva la presentazione e la barra offre i servizi nello stesso ordine', async () => {
   const home=await readFile(resolve(root,'index.html'),'utf8');
   const navScript=await readFile(resolve(root,'lc-unified-navbar.js'),'utf8');
   const css=await readFile(resolve(root,'lc-unified-site.css'),'utf8');
@@ -202,8 +203,8 @@ test('la homepage non contiene i pulsanti centrali né sezioni inferiori e i ser
   const indexes=right.map(x=>navScript.indexOf(x));
   assert.ok(indexes.every(x=>x>=0));
   assert.ok(indexes[0]<indexes[1] && indexes[1]<indexes[2], 'Ordine servizi a destra errato');
-  assert.ok(css.includes('.lc-clean-nav.is-menu-open .lc-clean-links'));
-  assert.ok(navScript.includes("toggle.setAttribute('aria-controls','lc-main-links')"));
+  assert.ok(css.includes('.lc-expanded-links'));
+  assert.ok(navScript.includes("button.setAttribute('aria-controls','lc-main-links')"));
   assert.ok(home.includes('src="lc-logo-official.png"'));
 });
 
