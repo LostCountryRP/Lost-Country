@@ -870,3 +870,145 @@ body:not(.page-home) .parchment-page :is(a,button,input,select,textarea,summary)
     height: 95px !important;
   }
 }
+
+
+/* LC HOME NAV — official menu categories 2026-10-25 */
+/* This is the SAME set of real destinations already used across internal pages. */
+body.page-home .lc-map-navbar {
+  grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+  column-gap:clamp(196px,20vw,335px);
+  padding-inline:clamp(15px,3.5vw,65px);
+  overflow:visible;
+}
+body.page-home .lc-map-navside.lc-map-navleft {
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:4px;
+}
+body.page-home .lc-map-navside.lc-map-navright {
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:4px;
+}
+body.page-home .lc-map-navside > a,
+body.page-home .lc-map-navside .lc-home-more > summary {
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:100%;
+  min-width:0;
+  min-height:50px;
+  height:100%;
+  padding:8px 5px;
+  margin:0;
+  color:#f0dabb;
+  font-family:Georgia,'Times New Roman',serif;
+  font-size:clamp(.72rem,.88vw,.89rem);
+  font-weight:600;
+  line-height:1.2;
+  letter-spacing:.005em;
+  text-align:center;
+  text-decoration:none;
+  text-transform:uppercase;
+  text-shadow:0 2px 4px #000;
+  border:0;
+  border-bottom:1px solid transparent;
+  border-radius:0;
+  background:transparent;
+  box-shadow:none;
+  cursor:pointer;
+}
+body.page-home .lc-map-navside > a:is(:hover,:focus-visible),
+body.page-home .lc-map-navside .lc-home-more > summary:is(:hover,:focus-visible),
+body.page-home .lc-map-navside .lc-home-more[open] > summary {
+  color:#ffe0aa;
+  background:rgba(167,116,60,.12);
+  border-bottom-color:rgba(212,165,98,.9);
+}
+body.page-home .lc-home-more {
+  position:relative;
+  align-self:stretch;
+  min-width:0;
+  height:100%;
+}
+body.page-home .lc-home-more > summary {
+  list-style:none;
+  border:1px solid rgba(189,139,79,.55) !important;
+  background:rgba(12,10,9,.24) !important;
+}
+body.page-home .lc-home-more > summary::-webkit-details-marker {display:none}
+body.page-home .lc-home-more > summary::after {
+  content:'⌄';
+  display:inline-block;
+  margin-left:6px;
+  color:#ebc08a;
+}
+body.page-home .lc-home-more-menu {
+  position:absolute;
+  z-index:40;
+  top:calc(100% + 8px);
+  right:0;
+  width:260px;
+  max-width:min(90vw,320px);
+  padding:9px;
+  display:grid;
+  gap:5px;
+  background:rgba(8,9,12,.97);
+  border:1px solid #bc9054;
+  box-shadow:0 14px 30px rgba(0,0,0,.58);
+}
+body.page-home .lc-home-more-menu > a {
+  display:block;
+  padding:12px 11px;
+  color:#f0dcba;
+  font:600 .85rem/1.25 Georgia,'Times New Roman',serif;
+  text-decoration:none;
+  text-transform:uppercase;
+  border:1px solid rgba(193,144,77,.32);
+  background:rgba(176,117,59,.1);
+}
+body.page-home .lc-home-more-menu > a:is(:hover,:focus-visible) {
+  color:#ffe4b1;
+  background:rgba(176,117,59,.25);
+  border-color:#c99a5f;
+}
+body.page-home .lc-home-more > summary:focus-visible,
+body.page-home .lc-home-more-menu > a:focus-visible {
+  outline:2px solid #ffd392;
+  outline-offset:2px;
+}
+@media(max-width:850px) {
+  body.page-home .lc-map-navbar {
+    display:block;
+    padding:10px 12px;
+  }
+  body.page-home .lc-map-navside.lc-map-navleft {
+    display:grid;
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:4px;
+  }
+  body.page-home .lc-map-navside.lc-map-navright {
+    display:grid;
+    grid-template-columns:repeat(4,minmax(0,1fr));
+    margin-top:5px;
+    gap:4px;
+  }
+  body.page-home .lc-map-navside > a,
+  body.page-home .lc-map-navside .lc-home-more > summary {
+    min-height:41px;
+    padding:7px 4px;
+    font-size:.76rem;
+  }
+}
+@media(max-width:520px) {
+  body.page-home .lc-map-navside.lc-map-navright {
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+  body.page-home .lc-map-navside > a,
+  body.page-home .lc-map-navside .lc-home-more > summary {
+    font-size:.72rem;
+  }
+  body.page-home .lc-home-more-menu {
+    width:min(260px,85vw);
+  }
+}
