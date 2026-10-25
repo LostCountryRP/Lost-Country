@@ -6,13 +6,13 @@
   const MAIN = [
     ['regolamento.html','Regolamento'],
     ['approfondimenti.html','Approfondimenti'],
-    ['codice-penale.html','Codice Penale'],
     ['lore.html','Lore'],
-    ['medico.html','Registro Medico'],
     ['voce-della-frontiera.html','La Voce della Frontiera'],
     ['eventi.html','Eventi'],
+    ['attivita-commerciali.html','Attività Commerciali'],
+    ['codice-penale.html','Codice Penale'],
     ['sceriffi.html','Gestione Sceriffi'],
-    ['attivita-commerciali.html','Attività Commerciali']
+    ['medico.html','Registro Medico']
   ];
   const EXTRA = [
     ['hosting-immagini.html','Hosting Immagini'],
@@ -55,8 +55,16 @@
     viewport.setAttribute('aria-label','Categorie: usa le frecce o scorri orizzontalmente');
     const track=document.createElement('div');
     track.className='lc-nav-track';
-    MAIN.forEach(([href,label])=>track.append(makeLink(href,label)));
+    MAIN.forEach(([href,label],i)=>{
+      const a=makeLink(href,label);
+      if(i>=MAIN.length-3)a.classList.add('lc-nav-right-item');
+      track.append(a);
+    });
     viewport.append(track);
+    // Desktop: i tre servizi richiesti restano a destra, nell'ordine stabilito.
+    const rightGroup=document.createElement('div');
+    rightGroup.className='lc-nav-rightgroup';
+    MAIN.slice(-3).forEach(([href,label])=>rightGroup.append(makeLink(href,label)));
     const back=makeArrow('‹','Scorri le categorie a sinistra',-290,viewport);
     const forward=makeArrow('›','Scorri le categorie a destra',290,viewport);
 
@@ -69,7 +77,7 @@
     panel.className='lc-home-more-menu lc-site-more-menu';
     EXTRA.forEach(([href,label])=>panel.append(makeLink(href,label)));
     more.append(summary,panel);
-    nav.replaceChildren(back,viewport,forward,more);
+    nav.replaceChildren(back,viewport,forward,rightGroup,more);
 
     const update=()=>{
       const max=viewport.scrollWidth-viewport.clientWidth;
