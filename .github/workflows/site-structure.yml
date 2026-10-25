@@ -32,5 +32,12 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '22'
+      - name: Controlla la sintassi degli script della navigazione e del CMS
+        run: |
+          node --check lc-unified-navbar.js
+          node --check lc-cms-public.js
+          node --check amministrazione-contenuti.js
+          node --check western-premium.js
+          node --check site-enhancements.js
       - name: Verifica la struttura del sito
         run: node --test tests/site-structure.test.mjs
