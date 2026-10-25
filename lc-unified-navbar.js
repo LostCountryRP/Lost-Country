@@ -14,9 +14,7 @@
     ['sceriffi.html','Gestione Sceriffi'],
     ['medico.html','Registro Medico'],
     ['ufficio-civico.html','Ufficio Civico'],
-    ['redazione.html','Redazione'],
-    ['hosting-immagini.html','Hosting Immagini'],
-    ['admin-sceriffi.html','Account Sceriffi']
+    ['redazione.html','Redazione']
   ];
   const current = (location.pathname.split('/').pop() || 'index.html').toLowerCase();
   function makeLink(href,label) {
@@ -27,69 +25,45 @@
     return a;
   }
   function setupBar(nav) {
-    if(nav.dataset.lcUnified==='3')return;
-    nav.dataset.lcUnified='3';
-    nav.classList.add('lc-site-nav','lc-clean-nav');
+    if(nav.dataset.lcUnified==='4')return;
+    nav.dataset.lcUnified='4';
+    nav.classList.add('lc-site-nav','lc-expanded-nav');
     nav.setAttribute('aria-label','Navigazione principale Lost Country');
-    const home=makeLink('index.html','Home');
-    home.className='lc-clean-home';
-    const toggle=document.createElement('button');
-    toggle.type='button';
-    toggle.className='lc-clean-toggle';
-    toggle.textContent='Menu ☰';
-    toggle.setAttribute('aria-expanded','false');
-    toggle.setAttribute('aria-controls','lc-main-links');
     const links=document.createElement('div');
     links.id='lc-main-links';
-    links.className='lc-clean-links';
-    MAIN.forEach(([href,label])=>links.append(makeLink(href,label)));
-    const services=document.createElement('details');
-    services.className='lc-clean-services';
-    const summary=document.createElement('summary');
-    summary.textContent='Servizi';
-    if(SERVICES.some(([href])=>href===current))services.classList.add('has-current-page');
-    const panel=document.createElement('div');
-    panel.className='lc-clean-services-panel';
-    SERVICES.forEach(([href,label])=>panel.append(makeLink(href,label)));
-    services.append(summary,panel);
+    links.className='lc-expanded-links';
+    links.append(makeLink('index.html','Home'));
+    [...MAIN,...SERVICES].forEach(([href,label])=>links.append(makeLink(href,label)));
     const admin=makeLink('amministrazione.html','Amministrazione');
-    admin.className='lc-clean-admin';
-    admin.setAttribute('aria-label','Funzioni amministratore');
-    links.append(services,admin);
-    nav.replaceChildren(home,toggle,links);
-    const compact=matchMedia('(max-width: 1200px)');
-    function closeMenu(restoreFocus=false) {
-      if(restoreFocus)toggle.focus();
-      nav.classList.remove('is-menu-open');
-      toggle.setAttribute('aria-expanded','false');
-      services.open=false;
+    if(['admin-sceriffi.html','hosting-immagini.html'].includes(current)) {
+      admin.classList.add('lc-parent-current');
+      admin.setAttribute('aria-label','Amministrazione — sezione corrente');
     }
-    toggle.addEventListener('click',()=>{
-      const open=toggle.getAttribute('aria-expanded')!=='true';
-      nav.classList.toggle('is-menu-open',open);
-      toggle.setAttribute('aria-expanded',String(open));
-      if(!open)services.open=false;
-    });
-    document.addEventListener('click',e=>{
-      if(!nav.contains(e.target))closeMenu();
-      else if(!services.contains(e.target))services.open=false;
-    });
-    document.addEventListener('keydown',e=>{
-      if(e.key!=='Escape')return;
-      if(services.open){services.open=false;summary.focus();}
-      else if(nav.classList.contains('is-menu-open'))closeMenu(true);
-    });
-    nav.addEventListener('focusout',()=>{
-      setTimeout(()=>{if(!nav.contains(document.activeElement))closeMenu();},0);
-    });
-    compact.addEventListener('change',()=>{
-      const focus=links.contains(document.activeElement);
-      closeMenu(compact.matches&&focus);
-      if(!compact.matches&&document.activeElement===toggle)home.focus();
-    });
-    const update=()=>document.documentElement.style.setProperty('--lc-nav-height',`${Math.ceil(nav.getBoundingClientRect().height)}px`);
+    links.append(admin);
+    const arrow=(direction,label)=>{
+      const button=document.createElement('button');
+      button.type='button';
+      button.className='lc-expanded-arrow';
+      button.textContent=direction<0?'‹':'›';
+      button.setAttribute('aria-label',label);
+      button.setAttribute('aria-controls','lc-main-links');
+      button.addEventListener('click',()=>links.scrollBy({left:direction*links.clientWidth*.8,behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'}));
+      return button;
+    };
+    const prev=arrow(-1,'Scorri le sezioni a sinistra');
+    const next=arrow(1,'Scorri le sezioni a destra');
+    nav.replaceChildren(prev,links,next);
+    const update=()=>{
+      const max=links.scrollWidth-links.clientWidth;
+      prev.hidden=next.hidden=max<=2;
+      prev.disabled=links.scrollLeft<=2;
+      next.disabled=links.scrollLeft>=max-2;
+      document.documentElement.style.setProperty('--lc-nav-height',`${Math.ceil(nav.getBoundingClientRect().height)}px`);
+    };
+    links.addEventListener('scroll',update,{passive:true});
     if(typeof ResizeObserver!=='undefined')new ResizeObserver(update).observe(nav);
-    else window.addEventListener('resize',update,{passive:true});
+    window.addEventListener('resize',update,{passive:true});
+    document.fonts?.ready.then(update);
     requestAnimationFrame(update);
   }
   function makeInnerHeader() {

@@ -3,7 +3,7 @@
   'use strict';
   const file=(location.pathname.split('/').pop()||'index.html').toLowerCase();
   const page=file.includes('admin-sceriffi')?'admin':file.includes('sceriffi')?'sheriff':file.includes('lore')?'lore':file.includes('approfondimenti')?'approfondimenti':file.includes('codice-penale')||file.includes('codice_penale')||file.includes('penale')?'penale':'home';
-  const TOP=[['index.html','Regolamento'],['approfondimenti.html','Approfondimenti'],['codice-penale.html','Codice Penale'],['lore.html','Lore'],['sceriffi.html','Ufficio Sceriffo']];
+  const TOP=[['regolamento.html','Regolamento'],['approfondimenti.html','Approfondimenti'],['codice-penale.html','Codice Penale'],['lore.html','Lore'],['sceriffi.html','Ufficio Sceriffo']];
   const side={
     sheriff:[['#loginPanel','Accesso Sceriffi','★'],['#newCaseTab','Nuovo Verbale','✎'],['#fedinaTab','Fedine Penali','▤'],['#wantedTab','Bacheca Ricercati','☠'],['codice-penale.html','Codice Penale','§']],
     admin:[['sceriffi.html','Torna allo Sceriffo','↶'],['#create-sheriff','Crea Account','✚'],['#accounts-list','Account Esistenti','▤']],
