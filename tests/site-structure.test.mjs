@@ -125,7 +125,10 @@ test('homepage: navigazione identica alle categorie ufficiali e indirizzi reali'
     ['LORE','lore.html'],
     ['REGISTRO MEDICO','medico.html'],
     ['LA VOCE DELLA FRONTIERA','voce-della-frontiera.html'],
-    ['EVENTI','eventi.html']
+    ['EVENTI','eventi.html'],
+    ['APPROFONDIMENTI','approfondimenti.html'],
+    ['GESTIONE SCERIFFI','sceriffi.html'],
+    ['ATTIVITÀ COMMERCIALI','attivita-commerciali.html']
   ];
   for(const [label,href] of expected) {
     assert.ok(nav.includes('href="'+href+'">'+label+'</a>'), 'Voce mancante: '+label);
@@ -136,6 +139,8 @@ test('homepage: navigazione identica alle categorie ufficiali e indirizzi reali'
     'hosting-immagini.html','amministrazione.html'
   ]) assert.ok(nav.includes('href="'+href+'"'),'Collegamento mancante: '+href);
   const topLinks = [...nav.matchAll(/<a\s+href="[^"]+">[^<]+<\/a>/g)].map(m=>m[0]);
-  assert.equal(topLinks.length,11,'Il menu deve contenere 6 link diretti e 5 nel dropdown');
+  assert.equal(topLinks.length,11,'Il menu deve contenere 9 link diretti e 2 nel dropdown');
+  const visible = nav.split('<details class="lc-home-more">')[0];
+  assert.equal([...visible.matchAll(/<a\s+href=/g)].length,9,'Devono comparire 9 categorie nella barra principale');
   assert.ok(!nav.includes('IL SERVER</a>') && !nav.includes('FAZIONI</a>') && !nav.includes('MEDIA</a>'));
 });
