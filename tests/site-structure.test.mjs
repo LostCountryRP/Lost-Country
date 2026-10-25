@@ -85,10 +85,10 @@ test('tutti i link, gli script e le immagini locali puntano a file esistenti', a
 
 test('gli elementi grafici della homepage sono preservati, senza manuale incorporato', async () => {
   const html = await readFile(resolve(root, 'index.html'), 'utf8');
-  for (const id of ['il-server', 'fazioni', 'lc-scopri', 'lc-accesso', 'lc-contatti', 'lc-guide-title']) {
+  for (const id of ['il-server']) {
     assert.ok(html.includes(`id="${id}"`), `Ancora essenziale non trovata: ${id}`);
   }
-  for (const selector of ['lc-map-landing', 'lc-map-navbar', 'lc-map-mainlogo', 'lc-map-benefits', 'lc-map-gallery'])
+  for (const selector of ['lc-map-landing', 'lc-map-navbar', 'lc-map-mainlogo', 'lc-map-message'])
     assert.ok(html.includes(selector), `Contenitore homepage mancante: ${selector}`);
   assert.ok(!html.includes('data-lc-edit="rule-'), 'Il Regolamento non deve più comparire sotto la Home');
 });
@@ -157,7 +157,9 @@ test('il regolamento è pagina autonoma, con tutti i 15 blocchi CMS e ancore sto
     assert.ok(rule.includes('id="'+id+'"'), 'Capitolo mancante: '+id);
   assert.ok(!home.includes('id="regole-oro"'));
   assert.ok(home.includes("location.replace('regolamento.html'+location.hash)"),'Vecchi link al Regolamento non reindirizzati');
-  assert.ok(home.includes('class="lc-home-guide-actions"'),'Mancano i due pulsanti vicini in Home');
+  assert.ok(!home.includes('class="lc-home-guide-actions"'),'La fascia inferiore deve essere rimossa');
+  for (const removed of ['lc-map-ctas','lc-map-bottom','lc-map-after-hero','lc-map-contact','lc-map-gallery','lc-home-guides'])
+    assert.ok(!home.includes(removed),'Sezione non rimossa dalla Home: '+removed);
 });
 
 test('il Regolamento mantiene le pubblicazioni legacy Supabase e il proprio editor', async () => {
@@ -173,16 +175,33 @@ test('stesse categorie e ordine su tutte le pagine, Regolamento e Approfondiment
   const expected=[
     "['regolamento.html','Regolamento']",
     "['approfondimenti.html','Approfondimenti']",
-    "['codice-penale.html','Codice Penale']",
     "['lore.html','Lore']",
-    "['medico.html','Registro Medico']",
     "['voce-della-frontiera.html','La Voce della Frontiera']",
     "['eventi.html','Eventi']",
+    "['attivita-commerciali.html','Attività Commerciali']",
+    "['codice-penale.html','Codice Penale']",
     "['sceriffi.html','Gestione Sceriffi']",
-    "['attivita-commerciali.html','Attività Commerciali']"
+    "['medico.html','Registro Medico']"
   ];
   const positions=expected.map(x=>script.indexOf(x));
   assert.ok(positions.every(x=>x>=0),'Mancano categorie nel menu condiviso');
   assert.ok(positions.every((x,i)=>i===0||x>positions[i-1]),'Ordine del menu non corretto');
-  assert.ok(script.includes("viewport.scrollBy({left:delta,behavior:'smooth'})"),'Barra non scorrevole tramite frecce');
+  assert.ok(script.includes("viewport.scrollBy({left:offset,behavior:'smooth'})"),'Barra non scorrevole tramite frecce');
+  assert.ok(script.includes("MAIN.slice(-3)"),'I tre servizi devono essere raggruppati sulla destra');
+  assert.ok(script.includes("rightGroup.className='lc-nav-rightgroup'"),'Manca il gruppo dei pulsanti a destra');
+});
+
+test('la homepage non contiene i pulsanti centrali né sezioni inferiori e i servizi sono a destra', async () => {
+  const home=await readFile(resolve(root,'index.html'),'utf8');
+  const navScript=await readFile(resolve(root,'lc-unified-navbar.js'),'utf8');
+  const css=await readFile(resolve(root,'lc-unified-site.css'),'utf8');
+  assert.ok(!home.includes('ENTRA NEL SERVER'));
+  assert.ok(!home.includes('SCOPRI IL SERVER'));
+  const right=["['codice-penale.html','Codice Penale']","['sceriffi.html','Gestione Sceriffi']","['medico.html','Registro Medico']"];
+  const indexes=right.map(x=>navScript.indexOf(x));
+  assert.ok(indexes.every(x=>x>=0));
+  assert.ok(indexes[0]<indexes[1] && indexes[1]<indexes[2], 'Ordine servizi a destra errato');
+  assert.ok(css.includes('lc-nav-rightgroup') && css.includes('.lc-nav-track > a.lc-nav-right-item'));
+  assert.ok(css.includes('max-width:920px'), 'Il menu deve poter scorrere anche su schermi larghi');
+  assert.ok(home.includes('src="lc-logo-official.png"'));
 });
