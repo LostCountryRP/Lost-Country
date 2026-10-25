@@ -1,0 +1,146 @@
+/* Shared finishing layer: public pages and staff offices use the same controls.
+   Keep the map homepage, original artwork, hidden states and Lore book intact. */
+:root {
+  --lc-surface: rgba(14, 16, 19, .88);
+  --lc-surface-soft: rgba(21, 22, 24, .76);
+  --lc-line: rgba(195, 148, 83, .34);
+  --lc-text: #f0e5d2;
+  --lc-muted: #c7baa4;
+  --lc-accent: #d5aa6b;
+}
+body *, body *::before, body *::after { box-sizing: border-box; }
+body .site-main { min-width: 0; }
+body :is(a, button, input, select, textarea, summary):focus-visible {
+  outline: 2px solid #f6cf8f !important;
+  outline-offset: 4px;
+}
+body [id] { scroll-margin-top: 90px; }
+body:not(.page-home) .site-shell { margin-inline: auto !important; }
+body:not(.page-home) .parchment-content { margin-inline: auto; }
+/* Staff already have a logo in the sidebar and a page title: remove duplicate banner. */
+body:not(.page-home) .site-main > .lc-office-masthead { display: none; }
+body:not(.page-home) .site-main > .top-nav {
+  background: rgba(10, 11, 13, .97) !important;
+}
+body:not(.page-home) .western-sidebar { background: rgba(10, 11, 13, .90) !important; }
+body:not(.page-home) .site-main > .parchment-page {
+  background: rgba(10, 12, 15, .68) !important;
+}
+body:not(.page-home) .site-main :is(.app-card,.auth-card,.admin-card,.case-card,.medical-card,.sheriff-card,.hub-service,.hub-item,.hosting-note) {
+  background: var(--lc-surface) !important;
+  border: 1px solid var(--lc-line) !important;
+  border-radius: 5px !important;
+  color: var(--lc-text) !important;
+  box-shadow: 0 8px 24px rgba(0,0,0,.14) !important;
+  padding: clamp(16px,2vw,26px);
+  min-width: 0;
+}
+body:not(.page-home) .site-main :is(.app-subtitle,.hosting-kicker,.hub-eyebrow,.empty-state) {
+  color: var(--lc-muted) !important;
+  line-height: 1.65;
+}
+body:not(.page-home) .site-main :is(.app-title,.main-title) {
+  letter-spacing: .015em !important;
+  overflow-wrap: anywhere;
+}
+body:not(.page-home) .site-main :is(.app-card,.auth-card,.admin-card) > h2 {
+  background: transparent !important;
+  border: 0 !important;
+  border-bottom: 1px solid var(--lc-line) !important;
+  padding: 0 0 12px !important;
+  margin: 0 0 20px !important;
+}
+/* A consistent, readable interface for the operational forms. */
+body .parchment-page :is(input:not([type=checkbox]):not([type=radio]):not([type=hidden]), select, textarea) {
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  border: 1px solid rgba(195,148,83,.45) !important;
+  border-radius: 4px !important;
+  background: #101216 !important;
+  color: var(--lc-text) !important;
+  box-shadow: none !important;
+  padding: 11px 12px;
+  font: 400 1rem/1.45 system-ui, sans-serif;
+  color-scheme: dark;
+}
+body .parchment-page :is(input, select) { min-height: 44px; }
+body .parchment-page :is(input[type=checkbox],input[type=radio]) {
+  min-height: 0;
+  accent-color: var(--lc-accent);
+}
+body .parchment-page textarea { min-height: 110px; resize: vertical; }
+body .parchment-page :is(input,textarea)::placeholder { color: #a79f92 !important; opacity: 1; }
+body .parchment-page label {
+  display: inline-block;
+  margin-bottom: 7px;
+  font: 500 .9rem/1.45 system-ui, sans-serif;
+  color: #dfcfb5 !important;
+}
+body .parchment-page .form-grid { gap: 18px; }
+body .parchment-page .form-grid > * { min-width: 0; }
+body .parchment-page :is(.btn-primary,.btn-secondary) {
+  min-height: 44px;
+  padding: 11px 18px !important;
+  border: 1px solid var(--lc-accent) !important;
+  border-radius: 4px !important;
+  font: 600 .94rem/1.4 system-ui,sans-serif !important;
+  letter-spacing: .015em !important;
+  text-transform: none !important;
+  text-shadow: none !important;
+  box-shadow: none !important;
+  cursor: pointer;
+  white-space: normal;
+}
+body .parchment-page .btn-primary { background: #d5aa6b !important; color: #19130b !important; }
+body .parchment-page .btn-secondary { background: #191b1e !important; color: #edcf9e !important; }
+body .parchment-page :is(.btn-primary,.btn-secondary):hover:not(:disabled) { filter: brightness(1.12); }
+body .parchment-page button:disabled { opacity: .55; cursor: not-allowed; }
+body .parchment-page .tab-btn { min-height: 44px; }
+body .parchment-page .table-wrap { max-width: 100%; overflow-x: auto; }
+body .parchment-page :is(th,td) { padding: 12px; }
+body .parchment-page :is(.case-card,.hub-item) { overflow-wrap: anywhere; }
+body .lc-home-more-menu { max-width: calc(100vw - 32px); }
+/* Intermediate widths used to compress eleven links into an unreadable row. */
+@media (min-width:1101px) and (max-width:1250px) {
+  body:not(.page-home) .site-main > .top-nav.lc-global-nav {
+    flex-wrap: wrap !important;
+    justify-content: flex-start !important;
+  }
+  body:not(.page-home) .site-main > .top-nav.lc-global-nav > a {
+    flex: 1 0 130px !important;
+  }
+}
+@media (max-width:700px) {
+  body:not(.page-home) .site-main > .top-nav.lc-global-nav > a { min-height: 44px !important; }
+  body:not(.page-home) .western-sidebar > .side-nav a { min-height: 44px !important; }
+  body .parchment-page .form-grid { grid-template-columns: minmax(0,1fr) !important; }
+  body .parchment-page .form-grid > .full { grid-column: 1 !important; }
+  body:not(.page-home) .site-main > .parchment-page { padding: 22px 14px 40px !important; }
+  body:not(.page-home) .site-main :is(.app-title,.main-title) { font-size: 1.7rem !important; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto !important; }
+  body .lc-reveal { opacity: 1 !important; transform: none !important; transition: none !important; }
+}
+/* Match document panels and legacy notice/icon colors to the shared palette. */
+body:not(.page-home) .site-main :is(.deep-dive-content,.law-card) {
+  background: rgba(14,16,19,.82) !important;
+  border-color: var(--lc-line) !important;
+}
+body:not(.page-home) :is(.lc-icon,.lc-nav-icon,.lc-svg-icon,.lc-main-title-with-icon > .lc-icon) {
+  color: var(--lc-accent) !important;
+}
+body:not(.page-home) .side-nav a::after { color: var(--lc-muted) !important; }
+body:not(.page-home) .hub-disclaimer {
+  background: #191b1e !important;
+  color: var(--lc-muted) !important;
+  border: 1px solid var(--lc-line) !important;
+  border-left: 3px solid var(--lc-accent) !important;
+  border-radius: 4px !important;
+  font: 400 .94rem/1.6 system-ui,sans-serif;
+}
+body:not(.page-home) .site-main .hub-eyebrow {
+  font: 600 .75rem/1.6 system-ui,sans-serif !important;
+  letter-spacing: .12em !important;
+}
