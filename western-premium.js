@@ -92,7 +92,7 @@
     if(!aside||!localNav||aside.querySelector('.lc-premium-side-nav'))return;
     const sections=[
       ['index.html','HOME','⌂'],
-      ['index.html#regole-oro','REGOLAMENTO','✦'],
+      ['regolamento.html#regole-oro','REGOLAMENTO','✦'],
       ['lore.html','LORE','▤'],
       ['codice-penale.html','CODICE PENALE','⚖'],
       ['voce-della-frontiera.html','LA VOCE DELLA FRONTIERA','▣'],
@@ -160,7 +160,7 @@
 
   function refineHomeIcons(){
     const icons={
-      'index.html#regole-oro':'<path d="m12 2 3 3.5 4.7-.4-.4 4.7L22 12l-3.7 2.2.4 4.7-4.7-.4L12 22l-2-3.5-4.7.4.4-4.7L2 12l3.7-2.2-.4-4.7 4.7.4z"/><circle cx="12" cy="12" r="3"/>',
+      'regolamento.html#regole-oro':'<path d="m12 2 3 3.5 4.7-.4-.4 4.7L22 12l-3.7 2.2.4 4.7-4.7-.4L12 22l-2-3.5-4.7.4.4-4.7L2 12l3.7-2.2-.4-4.7 4.7.4z"/><circle cx="12" cy="12" r="3"/>',
       'lore.html':'<path d="M12 6C9 3.5 5.5 4 2.5 5v14c3-.7 6.8.6 9.5 2 2.7-1.4 6.5-2.7 9.5-2V5C18.5 4 15 3.5 12 6z"/><path d="M12 6v15"/>',
       'codice-penale.html':'<path d="M12 3v18M4 7h16M6.2 8 3 15h6.4L6.2 8zm11.6 0-3.2 7H21l-3.2-7zM8 21h8"/>',
       'voce-della-frontiera.html':'<rect x="3" y="3" width="18" height="18" rx="1"/><path d="M7 7h10M7 10h5v6H7zm8 0h3M15 13h3M7 19h11"/>',

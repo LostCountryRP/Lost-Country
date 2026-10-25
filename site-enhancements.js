@@ -151,7 +151,7 @@
   function normalizeTopNavigation() {
     const file=(location.pathname.split('/').pop()||'index.html').toLowerCase();
     const entries=[
-      ['index.html','Regolamento'],
+      ['regolamento.html','Regolamento'],
       ['approfondimenti.html','Approfondimenti'],
       ['codice-penale.html','Codice Penale'],
       ['lore.html','Lore'],

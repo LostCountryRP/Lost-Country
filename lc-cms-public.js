@@ -3,6 +3,8 @@
   'use strict';
   async function apply() {
     const page = location.pathname.split('/').pop() || 'index.html';
+    // Alias: i testi pubblicati del regolamento restano sulla chiave index.html.
+    const storagePage = page === 'regolamento.html' ? 'index.html' : page;
     const containers = [...document.querySelectorAll('[data-lc-edit]')];
     if (!containers.length || !window.LC_CMS || !window.supabase ||
       !window.LC_SUPABASE_URL || !window.LC_SUPABASE_KEY) return;
@@ -11,7 +13,7 @@
         auth:{persistSession:false,autoRefreshToken:false,detectSessionInUrl:false}
       });
       const {data,error} = await db.from('lc_site_edits')
-        .select('block_key,html').eq('page',page).eq('enabled',true);
+        .select('block_key,html').eq('page',storagePage).eq('enabled',true);
       if (error) throw error;
       const targetMap = new Map(containers.map(element=>[element.dataset.lcEdit,element]));
       for (const row of data || []) {

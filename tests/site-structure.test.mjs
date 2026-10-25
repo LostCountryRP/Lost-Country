@@ -44,10 +44,10 @@ function toLocal(fromFile, href) {
   return { path, fragment: decodedFragment };
 }
 
-test('14 pagine storiche ancora presenti, senza creare pagine di fantasia', async () => {
+test('14 pagine storiche e nuovo regolamento autonomo, nessuna pagina fittizia', async () => {
   const files = await collectFiles(root);
   const required = [
-    'index.html', 'approfondimenti.html', 'codice-penale.html', 'lore.html',
+    'index.html', 'regolamento.html', 'approfondimenti.html', 'codice-penale.html', 'lore.html',
     'voce-della-frontiera.html', 'attivita-commerciali.html', 'eventi.html',
     'sceriffi.html', 'medico.html', 'ufficio-civico.html', 'redazione.html',
     'amministrazione.html', 'admin-sceriffi.html', 'hosting-immagini.html'
@@ -56,6 +56,7 @@ test('14 pagine storiche ancora presenti, senza creare pagine di fantasia', asyn
   assert.ok(!files.has('server.html') && !files.has('fazioni.html'),
     'Server e Fazioni sono sezioni della homepage, non pagine da aggiungere');
   for (const name of files) if (name.endsWith('.html')) htmlFiles.push(name);
+  assert.equal(htmlFiles.length,15,'La sitemap deve avere 15 pagine HTML');
 });
 
 test('tutti i link, gli script e le immagini locali puntano a file esistenti', async () => {
@@ -82,14 +83,14 @@ test('tutti i link, gli script e le immagini locali puntano a file esistenti', a
   assert.deepEqual(broken, [], broken.join('\n'));
 });
 
-test('gli elementi della homepage usati dal sito e dal CMS sono preservati', async () => {
+test('gli elementi grafici della homepage sono preservati, senza manuale incorporato', async () => {
   const html = await readFile(resolve(root, 'index.html'), 'utf8');
-  for (const id of ['il-server', 'fazioni', 'regole-oro', 'ingaggio', 'lc-scopri', 'lc-accesso', 'lc-contatti']) {
+  for (const id of ['il-server', 'fazioni', 'lc-scopri', 'lc-accesso', 'lc-contatti', 'lc-guide-title']) {
     assert.ok(html.includes(`id="${id}"`), `Ancora essenziale non trovata: ${id}`);
   }
   for (const selector of ['lc-map-landing', 'lc-map-navbar', 'lc-map-mainlogo', 'lc-map-benefits', 'lc-map-gallery'])
     assert.ok(html.includes(selector), `Contenitore homepage mancante: ${selector}`);
-  assert.ok(html.includes('data-lc-edit'), 'I punti di modifica CMS non devono scomparire');
+  assert.ok(!html.includes('data-lc-edit="rule-'), 'Il Regolamento non deve più comparire sotto la Home');
 });
 
 test('foglio condiviso caricato da tutte le pagine senza toccare i moduli operativi', async () => {
@@ -97,6 +98,8 @@ test('foglio condiviso caricato da tutte le pagine senza toccare i moduli operat
   for (const file of [...files].filter(f => f.endsWith('.html'))) {
     const html = await readFile(resolve(root, file), 'utf8');
     assert.ok(html.includes('lc-heritage-theme.css'), `Stile condiviso non incluso: ${file}`);
+    assert.ok(html.includes('lc-unified-site.css'), `Stile della barra unificata mancante: ${file}`);
+    assert.ok(html.includes('lc-unified-navbar.js'), `Script della barra unificata mancante: ${file}`);
   }
   for (const moduleName of ['sheriff.js','medico.js','lore.js','news-archive.js',
     'amministrazione.js','frontier-portal.js','lc-cms-core.js','supabase-config.js'])
@@ -120,7 +123,7 @@ test('homepage: navigazione identica alle categorie ufficiali e indirizzi reali'
   assert.ok(start >= 0 && end > start,'Menu homepage non trovato');
   const nav = html.slice(start,end);
   const expected = [
-    ['REGOLAMENTO','index.html#regole-oro'],
+    ['REGOLAMENTO','regolamento.html'],
     ['CODICE PENALE','codice-penale.html'],
     ['LORE','lore.html'],
     ['REGISTRO MEDICO','medico.html'],
@@ -139,8 +142,47 @@ test('homepage: navigazione identica alle categorie ufficiali e indirizzi reali'
     'hosting-immagini.html','amministrazione.html'
   ]) assert.ok(nav.includes('href="'+href+'"'),'Collegamento mancante: '+href);
   const topLinks = [...nav.matchAll(/<a\s+href="[^"]+">[^<]+<\/a>/g)].map(m=>m[0]);
-  assert.equal(topLinks.length,11,'Il menu deve contenere 9 link diretti e 2 nel dropdown');
+  assert.equal(topLinks.length,14,'Il menu deve contenere 9 collegamenti diretti e 5 nel menu extra');
   const visible = nav.split('<details class="lc-home-more">')[0];
   assert.equal([...visible.matchAll(/<a\s+href=/g)].length,9,'Devono comparire 9 categorie nella barra principale');
   assert.ok(!nav.includes('IL SERVER</a>') && !nav.includes('FAZIONI</a>') && !nav.includes('MEDIA</a>'));
+});
+
+test('il regolamento è pagina autonoma, con tutti i 15 blocchi CMS e ancore storiche', async () => {
+  const home=await readFile(resolve(root,'index.html'),'utf8');
+  const rule=await readFile(resolve(root,'regolamento.html'),'utf8');
+  const keys=[...rule.matchAll(/data-lc-edit="(rule-\d{3})"/g)].map(m=>m[1]);
+  assert.deepEqual(keys,Array.from({length:15},(_,i)=>'rule-'+String(i+1).padStart(3,'0')));
+  for(const id of ['inizio','regole-oro','ingaggio','numeri','bande','bottino','rapine','nativi','postale'])
+    assert.ok(rule.includes('id="'+id+'"'), 'Capitolo mancante: '+id);
+  assert.ok(!home.includes('id="regole-oro"'));
+  assert.ok(home.includes("location.replace('regolamento.html'+location.hash)"),'Vecchi link al Regolamento non reindirizzati');
+  assert.ok(home.includes('class="lc-home-guide-actions"'),'Mancano i due pulsanti vicini in Home');
+});
+
+test('il Regolamento mantiene le pubblicazioni legacy Supabase e il proprio editor', async () => {
+  const publicCMS=await readFile(resolve(root,'lc-cms-public.js'),'utf8');
+  const editor=await readFile(resolve(root,'amministrazione-contenuti.js'),'utf8');
+  assert.ok(publicCMS.includes("page === 'regolamento.html' ? 'index.html' : page"),'Manca l’alias CMS pubblico');
+  assert.ok(editor.includes("cmsStoragePage=()=>page==='regolamento.html'?'index.html':page"),'Manca l’alias dell’editor');
+  assert.ok(editor.includes('<option value="regolamento.html">Regolamento</option>'),'L’editor deve aprire il nuovo documento');
+});
+
+test('stesse categorie e ordine su tutte le pagine, Regolamento e Approfondimenti vicini', async () => {
+  const script=await readFile(resolve(root,'lc-unified-navbar.js'),'utf8');
+  const expected=[
+    "['regolamento.html','Regolamento']",
+    "['approfondimenti.html','Approfondimenti']",
+    "['codice-penale.html','Codice Penale']",
+    "['lore.html','Lore']",
+    "['medico.html','Registro Medico']",
+    "['voce-della-frontiera.html','La Voce della Frontiera']",
+    "['eventi.html','Eventi']",
+    "['sceriffi.html','Gestione Sceriffi']",
+    "['attivita-commerciali.html','Attività Commerciali']"
+  ];
+  const positions=expected.map(x=>script.indexOf(x));
+  assert.ok(positions.every(x=>x>=0),'Mancano categorie nel menu condiviso');
+  assert.ok(positions.every((x,i)=>i===0||x>positions[i-1]),'Ordine del menu non corretto');
+  assert.ok(script.includes("viewport.scrollBy({left:delta,behavior:'smooth'})"),'Barra non scorrevole tramite frecce');
 });

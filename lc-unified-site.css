@@ -1,0 +1,399 @@
+/* Lost Country RP — top navigation and regulation section, 25 October 2026.
+   Last style loaded on all site pages. Source images are left unchanged. */
+:root {
+  --lc-nav-gold:rgba(205,157,91,.58);
+  --lc-nav-text:#f2dfbf;
+  --lc-nav-glass:rgba(6,8,12,.63);
+}
+body .lc-site-nav,
+body:not(.page-home) .site-main>.top-nav.lc-site-nav,
+body.page-home .lc-map-navbar.lc-site-nav {
+  display:flex !important;
+  grid-template-columns:none !important;
+  align-items:center !important;
+  justify-content:space-between !important;
+  position:relative !important;
+  top:auto !important;
+  flex:0 0 auto !important;
+  gap:4px !important;
+  width:100% !important;
+  height:auto !important;
+  min-height:59px !important;
+  margin:0 !important;
+  padding:6px clamp(8px,1.3vw,23px) !important;
+  overflow:visible !important;
+  border:0 !important;
+  border-bottom:1px solid var(--lc-nav-gold) !important;
+  background:var(--lc-nav-glass) !important;
+  background-image:none !important;
+  box-shadow:0 3px 14px rgba(0,0,0,.18) !important;
+}
+body.page-home .lc-map-navbar.lc-site-nav {
+  width:calc(100% + 2 * clamp(15px,3vw,52px)) !important;
+  margin:0 calc(-1 * clamp(15px,3vw,52px)) !important;
+  padding:6px clamp(9px,2vw,32px) !important;
+  z-index:10 !important;
+}
+body .lc-site-nav .lc-nav-viewport {
+  flex:1 1 auto;
+  display:block;
+  min-width:0;
+  max-width:100%;
+  padding:0 1px;
+  overflow-x:auto;
+  overflow-y:hidden;
+  scrollbar-width:thin;
+  scrollbar-color:rgba(199,154,89,.65) transparent;
+  overscroll-behavior-x:contain;
+  scroll-behavior:smooth;
+  -webkit-overflow-scrolling:touch;
+}
+body .lc-site-nav .lc-nav-track {
+  display:flex !important;
+  flex-flow:row nowrap !important;
+  justify-content:flex-start !important;
+  align-items:center !important;
+  gap:clamp(1px,.25vw,5px);
+  width:max-content;
+  min-width:100%;
+}
+body .lc-site-nav .lc-nav-track>a,
+body:not(.page-home) .site-main>.top-nav.lc-site-nav .lc-nav-track>a,
+body.page-home .lc-map-navbar.lc-site-nav .lc-nav-track>a {
+  display:inline-flex !important;
+  flex:0 0 auto !important;
+  justify-content:center !important;
+  align-items:center !important;
+  width:auto !important;
+  min-width:0 !important;
+  max-width:185px !important;
+  min-height:41px !important;
+  height:auto !important;
+  margin:0 !important;
+  padding:9px clamp(8px,.85vw,14px) !important;
+  color:var(--lc-nav-text) !important;
+  background:transparent !important;
+  background-image:none !important;
+  border:0 !important;
+  border-bottom:1px solid transparent !important;
+  border-radius:0 !important;
+  box-shadow:none !important;
+  font:600 clamp(.70rem,.83vw,.91rem)/1.21 Georgia,serif !important;
+  letter-spacing:.008em !important;
+  text-align:center !important;
+  text-decoration:none !important;
+  text-shadow:0 2px 4px #000 !important;
+  text-transform:uppercase !important;
+  overflow-wrap:normal !important;
+  white-space:normal !important;
+  filter:none !important;
+}
+body .lc-site-nav .lc-nav-track>a:is(:hover,:focus-visible,.active-page,[aria-current]) {
+  color:#ffdc9c !important;
+  border-bottom-color:#d8a35f !important;
+  background:rgba(171,119,60,.11) !important;
+}
+body .lc-site-nav .lc-nav-arrow {
+  flex:0 0 24px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width:24px;
+  min-height:39px;
+  height:39px;
+  padding:0;
+  margin:0;
+  border:1px solid rgba(195,148,83,.32);
+  border-radius:0;
+  background:rgba(5,7,10,.28);
+  color:#ebc58f;
+  box-shadow:none;
+  font:400 1.7rem/1 Georgia,serif;
+  cursor:pointer;
+}
+body .lc-site-nav .lc-nav-arrow[hidden] {display:none!important}
+body .lc-site-nav .lc-nav-arrow:disabled {opacity:.32;cursor:default}
+body .lc-site-nav .lc-nav-arrow:not(:disabled):hover {
+  background:rgba(190,139,69,.19);
+  border-color:rgba(215,163,95,.65);
+}
+body .lc-site-nav .lc-site-more {
+  position:relative;
+  z-index:51;
+  display:block;
+  flex:0 0 clamp(100px,9vw,140px) !important;
+  min-width:0 !important;
+  max-width:140px;
+  align-self:stretch;
+  height:auto !important;
+  margin:0 !important;
+}
+body .lc-site-nav .lc-site-more>summary,
+body:not(.page-home) .site-main>.top-nav.lc-site-nav .lc-site-more>summary,
+body.page-home .lc-map-navbar.lc-site-nav .lc-site-more>summary {
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  width:100% !important;
+  height:100% !important;
+  min-height:41px !important;
+  padding:5px 7px !important;
+  margin:0 !important;
+  color:#f0d7af !important;
+  background:rgba(12,13,16,.31) !important;
+  border:1px solid var(--lc-nav-gold) !important;
+  border-radius:0 !important;
+  box-shadow:none !important;
+  font:600 clamp(.69rem,.78vw,.88rem)/1.2 Georgia,serif !important;
+  text-align:center !important;
+  text-transform:uppercase !important;
+  cursor:pointer;
+  list-style:none;
+}
+body .lc-site-nav .lc-site-more>summary::-webkit-details-marker{display:none}
+body .lc-site-nav .lc-site-more>summary::after{content:"⌄";margin-left:4px;color:#e7b978}
+body .lc-site-nav .lc-site-more[open]>summary,
+body .lc-site-nav .lc-site-more>summary:hover {
+  background:rgba(149,100,47,.27) !important;
+}
+body .lc-site-nav .lc-site-more-menu,
+body:not(.page-home) .site-main>.top-nav.lc-site-nav .lc-site-more-menu {
+  position:absolute !important;
+  z-index:60 !important;
+  top:calc(100% + 8px);
+  right:0;
+  display:grid;
+  gap:5px;
+  width:min(265px,85vw) !important;
+  max-width:min(265px,85vw) !important;
+  max-height:65vh;
+  overflow-y:auto;
+  padding:9px;
+  border:1px solid #c0965d !important;
+  background:rgba(8,9,12,.97) !important;
+  box-shadow:0 14px 28px rgba(0,0,0,.47) !important;
+}
+body .lc-site-nav .lc-site-more:not([open])>.lc-site-more-menu{display:none!important}
+body .lc-site-nav .lc-site-more-menu>a {
+  display:block !important;
+  width:100% !important;
+  height:auto !important;
+  min-height:38px !important;
+  padding:10px 9px !important;
+  color:#f0dcbb !important;
+  border:1px solid rgba(195,145,81,.32) !important;
+  background:rgba(120,78,33,.13) !important;
+  text-decoration:none !important;
+  text-transform:uppercase !important;
+  text-align:left !important;
+  font:600 .82rem/1.3 Georgia,serif !important;
+}
+body .lc-site-nav .lc-site-more-menu>a:is(:hover,:focus-visible) {
+  background:rgba(174,124,64,.28) !important;
+  border-color:#c69a61 !important;
+}
+body .lc-site-nav :is(a,button,summary,.lc-nav-viewport):focus-visible {
+  outline:2px solid #f7ca7c !important;
+  outline-offset:2px !important;
+}
+
+/* Homepage: keep the original landscape and official logo; the scrollable bar
+   now stands above the logo rather than having links hidden behind it. */
+body.page-home .lc-map-landing {overflow:visible}
+body.page-home .lc-map-landing>.lc-map-mainlogo {
+  display:block !important;
+  position:relative !important;
+  top:auto !important;
+  left:auto !important;
+  transform:none !important;
+  width:clamp(176px,17vw,252px) !important;
+  height:clamp(176px,17vw,252px) !important;
+  min-width:0 !important;
+  max-width:100% !important;
+  margin:6px auto 0 !important;
+  pointer-events:none;
+}
+body.page-home .lc-map-message {
+  padding-top:clamp(5px,1.6vw,25px) !important;
+  width:min(630px,87%) !important;
+  margin:0 auto !important;
+}
+body.page-home .lc-map-message h1 {
+  font-size:clamp(1.95rem,2.9vw,3rem) !important;
+  letter-spacing:.065em;
+}
+body.page-home .lc-map-landing>.lc-map-bottom {
+  margin-top:auto !important;
+  padding-top:28px;
+}
+body.page-home .lc-map-benefits {
+  border-top:1px solid rgba(196,146,73,.38);
+  background:rgba(5,7,10,.20);
+}
+body.page-home .lc-map-tile {
+  border:1px solid rgba(194,148,81,.43) !important;
+  box-shadow:0 5px 18px rgba(0,0,0,.23);
+}
+body.page-home .lc-home-guides {
+  margin:0 auto;
+  width:min(100%,1660px);
+  padding:25px clamp(18px,5vw,65px) 29px;
+  background:rgba(7,9,12,.74);
+  color:#e8d8bd;
+  border:1px solid rgba(194,145,77,.50);
+  border-top:0;
+}
+body.page-home .lc-home-guides .lc-guides-kicker {
+  margin:0 0 7px;
+  color:#cfa56d;
+  text-align:center;
+  font:600 .73rem/1.2 Georgia,serif;
+  letter-spacing:.2em;
+  text-transform:uppercase;
+}
+body.page-home .lc-home-guides h2 {
+  margin:0 0 17px;
+  padding:0;
+  color:#f1dfbe !important;
+  border:0 !important;
+  background:none !important;
+  text-align:center;
+  font:500 clamp(1.3rem,2vw,1.85rem)/1.2 Georgia,serif !important;
+}
+body.page-home .lc-home-guide-actions {
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:12px;
+  width:min(100%,790px);
+  margin:0 auto;
+}
+body.page-home .lc-home-guide-actions a {
+  display:flex;
+  flex-direction:column;
+  gap:5px;
+  padding:16px 18px;
+  color:#f1debc;
+  text-decoration:none;
+  text-align:center;
+  border:1px solid rgba(195,146,82,.53);
+  background:rgba(5,7,10,.41);
+}
+body.page-home .lc-home-guide-actions a strong {
+  color:#f3d7a6;
+  font:600 1rem/1.2 Georgia,serif;
+  letter-spacing:.05em;
+}
+body.page-home .lc-home-guide-actions a span {font:400 .90rem/1.35 Georgia,serif}
+body.page-home .lc-home-guide-actions a:is(:hover,:focus-visible) {
+  background:rgba(159,107,52,.24);
+  border-color:#d6a968;
+}
+
+/* The separate rulebook: preserve every paragraph and its 15 CMS keys. */
+body.page-regolamento .site-main>.parchment-page {
+  background:rgba(7,8,11,.38)!important;
+}
+body.page-regolamento .parchment-content>.hero {
+  padding:20px 13px 26px;
+  margin:0 auto 24px;
+  color:#f1e0c0!important;
+  background:rgba(7,9,13,.16)!important;
+  border:0!important;
+  box-shadow:none!important;
+}
+body.page-regolamento .hero-title-row {display:flex;justify-content:center;align-items:center;gap:12px}
+body.page-regolamento .hero h1 {
+  color:#f4dcaf!important;
+  font-size:clamp(2rem,3.2vw,3.15rem)!important;
+  text-shadow:0 2px 8px #000!important;
+}
+body.page-regolamento .hero .welcome,
+body.page-regolamento .hero .hero-subtitle {
+  color:#e5d6bd!important;
+  background:rgba(7,9,12,.12)!important;
+}
+body.page-regolamento .hero p {color:#e9ddc8!important}
+body.page-regolamento .rule-section {
+  margin:0 0 22px!important;
+  padding:clamp(13px,2.2vw,26px)!important;
+  color:#e9dbc6!important;
+  background:rgba(7,9,12,.37)!important;
+  background-image:none!important;
+  border:1px solid rgba(195,148,83,.39)!important;
+  border-radius:0!important;
+  box-shadow:none!important;
+}
+body.page-regolamento .rule-section>h2,
+body.page-regolamento .rule-section>h3,
+body.page-regolamento .rule-section h3 {
+  color:#f2d9ab!important;
+  background:rgba(7,9,12,.51)!important;
+  background-image:none!important;
+  border:1px solid rgba(195,148,83,.35)!important;
+  border-left:1px solid rgba(195,148,83,.35)!important;
+  border-radius:0!important;
+  box-shadow:none!important;
+  font-family:Georgia,serif!important;
+  text-shadow:0 2px 4px #000!important;
+}
+body.page-regolamento .rule-content,
+body.page-regolamento .rule-section-intro {
+  padding:15px 18px!important;
+  color:#ebdbc2!important;
+  background:rgba(7,8,11,.26)!important;
+  background-image:none!important;
+  border:1px solid rgba(195,148,83,.23)!important;
+  border-radius:0!important;
+  box-shadow:none!important;
+}
+body.page-regolamento .rule-section :is(p,li,em) {
+  color:#ecdcc4!important;
+  font:400 clamp(.98rem,1.18vw,1.11rem)/1.65 Georgia,serif!important;
+}
+body.page-regolamento .rule-section strong {color:#f5deb4!important}
+body.page-regolamento .rule-section .danger {color:#ffafa5!important}
+body.page-regolamento .rule-section .success {color:#b9e6b4!important}
+body.page-regolamento .lc-footer {
+  margin:20px 0 0;
+  padding:21px;
+  text-align:center;
+  background:rgba(7,9,12,.39)!important;
+  border:1px solid rgba(195,148,83,.38)!important;
+  color:#ecd9b7!important;
+}
+
+@media(max-width:850px) {
+  body .lc-site-nav,
+  body.page-home .lc-map-navbar.lc-site-nav,
+  body:not(.page-home) .site-main>.top-nav.lc-site-nav {
+    padding:6px 8px!important;
+    min-height:54px!important;
+  }
+  body.page-home .lc-map-navbar.lc-site-nav {
+    width:calc(100% + 30px)!important;
+    margin:0 -15px!important;
+  }
+  body .lc-site-nav .lc-nav-track>a {padding:8px 10px!important;font-size:.72rem!important}
+  body .lc-site-nav .lc-site-more {flex-basis:101px!important}
+  body.page-home .lc-map-landing {overflow:visible}
+  body.page-home .lc-map-landing>.lc-map-mainlogo {
+    width:clamp(160px,26vw,210px)!important;
+    height:clamp(160px,26vw,210px)!important;
+  }
+  body.page-home .lc-map-message {padding-top:4px!important}
+}
+@media(max-width:540px) {
+  body .lc-site-nav .lc-nav-arrow {width:21px;flex-basis:21px}
+  body .lc-site-nav .lc-site-more {flex-basis:91px!important}
+  body .lc-site-nav .lc-site-more>summary {font-size:.66rem!important;padding-inline:2px!important}
+  body.page-home .lc-home-guide-actions {grid-template-columns:1fr}
+  body.page-home .lc-map-landing>.lc-map-mainlogo {
+    width:166px!important;
+    height:166px!important;
+  }
+  body.page-home .lc-map-message h1 {font-size:1.65rem!important}
+  body.page-regolamento .rule-content {padding:12px 11px!important}
+}
+@media(prefers-reduced-motion:reduce){
+  body .lc-site-nav .lc-nav-viewport {scroll-behavior:auto}
+}
