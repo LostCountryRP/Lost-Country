@@ -943,6 +943,8 @@ body.page-home .lc-home-more > summary::after {
   margin-left:6px;
   color:#ebc08a;
 }
+body.page-home .lc-home-more:not([open]) > .lc-home-more-menu { display:none; }
+body.page-home .lc-home-more[open] > .lc-home-more-menu { display:grid; }
 body.page-home .lc-home-more-menu {
   position:absolute;
   z-index:40;
