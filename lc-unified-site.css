@@ -797,3 +797,115 @@ body:not(.page-home).lc-layout-unified .site-main :is(
     padding:22px 14px 50px!important;
   }
 }
+
+
+/* LC CLEAN HOME AND RIGHT-SIDE TOOLS — 2026-10-25 */
+/* A destra e in quest'ordine: Codice Penale, Gestione Sceriffi, Registro Medico.
+   Sotto 1250px tornano nella barra scorrevole, senza perdere collegamenti. */
+body.lc-layout-unified .lc-site-nav .lc-nav-rightgroup {
+  display:flex!important;
+  flex:0 0 auto!important;
+  flex-direction:row!important;
+  align-items:stretch!important;
+  gap:3px!important;
+  width:auto!important;
+  min-width:0!important;
+  height:43px!important;
+  padding:0!important;
+  margin:0!important;
+}
+body.lc-layout-unified .lc-site-nav .lc-nav-rightgroup > a {
+  display:flex!important;
+  flex:0 0 auto!important;
+  align-items:center!important;
+  justify-content:center!important;
+  width:clamp(116px,8.6vw,145px)!important;
+  max-width:145px!important;
+  height:43px!important;
+  min-height:43px!important;
+  padding:6px 7px!important;
+  border:0!important;
+  border-bottom:1px solid rgba(197,149,85,.22)!important;
+  color:#f1ddbc!important;
+  background:rgba(9,11,14,.22)!important;
+  box-shadow:none!important;
+  border-radius:0!important;
+  font:600 clamp(.70rem,.80vw,.84rem)/1.17 Georgia,serif!important;
+  text-align:center!important;
+  white-space:normal!important;
+  text-decoration:none!important;
+  text-transform:uppercase!important;
+}
+body.lc-layout-unified .lc-site-nav .lc-nav-rightgroup > a:is(:hover,:focus-visible,[aria-current]) {
+  color:#ffe0ac!important;
+  border-bottom-color:#d1a066!important;
+  background:rgba(180,128,66,.18)!important;
+}
+@media (min-width:1251px) {
+  body.lc-layout-unified .lc-site-nav .lc-nav-track > a.lc-nav-right-item {
+    display:none!important;
+  }
+  body.lc-layout-unified .lc-site-nav .lc-nav-viewport {
+    flex:1 1 510px!important;
+    width:auto!important;
+    max-width:920px!important;
+  }
+}
+@media (max-width:1250px) {
+  body.lc-layout-unified .lc-site-nav .lc-nav-rightgroup {display:none!important}
+  body.lc-layout-unified .lc-site-nav .lc-nav-track > a.lc-nav-right-item {
+    display:flex!important;
+  }
+}
+/* Solo homepage: nessuna CTA fittizia, nessuna galleria o ripetizione delle
+   categorie. Resta l'immagine originale con logo e testo di benvenuto. */
+body.page-home.lc-layout-unified .lc-map-landing {
+  display:flex!important;
+  flex-direction:column!important;
+  justify-content:flex-start!important;
+  min-height:clamp(590px,83svh,870px)!important;
+  height:auto!important;
+  overflow:visible!important;
+  padding-bottom:clamp(45px,8svh,110px)!important;
+}
+body.page-home.lc-layout-unified .lc-map-landing > .lc-map-mainlogo {
+  width:clamp(175px,16vw,240px)!important;
+  height:clamp(175px,16vw,240px)!important;
+  margin:clamp(9px,2svh,23px) auto 0!important;
+}
+body.page-home.lc-layout-unified .lc-map-message {
+  width:min(610px,84%)!important;
+  max-width:610px!important;
+  margin:clamp(14px,4svh,44px) auto 0!important;
+  padding:0!important;
+  text-align:center!important;
+  background:rgba(6,8,12,.05)!important;
+  border:0!important;
+  box-shadow:none!important;
+}
+body.page-home.lc-layout-unified .lc-map-message h1 {
+  margin:0 auto 16px!important;
+  font-size:clamp(1.9rem,2.8vw,3.0rem)!important;
+  line-height:1.13!important;
+  letter-spacing:.04em!important;
+  color:#f4dfb9!important;
+  text-shadow:0 3px 10px #000!important;
+}
+body.page-home.lc-layout-unified .lc-map-message p {
+  margin:0 auto!important;
+  max-width:570px!important;
+  color:#f0e1cb!important;
+  font-size:clamp(.96rem,1.2vw,1.18rem)!important;
+  line-height:1.55!important;
+  text-shadow:0 2px 6px #000!important;
+}
+@media(max-width:650px) {
+  body.page-home.lc-layout-unified .lc-map-landing {
+    min-height:clamp(560px,80svh,790px)!important;
+    padding-bottom:55px!important;
+  }
+  body.page-home.lc-layout-unified .lc-map-message {
+    width:min(100%,93%)!important;
+    margin:26px auto 0!important;
+  }
+}
