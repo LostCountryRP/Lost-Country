@@ -13,7 +13,7 @@
     banner.setAttribute('aria-label','Lost Country Roleplay');
     const img=document.createElement('img');
     img.className='lc-masthead-logo';
-    img.src='logo.png';
+    img.src='lc-logo-official.png';
     img.alt='Emblema Lost Country RP';
     img.loading=home?'eager':'lazy';
     const heading=document.createElement('h1');

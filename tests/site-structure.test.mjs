@@ -102,3 +102,13 @@ test('foglio condiviso caricato da tutte le pagine senza toccare i moduli operat
     'amministrazione.js','frontier-portal.js','lc-cms-core.js','supabase-config.js'])
     assert.ok(files.has(moduleName), `Modulo operativo assente: ${moduleName}`);
 });
+
+test('i due PNG approvati sono presenti e la home usa il logo originale', async () => {
+  const files = await collectFiles(root);
+  for (const p of ['lc-hero-approved.png','lc-logo-official.png'])
+    assert.ok(files.has(p), `Risorsa approvata non trovata: ${p}`);
+  const home = await readFile(resolve(root,'index.html'),'utf8');
+  assert.ok(home.includes('src="lc-logo-official.png"'), 'Logo ufficiale assente dalla homepage');
+  const css = await readFile(resolve(root,'lc-heritage-theme.css'),'utf8');
+  assert.ok(css.includes("url('lc-hero-approved.png')"), 'Sfondo originale non collegato al tema');
+});
