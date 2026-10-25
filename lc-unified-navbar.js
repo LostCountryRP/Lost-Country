@@ -4,19 +4,20 @@
 (() => {
   'use strict';
   const MAIN = [
+    ['index.html','Home'],
     ['regolamento.html','Regolamento'],
     ['approfondimenti.html','Approfondimenti'],
     ['lore.html','Lore'],
     ['voce-della-frontiera.html','La Voce della Frontiera'],
     ['eventi.html','Eventi'],
     ['attivita-commerciali.html','Attività Commerciali'],
+    ['amministrazione.html','Funzioni amministratore'],
     ['codice-penale.html','Codice Penale'],
     ['sceriffi.html','Gestione Sceriffi'],
     ['medico.html','Registro Medico']
   ];
   const EXTRA = [
     ['hosting-immagini.html','Hosting Immagini'],
-    ['amministrazione.html','Amministrazione'],
     ['ufficio-civico.html','Ufficio Civico'],
     ['redazione.html','Redazione'],
     ['admin-sceriffi.html','Account Sceriffi']
@@ -80,6 +81,7 @@
     nav.replaceChildren(back,viewport,forward,rightGroup,more);
 
     const update=()=>{
+      document.documentElement.style.setProperty('--lc-nav-height', `${Math.ceil(nav.getBoundingClientRect().height)}px`);
       const max=viewport.scrollWidth-viewport.clientWidth;
       const canScroll=max>4;
       back.hidden=!canScroll;
@@ -89,19 +91,16 @@
       viewport.dataset.scrollable=canScroll?'true':'false';
     };
     viewport.addEventListener('scroll',update,{passive:true});
-    // Mouse wheel: when hovering the bar, let the categories slide horizontally.
-    viewport.addEventListener('wheel',e=>{
-      if(e.ctrlKey||e.metaKey||Math.abs(e.deltaX)>Math.abs(e.deltaY))return;
-      const amount=e.deltaY;
+    viewport.addEventListener('keydown',e=>{
+      if(e.target!==viewport || !['ArrowLeft','ArrowRight','Home','End'].includes(e.key))return;
+      e.preventDefault();
       const max=viewport.scrollWidth-viewport.clientWidth;
-      const next=viewport.scrollLeft+amount;
-      if(max>4 && ((amount>0&&viewport.scrollLeft<max-2)||(amount<0&&viewport.scrollLeft>2))){
-        e.preventDefault();
-        viewport.scrollLeft=Math.max(0,Math.min(max,next));
-      }
-    },{passive:false});
+      const left=e.key==='Home'?0:e.key==='End'?max:viewport.scrollLeft+(e.key==='ArrowLeft'?-290:290);
+      viewport.scrollTo({left,behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'});
+    });
     if(typeof ResizeObserver!=='undefined'){
       const observer=new ResizeObserver(update);
+      observer.observe(nav);
       observer.observe(viewport);
       observer.observe(track);
     }else window.addEventListener('resize',update,{passive:true});
@@ -115,7 +114,7 @@
       if(more.open&&!more.contains(e.target))more.open=false;
     });
     document.addEventListener('keydown',e=>{
-      if(e.key==='Escape'&&more.open)more.open=false;
+      if(e.key==='Escape'&&more.open){more.open=false;summary.focus();}
     });
   }
   function makeInnerHeader() {

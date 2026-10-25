@@ -1,6 +1,7 @@
 /* Lost Country RP — top navigation and regulation section, 25 October 2026.
    Last style loaded on all site pages. Source images are left unchanged. */
 :root {
+  --lc-nav-height:76px;
   --lc-nav-gold:rgba(205,157,91,.58);
   --lc-nav-text:#f2dfbf;
   --lc-nav-glass:rgba(6,8,12,.63);
@@ -405,8 +406,9 @@ body.page-regolamento .lc-footer {
 body.lc-layout-unified .lc-site-nav,
 body.page-home.lc-layout-unified .lc-map-navbar.lc-site-nav,
 body:not(.page-home).lc-layout-unified .site-shell > .lc-site-nav {
-  position:relative!important;
-  top:auto!important;
+  position:sticky!important;
+  top:0!important;
+  align-self:start!important;
   display:flex!important;
   grid-template-columns:none!important;
   align-items:center!important;
@@ -612,18 +614,20 @@ body:not(.page-home).lc-layout-unified .lc-shared-masthead p {
 body:not(.page-home).lc-layout-unified .site-shell > .western-sidebar {
   grid-column:1!important;
   grid-row:3!important;
-  position:relative!important;
-  top:auto!important;
-  align-self:stretch!important;
+  position:sticky!important;
+  top:var(--lc-nav-height)!important;
+  align-self:start!important;
   display:flex!important;
   flex-direction:column!important;
   width:100%!important;
   height:auto!important;
   min-height:0!important;
-  max-height:none!important;
+  max-height:calc(100dvh - var(--lc-nav-height))!important;
   margin:0!important;
   padding:14px 9px 18px!important;
-  overflow:visible!important;
+  overflow-y:auto!important;
+  overflow-x:hidden!important;
+  z-index:90!important;
   border:0!important;
   border-right:1px solid rgba(199,151,83,.48)!important;
   background:rgba(6,8,11,.50)!important;
@@ -730,7 +734,7 @@ body:not(.page-home).lc-layout-unified .site-main :is(
     flex:none!important;
     width:100%!important;
     height:auto!important;
-    max-height:none!important;
+    max-height:calc(100dvh - var(--lc-nav-height))!important;
     padding:8px!important;
     border:0!important;
     border-bottom:1px solid rgba(195,148,83,.44)!important;
@@ -908,4 +912,11 @@ body.page-home.lc-layout-unified .lc-map-message p {
     width:min(100%,93%)!important;
     margin:26px auto 0!important;
   }
+}
+
+/* Keep sticky navigation attached to the document scroll container. */
+body.lc-layout-unified .site-shell {overflow:visible!important}
+html {scroll-padding-top:calc(var(--lc-nav-height, 76px) + 16px)}
+@media(max-width:1050px) {
+  html {scroll-padding-top:calc(var(--lc-nav-height, 76px) + 88px)}
 }

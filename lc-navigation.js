@@ -27,7 +27,7 @@
   }
   function apply(){
     const brand=document.querySelector('.western-sidebar .sidebar-brand');
-    if(brand){let img=brand.querySelector('img');if(!img){img=document.createElement('img');brand.prepend(img)}img.src='lc-logo-ufficiale.png';img.alt='Lost Country RP';}
+    if(brand){let img=brand.querySelector('img');if(!img){img=document.createElement('img');brand.prepend(img)}img.src='lc-logo-official.png';img.alt='Lost Country RP';}
     const nav=document.querySelector('.western-sidebar .side-nav');
     if(nav){
       const links=[...nav.querySelectorAll(':scope > a')];
