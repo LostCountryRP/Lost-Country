@@ -483,11 +483,7 @@ body:not(.page-home) .parchment-page tr:nth-child(even) {
   background-color: rgba(189,139,79,.065);
 }
 
-/* Non intaccare le illustrazioni, dimensioni o animazioni del libro Lore. */
-body.page-lore .flipbook :is(.book-half,.book-leaf,.leaf-face,.spread-crop,img),
-body.page-lore .flipbook-shell :is(.book-half,.book-leaf,.leaf-face,.spread-crop,img) {
-  background-image: initial;
-}
+/* Il visualizzatore Lore non riceve override diretti ai suoi livelli 3D. */
 @media (max-width:1100px) {
   body:not(.page-home) .western-sidebar {
     border-right: 0 !important;
