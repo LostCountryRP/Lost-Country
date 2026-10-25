@@ -142,9 +142,9 @@ test('homepage: navigazione identica alle categorie ufficiali e indirizzi reali'
     'hosting-immagini.html','amministrazione.html'
   ]) assert.ok(nav.includes('href="'+href+'"'),'Collegamento mancante: '+href);
   const topLinks = [...nav.matchAll(/<a\s+href="[^"]+">[^<]+<\/a>/g)].map(m=>m[0]);
-  assert.equal(topLinks.length,14,'Il menu deve contenere 9 collegamenti diretti e 5 nel menu extra');
+  assert.equal(topLinks.length,15,'Il menu deve contenere 11 collegamenti diretti e 4 nel menu extra');
   const visible = nav.split('<details class="lc-home-more">')[0];
-  assert.equal([...visible.matchAll(/<a\s+href=/g)].length,9,'Devono comparire 9 categorie nella barra principale');
+  assert.equal([...visible.matchAll(/<a\s+href=/g)].length,11,'Devono comparire 11 categorie nella barra principale');
   assert.ok(!nav.includes('IL SERVER</a>') && !nav.includes('FAZIONI</a>') && !nav.includes('MEDIA</a>'));
 });
 
