@@ -500,3 +500,35 @@ body:not(.page-home) .parchment-page tr:nth-child(even) {
     scroll-behavior:auto;
   }
 }
+
+
+/* LC APPROVED ASSET FALLBACKS — 2026-10-25 */
+/*
+ * L'immagine definitiva resta identica al PNG originale.
+ * Il secondo URL e' il fallback GIA' nel repository finche'
+ * i file approvati non vengono caricati sul ramo.
+ */
+html body {
+  background-image:
+    linear-gradient(rgba(7,6,5,.55),rgba(7,6,5,.78)),
+    url('lc-hero-approved.png'),
+    url('lc-map-global.webp') !important;
+  background-position:center,center top,center top !important;
+  background-size:cover,cover,cover !important;
+  background-repeat:no-repeat,no-repeat,no-repeat !important;
+}
+body.page-home .lc-map-landing {
+  background-image:
+    linear-gradient(180deg,rgba(6,5,4,.12) 0%,rgba(5,5,4,.06) 35%,rgba(5,5,4,.48) 68%,rgba(5,5,4,.86) 100%),
+    url('lc-hero-approved.png'),
+    url('lc-map-western-hero.webp') !important;
+  background-position:center,center top,center top !important;
+  background-size:100% 100%,cover,cover !important;
+  background-repeat:no-repeat,no-repeat,no-repeat !important;
+}
+@media (max-width:850px) {
+  body.page-home .lc-map-landing {
+    background-position:center,35% top,35% top !important;
+    background-size:100% 100%,auto 900px,auto 900px !important;
+  }
+}
