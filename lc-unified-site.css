@@ -920,3 +920,14 @@ html {scroll-padding-top:calc(var(--lc-nav-height, 76px) + 16px)}
 @media(max-width:1050px) {
   html {scroll-padding-top:calc(var(--lc-nav-height, 76px) + 88px)}
 }
+
+/* La Voce della Frontiera: neutral surrounds, original document scans. */
+body.page-news :is(.news-cover-frame, .news-live-card, .news-empty, .news-viewer-paper, .news-image-missing) {
+  background:rgba(7,9,12,.52)!important;
+  color:#f1e3ce!important;
+  border-color:rgba(195,148,83,.31)!important;
+}
+body.page-news .news-cover-frame img {background:transparent!important}
+body.page-news :is(.news-featured-eyebrow, .news-card-meta, .news-issue-date) {
+  color:#dfc29a!important;
+}
