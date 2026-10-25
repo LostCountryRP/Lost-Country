@@ -5,16 +5,20 @@ on:
       - '**/*.html'
       - '**/*.js'
       - '**/*.css'
-      - 'tests/site-structure.test.mjs'
+      - 'tests/**'
+      - 'scripts/**'
+      - 'supabase/functions/**'
       - '.github/workflows/site-structure.yml'
   push:
     branches:
-      - struttura-sito-2026-10-25
+      - main
     paths:
       - '**/*.html'
       - '**/*.js'
       - '**/*.css'
-      - 'tests/site-structure.test.mjs'
+      - 'tests/**'
+      - 'scripts/**'
+      - 'supabase/functions/**'
       - '.github/workflows/site-structure.yml'
   workflow_dispatch:
 
@@ -40,4 +44,6 @@ jobs:
           node --check western-premium.js
           node --check site-enhancements.js
       - name: Verifica la struttura del sito
-        run: node --test tests/site-structure.test.mjs
+        run: node --test tests/*.test.mjs
+      - name: Verifica backup Storage
+        run: python3 tests/backup-storage.test.py

@@ -25,7 +25,7 @@
     if(home){
       const explore=document.createElement('a');
       explore.className='lc-hero-action-hit';
-      explore.href='#frontierPortalTitle';
+      explore.href='#il-server';
       explore.setAttribute('aria-label','Vai alla presentazione di Lost Country RP');
       explore.title='Scopri Lost Country RP';
       banner.append(explore);
@@ -70,12 +70,15 @@
       else media.addListener(rerender);
     });
     document.addEventListener('click',event=>{
-      document.querySelectorAll('.lc-more-menu[open]').forEach(details=>{
+      document.querySelectorAll('.lc-more-menu[open], .lc-home-more[open]').forEach(details=>{
         if(!details.contains(event.target))details.removeAttribute('open');
       });
     });
     document.addEventListener('keydown',event=>{
-      if(event.key==='Escape')document.querySelectorAll('.lc-more-menu[open]').forEach(d=>d.removeAttribute('open'));
+      if(event.key==='Escape')document.querySelectorAll('.lc-more-menu[open], .lc-home-more[open]').forEach(d=>{
+        if(d.contains(document.activeElement))d.querySelector('summary')?.focus();
+        d.removeAttribute('open');
+      });
     });
   }
 

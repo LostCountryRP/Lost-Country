@@ -89,6 +89,13 @@
       viewport.dataset.scrollable=canScroll?'true':'false';
     };
     viewport.addEventListener('scroll',update,{passive:true});
+    viewport.addEventListener('keydown',e=>{
+      if(e.target!==viewport || !['ArrowLeft','ArrowRight','Home','End'].includes(e.key))return;
+      e.preventDefault();
+      const max=viewport.scrollWidth-viewport.clientWidth;
+      const left=e.key==='Home'?0:e.key==='End'?max:viewport.scrollLeft+(e.key==='ArrowLeft'?-290:290);
+      viewport.scrollTo({left,behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'});
+    });
     // Mouse wheel: when hovering the bar, let the categories slide horizontally.
     viewport.addEventListener('wheel',e=>{
       if(e.ctrlKey||e.metaKey||Math.abs(e.deltaX)>Math.abs(e.deltaY))return;
@@ -115,7 +122,7 @@
       if(more.open&&!more.contains(e.target))more.open=false;
     });
     document.addEventListener('keydown',e=>{
-      if(e.key==='Escape'&&more.open)more.open=false;
+      if(e.key==='Escape'&&more.open){more.open=false;summary.focus();}
     });
   }
   function makeInnerHeader() {

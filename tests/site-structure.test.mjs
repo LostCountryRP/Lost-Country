@@ -205,3 +205,49 @@ test('la homepage non contiene i pulsanti centrali né sezioni inferiori e i ser
   assert.ok(css.includes('max-width:920px'), 'Il menu deve poter scorrere anche su schermi larghi');
   assert.ok(home.includes('src="lc-logo-official.png"'));
 });
+
+test('tutte le pagine condividono stile e navigazione senza testo spurio', async () => {
+  const files = await collectFiles(root);
+  for (const page of [...files].filter(f => f.endsWith('.html'))) {
+    const html = await readFile(resolve(root, page), 'utf8');
+    assert.equal((html.match(/href="lc-ui-consistency\.css[^\"]*"/g) || []).length, 1, page);
+    assert.equal((html.match(/src="site-enhancements\.js[^\"]*"/g) || []).length, 1, page);
+    assert.equal((html.match(/src="western-premium\.js[^\"]*"/g) || []).length, 1, page);
+    assert.ok(!html.includes('>\\n'), `Testo spurio visibile: ${page}`);
+    const ids = [...html.matchAll(idRegex)].map(m => m[1]);
+    assert.equal(new Set(ids).size, ids.length, `ID duplicati: ${page}`);
+    for (const [, id] of html.matchAll(/<label\b[^>]*\bfor="([^"]+)"/gi)) {
+      assert.ok(ids.includes(id), `Etichetta senza campo ${page}: ${id}`);
+    }
+    if (page !== 'index.html') assert.match(html, /<nav class="top-nav"/, page);
+  }
+});
+
+test('JavaScript esterno e inline sintatticamente valido', async () => {
+  const { Script } = await import('node:vm');
+  const files = await collectFiles(root);
+  for (const file of files) {
+    if (file.endsWith('.js')) new Script(await readFile(resolve(root,file),'utf8'), {filename:file});
+    if (!file.endsWith('.html')) continue;
+    const html = await readFile(resolve(root,file),'utf8');
+    for (const [,attrs,code] of html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi)) {
+      if (/\bsrc=|application\/ld\+json/.test(attrs) || !code.trim()) continue;
+      new Script(code, {filename:file});
+    }
+  }
+});
+
+test('risorse CSS locali esistenti, inclusi percorsi URL codificati', async () => {
+  const files = await collectFiles(root);
+  const broken = [];
+  for (const file of [...files].filter(f => f.endsWith('.css'))) {
+    const css = await readFile(resolve(root,file),'utf8');
+    for (const [,url] of css.matchAll(/url\(\s*["']?([^\s"')]+)["']?\s*\)/gi)) {
+      const decoded = decodeURIComponent(url);
+      if (decoded.startsWith('#')) continue;
+      const ref = toLocal(file,decoded);
+      if (ref && (!ref.path || !files.has(ref.path))) broken.push(`${file}: ${url}`);
+    }
+  }
+  assert.deepEqual(broken, []);
+});
