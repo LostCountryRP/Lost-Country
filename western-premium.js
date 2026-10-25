@@ -85,6 +85,8 @@
     const file=(location.pathname.split('/').pop()||'index.html').toLowerCase();
     const eligible=new Set(['index.html','approfondimenti.html','codice-penale.html','lore.html','voce-della-frontiera.html','attivita-commerciali.html','eventi.html']);
     if(!eligible.has(file))return;
+    // Page interne: usa soltanto l'indice di capitoli originale, senza un secondo menu.
+    if(file!=='index.html')return;
     const aside=document.querySelector('.western-sidebar');
     const localNav=aside?.querySelector('.side-nav');
     if(!aside||!localNav||aside.querySelector('.lc-premium-side-nav'))return;
