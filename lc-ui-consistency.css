@@ -144,3 +144,17 @@ body:not(.page-home) .site-main .hub-eyebrow {
   font: 600 .75rem/1.6 system-ui,sans-serif !important;
   letter-spacing: .12em !important;
 }
+body .parchment-page .btn-link {
+  min-height: 44px;
+  padding: 11px 14px !important;
+  background: transparent !important;
+  color: #edcf9e !important;
+  border: 1px solid var(--lc-line) !important;
+  border-radius: 4px !important;
+  font: 500 .94rem/1.4 system-ui,sans-serif !important;
+  text-transform: none !important;
+  text-shadow: none !important;
+  cursor: pointer;
+}
+/* Roman counters were overlapping long office names in the narrow sidebar. */
+body:not(.page-home) .western-sidebar .side-nav a::after { display: none !important; }
