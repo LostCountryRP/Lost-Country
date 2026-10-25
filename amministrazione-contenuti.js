@@ -3,13 +3,15 @@
   'use strict';
   const $=id=>document.getElementById(id);
   const pages={
-    'index.html':'Regolamento',
+    'regolamento.html':'Regolamento',
     'approfondimenti.html':'Approfondimenti',
     'codice-penale.html':'Codice penale (descrizioni)'
   };
-  let authorized=false, canReadAudit=false, page='index.html', originals=[], overrides=new Map(), selected=null, working=false;
+  let authorized=false, canReadAudit=false, page='regolamento.html', originals=[], overrides=new Map(), selected=null, working=false;
   let pageRequest=0, auditRequest=0, historyRequest=0;
   const db=()=>window.LC_ADMIN_DB;
+  // Chiave Supabase originale, mantiene cronologia e testi pubblicati.
+  const cmsStoragePage=()=>page==='regolamento.html'?'index.html':page;
   function el(tag,cls,text) {
     const e=document.createElement(tag);
     if(cls)e.className=cls;
@@ -61,7 +63,7 @@
       if(!Object.hasOwn(pages,page))throw Error('Pagina non consentita');
       const [html,res]=await Promise.all([
         fetch(page,{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('Pagina non disponibile');return r.text()}),
-        db().from('lc_site_edits').select('page,block_key,html,enabled,version,updated_at').eq('page',page)
+        db().from('lc_site_edits').select('page,block_key,html,enabled,version,updated_at').eq('page',cmsStoragePage())
       ]);
       if(!authorized||request!==pageRequest)return;
       if(res.error)throw res.error;
@@ -112,10 +114,10 @@
       let result;
       if(current) {
         result=await db().from('lc_site_edits').update({html:safe,enabled})
-          .eq('page',page).eq('block_key',selected).eq('version',current.version)
+          .eq('page',cmsStoragePage()).eq('block_key',selected).eq('version',current.version)
           .select('page,block_key,html,enabled,version,updated_at').single();
       } else {
-        result=await db().from('lc_site_edits').insert({page,block_key:selected,html:safe,enabled})
+        result=await db().from('lc_site_edits').insert({page:cmsStoragePage(),block_key:selected,html:safe,enabled})
           .select('page,block_key,html,enabled,version,updated_at').single();
       }
       if(result.error)throw result.error;
@@ -213,7 +215,7 @@
   document.addEventListener('DOMContentLoaded',()=>{
     $('cmsRoot').innerHTML = `
       <div class="form-grid hub-cms-controls">
-        <div><label for="cmsPage">Pagina</label><select id="cmsPage"><option value="index.html">Regolamento</option><option value="approfondimenti.html">Approfondimenti</option><option value="codice-penale.html">Codice penale — descrizioni</option></select></div>
+        <div><label for="cmsPage">Pagina</label><select id="cmsPage"><option value="regolamento.html">Regolamento</option><option value="approfondimenti.html">Approfondimenti</option><option value="codice-penale.html">Codice penale — descrizioni</option></select></div>
         <div><label for="cmsSearch">Cerca un argomento</label><input id="cmsSearch" type="search" placeholder="Cerca nei testi…"></div>
       </div>
       <div class="hub-cms-toolbar"><span id="cmsCounter">—</span><button type="button" class="btn-secondary" id="cmsRefresh">Aggiorna testi</button></div>
