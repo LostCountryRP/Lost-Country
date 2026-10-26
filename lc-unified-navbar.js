@@ -14,7 +14,8 @@
     ['sceriffi.html','Gestione Sceriffi'],
     ['medico.html','Registro Medico'],
     ['ufficio-civico.html','Ufficio Civico'],
-    ['redazione.html','Redazione']
+    ['redazione.html','Redazione'],
+    ['hosting-immagini.html','Hosting immagini']
   ];
   const current = (location.pathname.split('/').pop() || 'index.html').toLowerCase();
   function makeLink(href,label) {
@@ -25,8 +26,8 @@
     return a;
   }
   function setupBar(nav) {
-    if(nav.dataset.lcUnified==='4')return;
-    nav.dataset.lcUnified='4';
+    if(nav.dataset.lcUnified==='5')return;
+    nav.dataset.lcUnified='5';
     nav.classList.add('lc-site-nav','lc-expanded-nav');
     nav.setAttribute('aria-label','Navigazione principale Lost Country');
     const links=document.createElement('div');
@@ -35,7 +36,7 @@
     links.append(makeLink('index.html','Home'));
     [...MAIN,...SERVICES].forEach(([href,label])=>links.append(makeLink(href,label)));
     const admin=makeLink('amministrazione.html','Amministrazione');
-    if(['admin-sceriffi.html','hosting-immagini.html'].includes(current)) {
+    if(current==='admin-sceriffi.html') {
       admin.classList.add('lc-parent-current');
       admin.setAttribute('aria-label','Amministrazione — sezione corrente');
     }

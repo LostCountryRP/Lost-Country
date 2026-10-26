@@ -1,6 +1,6 @@
 -- Lost Country RP: permessi Supabase Storage per il pannello image hosting.
 -- Applicate direttamente al progetto il 24/10/2026.
--- NON rieseguire se le policy con questi nomi esistono gia'.
+-- Questo file descrive la configurazione complessiva. Non rieseguire policy già applicate.
 -- Prima creare dal pannello Supabase Storage il bucket pubblico "lc-image-hosting".
 -- Limitare dal pannello MIME a jpeg/png/webp/gif e dimensioni a 10MB.
 
@@ -31,4 +31,17 @@ using (
 
 -- Nessuna policy UPDATE intenzionalmente.
 -- Gli oggetti nel bucket public sono leggibili da chi conosce il link,
--- ma lista, upload e cancellazione restano sotto RLS.
+-- ma soltanto la lista e la cancellazione sono riservate agli amministratori.
+
+-- Caricamento aperto ai visitatori: esclusivamente INSERT in uploads/ con nome UUID.
+-- Nessuna policy SELECT / DELETE / UPDATE per anon o utenti non admin.
+create policy lc_image_host_visitor_upload
+on storage.objects
+for insert to anon, authenticated
+with check (
+ bucket_id = 'lc-image-hosting'
+ and name ~ '^uploads/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}-[a-z0-9-]{1,55}\.(jpg|png|webp|gif)$'
+);
+
+-- Nota: l'upload anonimo puo' essere abusato. Consigliati monitoraggio quote,
+-- rate limit lato server e protezione antispam in produzione.
