@@ -3,13 +3,13 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="robots" content="noindex,nofollow,noarchive">
-  <title>Archivio immagini | Lost Country RP</title>
+  <meta name="description" content="Hosting immagini Lost Country RP: carica gratuitamente immagini e ottieni un link diretto. Archivio consultabile soltanto dagli amministratori.">
+  <title>Hosting immagini | Lost Country RP</title>
   <link rel="stylesheet" href="style.css?v=20261024-console-admin">
-  <link rel="stylesheet" href="hosting-immagini.css?v=2">
+  <link rel="stylesheet" href="hosting-immagini.css?v=20261026-public-1">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="supabase-config.js"></script>
-  <script defer src="hosting-immagini.js?v=2"></script>
+  <script defer src="hosting-immagini.js?v=20261026-public-1"></script>
 
 <link rel="stylesheet" href="western-premium.css?v=20261025-sitewide-1">
 <link rel="stylesheet" href="western-layout-fixes.css?v=20261025-sitewide-1">
@@ -19,7 +19,7 @@
 <script defer src="western-premium.js?v=20261025-uniform-1"></script>
 <link rel="stylesheet" href="lc-ui-consistency.css?v=20261025-1">
 <link rel="stylesheet" href="lc-unified-site.css?v=20261025-expanded-8">
-<script defer src="lc-unified-navbar.js?v=20261025-expanded-8"></script>
+<script defer src="lc-unified-navbar.js?v=20261026-public-1"></script>
 </head>
 <body class="page-sceriffi">
 <div class="site-shell">
@@ -30,32 +30,18 @@
       <a href="amministrazione.html">Console Amministratori</a>
     </nav>
   </aside>
-  <main class="site-main"><nav class="top-nav" aria-label="Navigazione principale"><a href="index.html">Regolamento</a><a href="approfondimenti.html">Approfondimenti</a><a href="codice-penale.html">Codice Penale</a><a href="lore.html">Lore</a><a href="sceriffi.html">Gestione Sceriffi</a><a href="medico.html">Registro Medico</a><a href="voce-della-frontiera.html">La Voce della Frontiera</a><a href="attivita-commerciali.html">Attività commerciali</a><a href="eventi.html">Eventi</a><a href="hosting-immagini.html" class="active-page" aria-current="page">Hosting immagini</a><a href="amministrazione.html">Amministrazione</a></nav><header class="lc-office-masthead" aria-label="Archivio Immagini"><img src="lc-logo-official.png" alt="Emblema Lost Country RP" width="86" height="86"><div><p class="lc-office-brand">Lost Country RP</p><p class="lc-office-subtitle">Archivio Immagini</p></div></header>
+  <main class="site-main"><nav class="top-nav" aria-label="Navigazione principale"><a href="index.html">Regolamento</a><a href="approfondimenti.html">Approfondimenti</a><a href="codice-penale.html">Codice Penale</a><a href="lore.html">Lore</a><a href="sceriffi.html">Gestione Sceriffi</a><a href="medico.html">Registro Medico</a><a href="voce-della-frontiera.html">La Voce della Frontiera</a><a href="attivita-commerciali.html">Attività commerciali</a><a href="eventi.html">Eventi</a><a href="hosting-immagini.html" class="active-page" aria-current="page">Hosting immagini</a><a href="amministrazione.html">Amministrazione</a></nav><header class="lc-office-masthead" aria-label="Hosting Immagini"><img src="lc-logo-official.png" alt="Emblema Lost Country RP" width="86" height="86"><div><p class="lc-office-brand">Lost Country RP</p><p class="lc-office-subtitle">Hosting Immagini</p></div></header>
     <section class="parchment-page">
       <div class="parchment-content hosting">
         <div class="hosting-heading">
           <div>
-            <p class="hosting-kicker">Strumento riservato allo staff</p>
-            <h1 class="app-title">Archivio immagini</h1>
+            <p class="hosting-kicker">Strumento per tutti i visitatori</p>
+            <h1 class="app-title">Hosting immagini</h1>
             <p>Carica le immagini una sola volta, copia il collegamento e usalo nel giornale, nei documenti o nelle pagine di Lost Country.</p>
           </div>
           <span class="hosting-icon" aria-hidden="true">▣</span>
         </div>
-        <div class="hosting-note" role="note"><strong>Link permanenti e non elencati:</strong> soltanto gli amministratori possono vedere l'archivio o caricare immagini. Chi conosce il link diretto può visualizzare la singola immagine. Non caricare documenti riservati.</div>
-        <section id="hostingLogin" class="app-card hosting-login">
-          <h2>Accesso amministratori</h2>
-          <p>Accedi con l'account staff abilitato alla gestione Sceriffi.</p>
-          <form id="hostingLoginForm" class="form-grid">
-            <div><label for="hostingEmail">Email</label><input id="hostingEmail" type="email" autocomplete="username" required></div>
-            <div><label for="hostingPassword">Password</label><input id="hostingPassword" type="password" autocomplete="current-password" required></div>
-            <div class="full"><button class="btn-primary" id="hostingLoginBtn" type="submit">Accedi all'archivio</button></div>
-          </form>
-        </section>
-        <section id="hostingPanel" hidden>
-          <div class="hosting-toolbar app-card">
-            <span>Accesso autorizzato: <strong id="hostingUser"></strong></span>
-            <button class="btn-secondary" id="hostingLogout" type="button">Esci</button>
-          </div>
+        <div class="hosting-note" role="note"><strong>Caricamento aperto a tutti, senza registrazione.</strong> Dopo il caricamento riceverai il link diretto della tua immagine. Solo gli amministratori possono consultare l'archivio completo ed eliminare le immagini. Chi conosce un link diretto può vedere la singola immagine: non caricare contenuti riservati.</div>
           <section class="app-card hosting-upload">
             <h2>Carica immagini</h2>
             <div id="hostingDrop" class="hosting-drop" role="button" tabindex="0" aria-label="Scegli o trascina immagini">
@@ -73,8 +59,22 @@
             </div>
             <div id="hostingResults" class="hosting-results" aria-live="polite"></div>
           </section>
+        <section id="hostingLogin" class="app-card hosting-login">
+          <h2>Accesso amministratori · Archivio riservato</h2>
+          <p>Per caricare immagini non serve un account. Accedi soltanto se devi consultare o gestire la galleria completa.</p>
+          <form id="hostingLoginForm" class="form-grid">
+            <div><label for="hostingEmail">Email</label><input id="hostingEmail" type="email" autocomplete="username" required></div>
+            <div><label for="hostingPassword">Password</label><input id="hostingPassword" type="password" autocomplete="current-password" required></div>
+            <div class="full"><button class="btn-primary" id="hostingLoginBtn" type="submit">Accedi all'archivio</button></div>
+          </form>
+        </section>
+        <section id="hostingPanel" hidden>
+          <div class="hosting-toolbar app-card">
+            <span>Accesso autorizzato: <strong id="hostingUser"></strong></span>
+            <button class="btn-secondary" id="hostingLogout" type="button">Esci</button>
+          </div>
           <section class="app-card hosting-library">
-            <div class="hosting-library-heading"><div><h2>Le immagini caricate</h2><p>La galleria è visibile solo agli amministratori. Usa il pulsante «Copia link» per inserire una foto ovunque.</p></div><button id="hostingRefresh" class="btn-secondary" type="button">Aggiorna</button></div>
+            <div class="hosting-library-heading"><div><h2>Archivio immagini · Solo amministratori</h2><p>La galleria è visibile solo agli amministratori. Usa il pulsante «Copia link» per inserire una foto ovunque.</p></div><button id="hostingRefresh" class="btn-secondary" type="button">Aggiorna</button></div>
             <label for="hostingSearch" class="hosting-search-label">Cerca tra le immagini visualizzate</label>
             <input id="hostingSearch" type="search" placeholder="Cerca per nome file...">
             <div id="hostingGrid" class="hosting-grid" aria-live="polite"></div>
