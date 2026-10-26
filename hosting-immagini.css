@@ -1,4 +1,4 @@
-/* Pannello privato di gestione immagini — nessuna galleria nel sito pubblico */
+/* Hosting pubblico, archivio e gestione immagini protetti da RLS amministratore. */
 .hosting{max-width:1120px;margin:0 auto}
 .hosting-heading{display:flex;align-items:center;justify-content:space-between;gap:24px;margin-bottom:20px}
 .hosting-heading p{max-width:720px}
@@ -68,3 +68,8 @@
 .hosting-result-actions .hosting-copy:first-child:hover{background:#254921}
 .hosting-card-actions button:first-child{background:#335e30;color:#fff7e6;border-color:#254921}
 .hosting-card-actions button:first-child:hover{background:#254921}
+
+/* Upload pubblico in evidenza; autenticazione separata per la sola galleria admin. */
+.hosting-upload{margin-bottom:22px}
+.hosting-login{margin:18px 0 24px}
+#hostingPanel .hosting-library{margin-top:20px}
