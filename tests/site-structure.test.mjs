@@ -142,8 +142,8 @@ test('homepage: navigazione identica alle categorie ufficiali e indirizzi reali'
     'amministrazione.html'
   ]) assert.ok(nav.includes('href="'+href+'"'),'Collegamento mancante: '+href);
   const topLinks = [...nav.matchAll(/<a\s+href="[^"]+">[^<]+<\/a>/g)].map(m=>m[0]);
-  assert.equal(topLinks.length,13,'Il menu deve contenere 11 collegamenti diretti e 2 uffici');
-  assert.ok(!nav.includes('hosting-immagini.html') && !nav.includes('admin-sceriffi.html'));
+  assert.equal(topLinks.length,14,'Il menu deve contenere 11 collegamenti diretti e 3 uffici');
+  assert.ok(nav.includes('hosting-immagini.html') && !nav.includes('admin-sceriffi.html'));
   const visible = nav.split('<details class="lc-home-more">')[0];
   assert.equal([...visible.matchAll(/<a\s+href=/g)].length,11,'Devono comparire 11 categorie nella barra principale');
   assert.ok(!nav.includes('IL SERVER</a>') && !nav.includes('FAZIONI</a>') && !nav.includes('MEDIA</a>'));
@@ -187,7 +187,7 @@ test('stesse categorie e ordine su tutte le pagine, Regolamento e Approfondiment
   const positions=expected.map(x=>script.indexOf(x));
   assert.ok(positions.every(x=>x>=0),'Mancano categorie nel menu condiviso');
   assert.ok(positions.every((x,i)=>i===0||x>positions[i-1]),'Ordine del menu non corretto');
-  assert.ok(!script.includes("['hosting-immagini.html','Hosting Immagini']"), 'Hosting riservato alla console');
+  assert.ok(script.includes("['hosting-immagini.html','Hosting immagini']"), 'Hosting pubblico mancante dalla navigazione');
   assert.ok(script.includes("makeLink('index.html','Home')"),'Manca Home');
   assert.ok(script.includes("makeLink('amministrazione.html','Amministrazione')"),'Manca Amministrazione');
   assert.ok(script.includes('scrollBy'), 'Scorrimento mobile disponibile');
@@ -252,4 +252,18 @@ test('risorse CSS locali esistenti, inclusi percorsi URL codificati', async () =
     }
   }
   assert.deepEqual(broken, []);
+});
+
+
+test('hosting immagini pubblico, galleria privata', async () => {
+  const html = await readFile(resolve(root,'hosting-immagini.html'),'utf8');
+  const js = await readFile(resolve(root,'hosting-immagini.js'),'utf8');
+  const sql = await readFile(resolve(root,'sql/image-hosting.sql'),'utf8');
+  assert.ok(html.indexOf('class="app-card hosting-upload"') < html.indexOf('id="hostingLogin"'), 'Il caricamento deve precedere l’accesso amministratori');
+  assert.ok(html.indexOf('class="app-card hosting-upload"') < html.indexOf('id="hostingPanel"'), 'Caricamento esterno al pannello amministratori');
+  assert.ok(html.includes('id="hostingPanel" hidden'), 'Archivio nascosto senza autorizzazione');
+  assert.ok(!js.includes('if (!authorized || busy || selected.length === 0)'), 'Upload erroneamente limitato agli admin');
+  assert.ok(js.includes('if (success && authorized)'), 'Ricarica della galleria solo per admin');
+  assert.ok(sql.includes('for insert to anon, authenticated'), 'Manca policy upload pubblico');
+  assert.ok(sql.includes('lc_image_host_admin_list'), 'Manca policy galleria admin');
 });
