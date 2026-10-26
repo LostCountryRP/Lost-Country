@@ -11,21 +11,23 @@
 5. Impostare **Restrict MIME types** a `image/jpeg`, `image/png`, `image/webp`, `image/gif`.
 6. **Configurazione già salvata e verificata.** Non riutilizzare il bucket privato `wanted-photos`.
 
-Le tre policy RLS **sono già state configurate** su `storage.objects` nel progetto Supabase:
+Le policy RLS su `storage.objects` nel progetto Supabase:
 - `lc_image_host_admin_list`: solo amministratori autenticati, SELECT/lista.
-- `lc_image_host_admin_upload`: solo amministratori autenticati, INSERT sotto `uploads/` con path UUID.
+- `lc_image_host_admin_upload`: INSERT degli amministratori autenticati sotto `uploads/` con path UUID.
+- `lc_image_host_visitor_upload`: INSERT consentito ai visitatori anonimi o autenticati, con path UUID (nessuna autorizzazione alla lista).
 - `lc_image_host_admin_delete`: solo amministratori autenticati, DELETE.
 - Nessuna policy UPDATE: niente sovrascrittura. Per cambiare un'immagine, caricare un nuovo file e sostituire il link nel contenuto pubblicato.
 
 L'autorizzazione usa la funzione server-side `public.is_sheriff_admin()`, già presente nel progetto. Attualmente riconosce gli amministratori Sceriffi Mineko e Diego. Il solo controllo nell'interfaccia **non** sostituisce RLS.
 
 ## Funzioni del pannello
-- Login con Supabase Auth.
+- Caricamento **pubblico senza login** e collegamento diretto immediatamente copiabile.
+- Login con Supabase Auth **solo per l’archivio amministrativo**.
 - Caricamento multi-immagine JPG, PNG, WEBP, GIF fino a 10 MB/file.
 - Nome file normalizzato e prefisso UUID non facilmente indovinabile.
 - Link pubblici permanenti tramite `supabase.storage.getPublicUrl`.
 - Galleria amministrativa paginata, ricerca locale, anteprime, copia URL, cancellazione con conferma.
-- Nessun link nel menu pubblico, istruzione `noindex` nella pagina del pannello.
+- Link Hosting immagini nel menu pubblico; galleria mostrata solo dopo la verifica admin.
 
 ## Privacy e limitazioni
 **Non è un archivio privato.** Le immagini non vengono elencate nel sito e la lista Storage è limitata agli amministratori, ma chiunque conosca un link diretto può accedere all'immagine. Evitare documenti riservati e fotografie con dati sensibili. La mancata indicizzazione non garantisce segretezza. I link rimangono validi finché l'oggetto rimane nel bucket e il progetto/storage è attivo; eliminarlo interrompe il link.
@@ -37,8 +39,8 @@ L'autorizzazione usa la funzione server-side `public.is_sheriff_admin()`, già p
 1. Accedere al pannello con Mineko (o Diego); aprire la galleria inizialmente vuota.
 2. Caricare un piccolo JPG di prova e copiare l'URL.
 3. Aprire il link in una finestra anonima: l'immagine deve apparire.
-4. In finestra anonima, aprire il pannello: **non** deve apparire la galleria.
-5. Con un account autenticato non amministratore, i tentativi di lista/caricamento devono essere rifiutati.
+4. In finestra anonima, aprire il pannello: **deve apparire il caricamento senza login**, ma **non** la galleria.
+5. Con un account autenticato non amministratore, il caricamento è permesso; lista e cancellazione devono essere rifiutate.
 6. Cancellare la foto di prova solo se non viene già utilizzata sul sito.
 7. Controllare periodicamente lo spazio occupato da Supabase Storage.
 
@@ -47,3 +49,7 @@ I dump SQL di Supabase **non contengono i file di Storage**. Per proteggere le i
 
 ## Manutenzione
 Per ripristinare le policy, vedere `sql/image-hosting.sql`. Non applicare due volte le stesse policy con lo stesso nome. Non esporre mai service_role o altre chiavi segrete nel frontend.
+
+## Sicurezza del caricamento pubblico
+Il bucket rimane pubblico per le singole immagini linkate; la lista resta protetta da RLS amministrativa. Chi conosce direttamente un link può comunque vedere quella specifica immagine.
+L’upload anonimo può essere abusato: i limiti dell’interfaccia non bloccano le chiamate dirette all’API. Implementare controlli anti-bot/rate limit lato server e sorvegliare costi e spazio dello Storage per l’uso continuativo.
