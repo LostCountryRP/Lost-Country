@@ -48,7 +48,7 @@
       return "Archivio non ancora attivato: crea il bucket pubblico 'lc-image-hosting' in Supabase Storage.";
     }
     if (/row.level.security|permission denied|unauthorized|403/i.test(msg)) {
-      return "Operazione negata: controlla che il tuo account sia amministratore e che le policy Storage siano attive.";
+      return "Operazione negata da Supabase. Verifica i permessi del caricamento pubblico o dell’archivio amministratori."; 
     }
     return msg;
   }
@@ -63,7 +63,7 @@
       if (permission.error) throw permission.error;
       if (permission.data !== true) {
         showPanel(false);
-        status("Questo account non è amministratore autorizzato dell'archivio immagini.", true);
+        status("Caricamento pubblico disponibile. Solo gli amministratori possono consultare l’archivio.");
         return;
       }
       showPanel(true);
@@ -167,7 +167,7 @@ function resultItem(fileName, link, error) {
     }
   }
 async function upload() {
-    if (!authorized || busy || selected.length === 0) return;
+    if (busy || selected.length === 0) return;
     busy = true;
     const btn = $("hostingUploadBtn");
     btn.disabled = true;
@@ -215,7 +215,7 @@ async function upload() {
       const description = success + " immagin" + (success === 1 ? "e caricata" : "i caricate") + " · " + failed + " non caricate. " + (success ? "Usa «Copia link» per inserire le immagini dove vuoi." : "Controlla i messaggi qui sotto.");
       uploadFeedback(failed === 0 ? "success" : success ? "warning" : "error", title, description, files.length, files.length);
       status(description, failed > 0);
-      if (success) {
+      if (success && authorized) {
         page = 0;
         try {
           await loadGallery();
