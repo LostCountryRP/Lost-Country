@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Portale Titolari — Lost Country RP</title>
+<link rel="stylesheet" href="style.css?v=20261024-check-generale">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-config.js"></script>
+<script defer src="portale-commercianti.js?v=20261027-owner-1"></script>
+<script defer src="site-enhancements.js?v=20261025-uniform-1"></script>
+<link rel="stylesheet" href="western-premium.css?v=20261025-approved-4">
+<script defer src="western-premium.js?v=20261025-uniform-1"></script>
+<link rel="stylesheet" href="western-layout-fixes.css?v=20261025-layout-fix-6">
+<link rel="stylesheet" href="western-site-wide.css?v=20261025-leather-1">
+<link rel="stylesheet" href="lc-heritage-theme.css?v=20261025-dark-glass-2">
+<link rel="stylesheet" href="lc-ui-consistency.css?v=20261025-1">
+<link rel="stylesheet" href="lc-unified-site.css?v=20261025-expanded-8">
+<link rel="stylesheet" href="commercianti.css?v=20261027-owner-1">
+<script defer src="lc-unified-navbar.js?v=20261026-public-1"></script>
+</head>
+<body class="page-sceriffi page-merchant">
+<div class="site-shell">
+<aside class="western-sidebar">
+<a class="sidebar-brand" href="index.html"><img src="lc-logo-official.png" alt="Lost Country RP"><span>Lost Country RP</span></a>
+<nav class="side-nav">
+<a href="index.html">Home</a>
+<a href="attivita-commerciali.html">Registro commerciale</a>
+<a href="#owner-auth">Accesso e registrazione</a>
+<a href="#owner-application">Richiedi gestione attività</a>
+<a href="#owner-editor">Pubblica comunicazioni</a>
+</nav>
+</aside>
+<main class="site-main">
+<nav class="top-nav" aria-label="Navigazione"><a href="index.html">Home</a><a href="attivita-commerciali.html">Attività commerciali</a><a href="eventi.html">Eventi</a><a href="amministrazione.html">Amministrazione</a></nav>
+<section class="parchment-page"><div class="parchment-content">
+<header class="merchant-hero">
+<p class="merchant-eyebrow">LOST COUNTRY RP · IMPRESE DELLA FRONTIERA</p>
+<h1 class="app-title">Portale dei Commercianti</h1>
+<p class="app-subtitle">La tua attività, la tua voce. Annunci, offerte, cataloghi ed eventi direttamente dal proprietario.</p>
+</header>
+<div id="ownerMessage" class="merchant-notice" role="status" aria-live="polite"></div>
+<section id="owner-auth" class="merchant-auth">
+<div id="ownerAuthGuest" class="merchant-auth-grid">
+<section class="app-card merchant-pane">
+<h2>Accedi al tuo ufficio</h2>
+<p>Se hai già un account, accedi per consultare le richieste e gestire i tuoi annunci.</p>
+<form id="ownerLogin" class="merchant-fields">
+<div><label for="ownerLoginEmail">Email</label><input id="ownerLoginEmail" type="email" autocomplete="username" required></div>
+<div><label for="ownerLoginPassword">Password</label><input id="ownerLoginPassword" type="password" autocomplete="current-password" required></div>
+<button type="submit" class="btn-primary">Accedi</button>
+</form>
+</section>
+<section class="app-card merchant-pane">
+<h2>Crea il tuo account</h2>
+<p>Registrazione gratuita per i titolari RP. La verifica della proprietà è effettuata dall'Amministrazione.</p>
+<form id="ownerSignup" class="merchant-fields">
+<div><label for="ownerSignupEmail">Email</label><input id="ownerSignupEmail" type="email" autocomplete="email" required></div>
+<div><label for="ownerSignupPassword">Password (minimo 8 caratteri)</label><input id="ownerSignupPassword" type="password" autocomplete="new-password" minlength="8" required></div>
+<div><label for="ownerSignupConfirm">Conferma password</label><input id="ownerSignupConfirm" type="password" autocomplete="new-password" minlength="8" required></div>
+<button type="submit" class="btn-primary">Registrati come titolare</button>
+</form>
+<p class="merchant-hint">Potrebbe essere richiesta la conferma dell'indirizzo email prima del primo accesso.</p>
+</section>
+</div>
+<section id="ownerAuthConnected" class="app-card merchant-toolbar" hidden>
+<div><p class="merchant-eyebrow">SESSIONE AUTENTICATA</p><strong id="ownerIdentity">—</strong><p class="merchant-hint">Le autorizzazioni commerciali sono concesse singolarmente per ogni attività.</p></div>
+<button id="ownerSignout" class="btn-secondary" type="button">Disconnettiti</button>
+</section>
+</section>
+
+<div id="ownerWorkspace" hidden>
+<section class="app-card merchant-section" id="owner-application">
+<div class="merchant-head"><div><p class="merchant-eyebrow">ISCRIZIONE AL REGISTRO</p><h2>Le mie attività e autorizzazioni</h2></div><button id="ownerReload" type="button" class="btn-secondary">Aggiorna</button></div>
+<div id="ownerRequests" class="merchant-requests"></div>
+<div id="ownerApplyPanel" class="merchant-application">
+<h3>Richiedi una nuova attività o il collegamento a una esistente</h3>
+<p>La richiesta sarà verificata dagli amministratori prima che tu possa pubblicare. Non crea automaticamente un'impresa nel registro.</p>
+<form id="ownerApply" class="merchant-form">
+<div class="full"><label for="ownerBusinessChoice">Quale attività vuoi gestire?</label><select id="ownerBusinessChoice">
+<option value="">Una nuova attività da registrare</option>
+</select></div>
+<div><label for="ownerBusinessName">Nome dell'attività</label><input id="ownerBusinessName" maxlength="150" minlength="3" required placeholder="Es. Emporio della Frontiera"></div>
+<div><label for="ownerBusinessCategory">Categoria</label><input id="ownerBusinessCategory" maxlength="100" minlength="2" required placeholder="Es. Saloon, maniscalco, emporio"></div>
+<div><label for="ownerBusinessTown">Città</label><input id="ownerBusinessTown" maxlength="100" minlength="2" required placeholder="Es. Blackwater"></div>
+<div><label for="ownerRpName">Nome e cognome RP del titolare</label><input id="ownerRpName" maxlength="150" minlength="3" required></div>
+<div class="full"><label for="ownerBusinessDescription">Descrizione dell'attività</label><textarea id="ownerBusinessDescription" rows="4" minlength="15" maxlength="3000" required placeholder="Cosa offre, orari RP, servizi e storia dell'attività..."></textarea></div>
+<div class="full"><button id="ownerApplySubmit" class="btn-primary" type="submit">Invia richiesta all'Amministrazione</button></div>
+</form>
+</div>
+</section>
+
+<section class="app-card merchant-section" id="owner-editor">
+<div class="merchant-head"><div><p class="merchant-eyebrow">BACHECA DELLA FRONTIERA</p><h2>Pubblica per la tua attività</h2></div><span class="merchant-stamp">Solo attività autorizzate</span></div>
+<div id="ownerEditorLocked" class="merchant-hint">Per pubblicare è necessaria almeno una richiesta approvata e un'attività attiva.</div>
+<div id="ownerEditorActive" hidden>
+<form id="ownerPostForm" class="merchant-form">
+<input type="hidden" id="ownerPostId">
+<div><label for="ownerPostBusiness">Attività</label><select id="ownerPostBusiness" required></select></div>
+<div><label for="ownerPostType">Tipo di pubblicazione</label><select id="ownerPostType" required>
+<option value="announcement">Comunicazione</option><option value="offer">Offerta / promozione</option>
+<option value="event">Evento</option><option value="catalog">Prodotto / servizio</option>
+</select></div>
+<div class="full"><label for="ownerPostTitle">Titolo</label><input id="ownerPostTitle" maxlength="160" minlength="5" required placeholder="Es. Nuova merce arrivata all'emporio"></div>
+<div class="full"><label for="ownerPostBody">Testo</label><textarea id="ownerPostBody" rows="5" minlength="10" maxlength="5000" required placeholder="Descrivi l'annuncio RP..."></textarea></div>
+<div><label for="ownerPostImage">Link immagine HTTPS (facoltativo)</label><input id="ownerPostImage" type="url" maxlength="1000" placeholder="https://..."></div>
+<div><label for="ownerPostExpiry">Scadenza (facoltativa)</label><input id="ownerPostExpiry" type="datetime-local"></div>
+<div class="full merchant-check"><label><input id="ownerPostPublished" type="checkbox" checked> Visibile subito nel Registro Commerciale</label></div>
+<div class="full merchant-actions"><button id="ownerPostSubmit" class="btn-primary" type="submit">Pubblica annuncio</button>
+<button id="ownerPostCancel" type="button" class="btn-secondary" hidden>Annulla modifica</button></div>
+</form>
+</div>
+</section>
+<section class="app-card merchant-section" id="owner-posts">
+<div class="merchant-head"><div><p class="merchant-eyebrow">ARCHIVIO</p><h2>Le mie pubblicazioni</h2></div></div>
+<div id="ownerPostList" class="merchant-post-grid"><p>Non ci sono ancora comunicazioni.</p></div>
+</section>
+</div>
+</div></section></main></div></body></html>
