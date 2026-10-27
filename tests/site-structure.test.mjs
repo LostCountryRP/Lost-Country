@@ -50,13 +50,13 @@ test('14 pagine storiche e nuovo regolamento autonomo, nessuna pagina fittizia',
     'index.html', 'regolamento.html', 'approfondimenti.html', 'codice-penale.html', 'lore.html',
     'voce-della-frontiera.html', 'attivita-commerciali.html', 'eventi.html',
     'sceriffi.html', 'medico.html', 'ufficio-civico.html', 'redazione.html',
-    'amministrazione.html', 'admin-sceriffi.html', 'hosting-immagini.html'
+    'amministrazione.html', 'admin-sceriffi.html', 'admin-medici.html', 'hosting-immagini.html'
   ];
   for (const name of required) assert.ok(files.has(name), `Pagina storica mancante: ${name}`);
   assert.ok(!files.has('server.html') && !files.has('fazioni.html'),
     'Server e Fazioni sono sezioni della homepage, non pagine da aggiungere');
   for (const name of files) if (name.endsWith('.html')) htmlFiles.push(name);
-  assert.equal(htmlFiles.length,15,'La sitemap deve avere 15 pagine HTML');
+  assert.equal(htmlFiles.length,16,'La sitemap include la gestione medici');
 });
 
 test('tutti i link, gli script e le immagini locali puntano a file esistenti', async () => {

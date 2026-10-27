@@ -7,7 +7,7 @@ const {default:handler}=await import('data:text/javascript;base64,'+Buffer.from(
 async function run({role='admin',targetRole='sheriff',protectedTarget=false,rpc=true,assignmentError=null,action='set_password'}={}) {
  let writes=0;
  const target={id:'target',app_metadata:{role:targetRole},user_metadata:{}};
- const ctx={supabase:{auth:{getUser:async()=>({data:{user:{id:'caller',app_metadata:{role}}}})},rpc:async()=>({data:rpc})},supabaseAdmin:{from:()=>({select:async()=>({data:protectedTarget?[{user_id:'target'}]:[],error:assignmentError})}),auth:{admin:{getUserById:async()=>({data:{user:target}}),updateUserById:async()=>{writes++;return {data:{user:target}}},listUsers:async()=>({data:{users:[target,{id:'admin',app_metadata:{role:'admin'}}]}})}}}};
+ const ctx={supabase:{auth:{getUser:async()=>({data:{user:{id:'caller',app_metadata:{role}}}})},rpc:async()=>({data:rpc})},supabaseAdmin:{from:()=>({update:()=>({eq:async()=>({error:null})}),select:async()=>({data:protectedTarget?[{user_id:'target'}]:[],error:assignmentError})}),auth:{admin:{getUserById:async()=>({data:{user:target}}),updateUserById:async()=>{writes++;return {data:{user:target}}},listUsers:async()=>({data:{users:[target,{id:'admin',app_metadata:{role:'admin'}}]}})}}}};
  const res=await handler.fetch(new Request('https://example.test',{method:'POST',body:JSON.stringify({action,userId:'target',password:'test-password-only',displayName:'Test'})}),ctx);
  return {status:res.status,writes,body:await res.json()};
 }
