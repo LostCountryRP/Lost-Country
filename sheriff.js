@@ -8,28 +8,76 @@ const fmtDate=v=>v?new Date(v).toLocaleString("it-IT"):"—";
 function bountyStatus(a){const n=Number(a||0);if(n<600)return{label:"🔴 RICERCATO",cls:"status-wanted"};if(n<3000)return{label:"🔥 RICERCATO FEDERALE",cls:"status-federal"};return{label:"👑 NEMICO PUBBLICO №1",cls:"status-enemy"}}
 function notice(m,t=""){const b=$("#notice");b.textContent=m||"";b.className="notice"+(t?" "+t:"");b.classList.toggle("hidden",!m)}
 function esc(v){return String(v??"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;")}
+// Una sola verifica del ruolo per sessione: evita richieste RPC concorrenti.
+let verifiedUserId=null;
+let pendingVerification=null;
+let loadedUserId=null;
+function loginFeedback(message,type="error"){
+ let el=$("#loginFeedback");
+ if(!el){
+  el=document.createElement("div");
+  el.id="loginFeedback";
+  el.setAttribute("role","alert");
+  $("#loginPanel").insertBefore(el,$("#loginForm"));
+ }
+ el.textContent=message||"";
+ el.className="notice"+(message&&type?" "+type:"");
+ el.classList.toggle("hidden",!message);
+}
 function showAuth(ok){
  $("#loginPanel").classList.toggle("hidden",ok);
  $("#appPanel").classList.toggle("hidden",!ok);
  const field=$("#officerName");
- if(field){field.readOnly=true;field.setAttribute("aria-readonly","true");field.title="Nome assegnato automaticamente dall’account sceriffo";field.autocomplete="off";field.value=ok?(state.officerName||"Caricamento nome sceriffo..."):"";}
+ if(field){field.readOnly=true;field.setAttribute("aria-readonly","true");field.title="Nome assegnato automaticamente dall’account sceriffo";field.autocomplete="off";field.value=ok?(state.officerName||""):"";}
  const save=$("#saveCaseBtn");if(save)save.disabled=!ok||!state.officerName;
  const adminBtn=$("#adminBtn");if(adminBtn){adminBtn.classList.toggle("hidden",!(ok&&state.isAdmin));adminBtn.hidden=!(ok&&state.isAdmin);}
  if(ok&&state.session?.user)$("#sessionUser").textContent=state.session.user.email||"Utente autenticato";
 }
+function resetOfficer(){
+ verifiedUserId=null;
+ state.officerName=null;
+ state.isAdmin=false;
+ loadedUserId=null;
+}
 async function loadOfficerName(){
- state.officerName=null;state.isAdmin=false;showAuth(!!state.session);
- if(!state.session)return false;
- const {data,error}=await state.db.rpc("current_sheriff_name");
- if(error||!data||!String(data).trim()){
-  showAuth(false);
-  notice("Impossibile identificare lo sceriffo autorizzato: "+(error?.message||"nome non configurato")+". Verifica la funzione SQL current_sheriff_name.","error");
+ const userId=state.session?.user?.id;
+ if(!userId){showAuth(false);return false;}
+ if(verifiedUserId===userId&&state.officerName){showAuth(true);return true;}
+ if(pendingVerification?.userId===userId)return pendingVerification.promise;
+ const task=(async()=>{
+  const {data,error}=await state.db.rpc("current_sheriff_name");
+  if(state.session?.user?.id!==userId)return false;
+  if(error||typeof data!=="string"||!data.trim()){
+   resetOfficer();
+   showAuth(false);
+   loginFeedback("Accesso autenticato, ma l'abilitazione sceriffo non è stata verificata. "+(error?.message||"Nome RP non disponibile. Contatta un amministratore.") );
+   return false;
+  }
+  const adminCheck=await state.db.rpc("is_sheriff_admin");
+  if(state.session?.user?.id!==userId)return false;
+  state.officerName=data.trim();
+  state.isAdmin=!adminCheck.error&&adminCheck.data===true;
+  verifiedUserId=userId;
+  showAuth(true);
+  loginFeedback("");
+  return true;
+ })().catch(err=>{
+  if(state.session?.user?.id===userId){
+   resetOfficer();showAuth(false);
+   loginFeedback("Verifica dell'account non riuscita: "+(err.message||String(err)));
+  }
   return false;
+ }).finally(()=>{if(pendingVerification?.promise===task)pendingVerification=null;});
+ pendingVerification={userId,promise:task};
+ return task;
+}
+async function openSheriff(){
+ if(!await loadOfficerName())return false;
+ const id=state.session?.user?.id;
+ if(id&&verifiedUserId===id&&loadedUserId!==id){
+  loadedUserId=id;
+  await loadAll();
  }
- state.officerName=String(data).trim();
- const adminCheck=await state.db.rpc("is_sheriff_admin");
- state.isAdmin=!adminCheck.error&&adminCheck.data===true;
- showAuth(true);
  return true;
 }
 function bind(){
@@ -43,20 +91,39 @@ function bind(){
 }
 async function init(){
  populateOffenseSelect();bind();
- if(!configured()){$("#configWarning").classList.remove("hidden");$("#loginPanel").classList.add("hidden");return}
+ if(!configured()){$("#configWarning").classList.remove("hidden");$("#loginPanel").classList.add("hidden");return;}
  state.db=window.supabase.createClient(window.LC_SUPABASE_URL,window.LC_SUPABASE_KEY,{auth:{persistSession:true,autoRefreshToken:true}});
- const{data}=await state.db.auth.getSession();state.session=data.session;showAuth(!!state.session);
- state.db.auth.onAuthStateChange((_e,s)=>{
-  const previousId=state.session?.user?.id;
-  state.session=s;
-  if(!s){state.officerName=null;state.isAdmin=false;showAuth(false);return;}
-  if(previousId!==s.user?.id||!state.officerName){
-   setTimeout(async()=>{if(await loadOfficerName())await loadAll()},0);
-  }
+ showAuth(false);
+ // Supabase può emettere più eventi SIGNED_IN/INITIAL_SESSION: non devono
+ // creare più verifiche contemporanee né mostrare l'archivio prima dei permessi.
+ state.db.auth.onAuthStateChange((_event,session)=>{
+  const oldId=state.session?.user?.id;
+  const newId=session?.user?.id;
+  state.session=session;
+  if(!session){resetOfficer();showAuth(false);loginFeedback("");return;}
+  if(oldId!==newId){resetOfficer();showAuth(false);}
+  if(verifiedUserId===newId&&state.officerName){showAuth(true);return;}
+  setTimeout(()=>{void openSheriff();},0);
  });
- if(state.session&&await loadOfficerName())await loadAll();
+ const {data,error}=await state.db.auth.getSession();
+ if(error){loginFeedback("Impossibile ripristinare la sessione: "+error.message);return;}
+ state.session=data?.session||null;
+ if(state.session)await openSheriff();
 }
-async function login(e){e.preventDefault();notice("");const{error}=await state.db.auth.signInWithPassword({email:$("#loginEmail").value.trim(),password:$("#loginPassword").value});if(error)notice("Accesso non riuscito: "+error.message,"error")}
+async function login(e){
+ e.preventDefault();
+ loginFeedback("");
+ const btn=$("#loginForm button[type=submit]");
+ if(btn)btn.disabled=true;
+ try{
+  const {data,error}=await state.db.auth.signInWithPassword({email:$("#loginEmail").value.trim(),password:$("#loginPassword").value});
+  if(error){loginFeedback("Accesso non riuscito: "+error.message);return;}
+  if(!data?.session?.user){loginFeedback("Accesso non completato: sessione mancante.");return;}
+  state.session=data.session;
+  await openSheriff();
+ }catch(err){loginFeedback("Accesso non riuscito: "+(err.message||String(err)));}
+ finally{if(btn)btn.disabled=false;}
+}
 function populateOffenseSelect(){
  const s=$("#offenseSelect"),search=$("#offenseSearch");
  const normalize=t=>String(t??"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLocaleLowerCase("it");
