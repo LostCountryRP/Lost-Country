@@ -85,6 +85,25 @@ export default {
         });
         if (error) throw error;
 
+        // Il ruolo app_metadata non abilita da solo l'accesso al gestionale.
+        // Le RPC e le policy sheriff verificano la presenza in sheriff_members.
+        const { error: membershipError } = await admin.from("sheriff_members").insert({
+          user_id: data.user.id,
+          officer_name: displayName,
+        });
+        if (membershipError) {
+          // Evita di lasciare nuovi account di autenticazione senza abilitazione.
+          const { error: rollbackError } = await admin.auth.admin.deleteUser(data.user.id);
+          if (rollbackError) {
+            return Response.json({
+              error: "Account creato, ma abilitazione Sceriffi non riuscita. Intervento amministratore richiesto.",
+            }, { status: 500 });
+          }
+          return Response.json({
+            error: "Creazione annullata: impossibile registrare l'abilitazione Sceriffi.",
+          }, { status: 500 });
+        }
+
         return Response.json({
           ok: true,
           user: {
@@ -109,6 +128,16 @@ export default {
           user_metadata: { ...existing, display_name: displayName },
         });
         if (error) throw error;
+
+        // Allinea anche l'anagrafica interna, senza creare nuove abilitazioni.
+        const { error: memberError } = await admin.from("sheriff_members")
+          .update({ officer_name: displayName })
+          .eq("user_id", userId);
+        if (memberError) {
+          return Response.json({
+            error: "Nome account modificato, ma sincronizzazione dell'anagrafica Sceriffi non riuscita.",
+          }, { status: 500 });
+        }
 
         return Response.json({ ok: true, userId: data.user.id, display_name: displayName });
       }
