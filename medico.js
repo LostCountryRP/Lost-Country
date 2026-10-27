@@ -14,6 +14,30 @@ let records=[];
 let folders=[];
 let activeFolderKey=null;
 let currentMedic=null;
+const MEDICAL_LEVELS={trainee:0,nurse:1,doctor:2,chief_physician:3,medical_director:4};
+const MEDICAL_LABELS={trainee:"Tirocinante",nurse:"Infermiere",doctor:"Medico",chief_physician:"Primario",medical_director:"Direttore Sanitario"};
+const level=()=>MEDICAL_LEVELS[currentMedic?.rank]??-1;
+function refreshPermissionUI(){
+ const rank=currentMedic?.rank,allowRecord=level()>=1;
+ const badge=$("#medicRankBadge");
+ if(badge)badge.textContent=rank?"Grado: "+(MEDICAL_LABELS[rank]||rank):"";
+ const editor=$("#medicNewReport");
+ if(editor)editor.hidden=!allowRecord;
+ const kind=$("#medicRecordType");
+ if(kind){
+  const clinical=kind.querySelector('option[value="clinical"]');
+  if(clinical)clinical.disabled=level()<2;
+  kind.value=level()<2?"nursing":"clinical";
+ }
+ const tip=$("#medicPermissionsHint");
+ if(tip)tip.textContent=level()===0?
+   "Accesso in sola consultazione. Non puoi registrare referti.":
+   level()===1?"Puoi inserire note assistenziali, non referti clinici.":
+   level()===2?"Puoi registrare referti clinici e note assistenziali.":
+   level()===3?"Puoi anche convalidare referti e note assistenziali.":
+   level()>=4?"Puoi convalidare e riaprire i referti già convalidati.":"";
+}
+
 
 const info=(text,type="")=>{
   const el=$("#medicNotice");
@@ -42,13 +66,13 @@ async function identity(){
   const user=sessionResult.data.session.user;
   const staff=await client
     .from("medical_staff")
-    .select("display_name")
+    .select("display_name,rank")
     .eq("user_id",user.id)
     .eq("active",true)
     .maybeSingle();
 
   if(staff.error||!staff.data)throw Error("Questo account non è ancora autorizzato come medico.");
-  return{id:user.id,name:staff.data.display_name};
+  return{id:user.id,name:staff.data.display_name,rank:staff.data.rank};
 }
 
 function buildFolders(){
@@ -159,6 +183,12 @@ function drawFolders(){
 function recordTemplate(record,index){
   const treatment=String(record.treatment||"").trim();
   const notes=String(record.notes||"").trim();
+  const nursing=record.record_type==="nursing";
+  const status=record.review_status==="validated"?"Convalidato":record.review_status==="reopened"?"Riaperto":"Da convalidare";
+  const reviewAction=level()>=4&&record.review_status==="validated"
+    ?'<button class="btn-secondary btn-small" data-med-review="reopen" data-record-id="'+escapeHtml(record.id)+'" type="button">Riapri documento</button>'
+    :level()>=3&&record.review_status!=="validated"
+    ?'<button class="btn-primary btn-small" data-med-review="validate" data-record-id="'+escapeHtml(record.id)+'" type="button">Convalida</button>':"";
 
   return `
     <article class="medical-timeline-item">
@@ -167,9 +197,12 @@ function recordTemplate(record,index){
         <summary>
           <span class="medical-record-date">${dateTime(record.visit_at)}</span>
           <strong>${escapeHtml(record.reason)}</strong>
-          <span class="medical-record-doctor">Dr. ${escapeHtml(record.physician_name||"—")}</span>
+          <span class="medical-record-doctor">${nursing?"Operatore":"Medico"}: ${escapeHtml(record.physician_name||"—")}</span>
         </summary>
         <div class="medical-record-body">
+          <div class="medical-review-summary"><strong>${nursing?"Nota assistenziale":"Referto clinico"}</strong> · ${escapeHtml(status)}
+          ${record.review_note?'<small>Ultima decisione: '+escapeHtml(record.review_note)+'</small>':""}
+          ${reviewAction}</div>
           <section>
             <h4>Referto</h4>
             <p>${escapeHtml(record.findings).replaceAll("\n","<br>")}</p>
@@ -233,6 +266,7 @@ async function refresh({keepFolder=true}={}){
     $("#medicAuth").hidden=true;
     $("#medicPanel").hidden=false;
     $("#medicUser").textContent=currentMedic.name;
+    refreshPermissionUI();
 
     const result=await client
       .from("medical_records")
@@ -256,6 +290,7 @@ async function refresh({keepFolder=true}={}){
     }
   }catch(error){
     currentMedic=null;
+    refreshPermissionUI();
     $("#medicPanel").hidden=true;
     $("#medicAuth").hidden=false;
     info(error.message||"Impossibile aprire il registro medico.","error");
@@ -269,6 +304,11 @@ async function save(event){
 
   try{
     const medic=await identity();
+    if((MEDICAL_LEVELS[medic.rank]??-1)<1)throw Error("Il tuo grado non permette di scrivere documenti.");
+    const recordType=$("#medicRecordType").value;
+    if(recordType==="clinical"&&(MEDICAL_LEVELS[medic.rank]??-1)<2)
+      throw Error("Solo Medici, Primari e Direttori possono firmare referti clinici.");
+    if(!["nursing","clinical"].includes(recordType))throw Error("Tipo di registrazione non valido.");
     const value=id=>$("#"+id).value.trim();
 
     const enteredPatient=value("medicPatient");
@@ -283,7 +323,8 @@ async function save(event){
       treatment:value("medicTreatment"),
       notes:value("medicNotes"),
       physician_id:medic.id,
-      physician_name:medic.name
+      physician_name:medic.name,
+      record_type:recordType
     });
 
     if(result.error)throw result.error;
@@ -295,7 +336,7 @@ async function save(event){
 
     activeFolderKey=folderKey;
     await refresh({keepFolder:true});
-    info("Referto salvato nella cartella clinica del paziente.","success");
+    info((recordType==="nursing"?"Nota assistenziale":"Referto clinico")+" salvato nella cartella del paziente.","success");
 
     if(folders.some(f=>f.key===folderKey)){
       openFolder(folderKey,{scroll:true});
@@ -305,6 +346,24 @@ async function save(event){
   }finally{
     button.disabled=false;
   }
+}
+
+async function reviewRecord(id,action){
+  if(!["validate","reopen"].includes(action))return;
+  const allowed=action==="validate"?level()>=3:level()>=4;
+  if(!allowed){info("Grado insufficiente per questa operazione.","error");return;}
+  const reason=prompt(action==="validate"?"Motivazione della convalida (minimo 5 caratteri):":"Motivo della riapertura (minimo 5 caratteri):");
+  if(reason===null)return;
+  if(reason.trim().length<5){info("Motivazione troppo breve.","error");return;}
+  if(!confirm(action==="validate"?"Confermare la convalida del documento?":"Riaprire il documento convalidato?"))return;
+  try{
+    const result=await client.rpc("lc_review_medical_record",{
+      p_record_id:id,p_action:action,p_reason:reason.trim()
+    });
+    if(result.error)throw result.error;
+    await refresh({keepFolder:true});
+    info(action==="validate"?"Documento convalidato.":"Documento riaperto, storico aggiornato.","success");
+  }catch(err){info(err.message||String(err),"error");}
 }
 
 document.addEventListener("DOMContentLoaded",()=>{
@@ -329,6 +388,10 @@ document.addEventListener("DOMContentLoaded",()=>{
   });
 
   $("#medicForm").addEventListener("submit",save);
+  $("#medicTimeline").addEventListener("click",event=>{
+    const button=event.target.closest("[data-med-review][data-record-id]");
+    if(button)reviewRecord(button.dataset.recordId,button.dataset.medReview);
+  });
   $("#medicSearch").addEventListener("input",drawFolders);
   $("#medicSort").addEventListener("change",drawFolders);
   $("#medicRefresh").addEventListener("click",()=>refresh({keepFolder:true}));
@@ -337,7 +400,7 @@ document.addEventListener("DOMContentLoaded",()=>{
 
   $("#medicFolderNewReport").addEventListener("click",()=>{
     const folder=folders.find(f=>f.key===activeFolderKey);
-    if(folder)preparePatient(folder.name);
+    if(folder&&level()>=1)preparePatient(folder.name);
   });
 
   $("#medicFolderList").addEventListener("click",event=>{
