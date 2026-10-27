@@ -1,0 +1,56 @@
+<!doctype html><html lang="it"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow"><title>Autorizzazioni commerciali — Lost Country RP</title>
+<link rel="stylesheet" href="style.css?v=20261024-console-admin">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-config.js"></script>
+<script defer src="admin-commercianti.js?v=20261027-1"></script>
+<script defer src="site-enhancements.js?v=20261025-uniform-1"></script>
+<link rel="stylesheet" href="western-premium.css?v=20261025-approved-4">
+<script defer src="western-premium.js?v=20261025-uniform-1"></script>
+<link rel="stylesheet" href="western-layout-fixes.css?v=20261025-layout-fix-6">
+<link rel="stylesheet" href="western-site-wide.css?v=20261025-leather-1">
+<link rel="stylesheet" href="lc-heritage-theme.css?v=20261025-dark-glass-2">
+<link rel="stylesheet" href="lc-ui-consistency.css?v=20261025-1">
+<link rel="stylesheet" href="lc-unified-site.css?v=20261025-expanded-8">
+<link rel="stylesheet" href="commercianti.css?v=20261027-owner-1">
+<script defer src="lc-unified-navbar.js?v=20261026-public-1"></script>
+</head><body class="page-sceriffi page-merchant page-merchant-admin">
+<div class="site-shell"><aside class="western-sidebar">
+<a class="sidebar-brand" href="index.html"><img src="lc-logo-official.png" alt="Lost Country RP"><span>Lost Country RP</span></a>
+<nav class="side-nav"><a href="amministrazione.html">Console amministratori</a>
+<a href="attivita-commerciali.html">Registro pubblico</a>
+<a href="#owner-admin-requests">Richieste proprietà</a>
+<a href="#owner-admin-posts">Moderazione annunci</a>
+<a href="portale-commercianti.html">Portale titolari</a></nav>
+</aside><main class="site-main">
+<nav class="top-nav"><a href="index.html">Home</a><a href="amministrazione.html">Amministrazione</a><a href="attivita-commerciali.html">Attività commerciali</a></nav>
+<section class="parchment-page"><div class="parchment-content">
+<header class="merchant-hero"><p class="merchant-eyebrow">DIREZIONE DELLE ATTIVITÀ COMMERCIALI</p>
+<h1 class="app-title">Autorizzazioni e Pubblicazioni</h1>
+<p class="app-subtitle">Verifica la proprietà delle imprese, approva le richieste e modera gli annunci pubblicati.</p></header>
+<p id="merchantAdminMessage" class="merchant-notice" role="status" aria-live="polite"></p>
+<div id="merchantAdminGate" class="app-card merchant-section" hidden>
+<h2>Accesso amministratori</h2><p>Possono gestire le richieste gli amministratori e i responsabili della sezione Attività commerciali.</p>
+<form id="merchantAdminLogin" class="merchant-form">
+<div><label for="merchantAdminEmail">Email</label><input type="email" id="merchantAdminEmail" required></div>
+<div><label for="merchantAdminPass">Password</label><input type="password" id="merchantAdminPass" required autocomplete="current-password"></div>
+<div class="full"><button class="btn-primary" type="submit">Accedi alla direzione commerciale</button></div></form>
+</div>
+<div id="merchantAdminWorkspace" hidden>
+<div class="app-card merchant-toolbar">
+<div><p class="merchant-eyebrow">ACCESSO AUTORIZZATO</p><strong id="merchantAdminIdentity"></strong></div>
+<div class="merchant-actions"><button id="merchantAdminRefresh" class="btn-secondary" type="button">Aggiorna</button>
+<button id="merchantAdminLogout" class="btn-secondary" type="button">Esci</button></div>
+</div>
+<section class="app-card merchant-section" id="owner-admin-requests">
+<div class="merchant-head"><div><p class="merchant-eyebrow">PROPRIETÀ DELLE IMPRESE</p><h2>Richieste dei titolari</h2></div><span class="merchant-stamp" id="merchantPendingCount">—</span></div>
+<p>Approva solo dopo aver verificato in gioco chi possiede l'attività. Per le imprese già presenti nel registro, collega il titolare alla scheda esistente.</p>
+<div id="merchantAdminRequests" class="merchant-post-grid"></div>
+</section>
+<section class="app-card merchant-section" id="owner-admin-posts">
+<div class="merchant-head"><div><p class="merchant-eyebrow">MODERAZIONE</p><h2>Annunci commerciali</h2></div></div>
+<p>Gli annunci pubblicati dai titolari autorizzati sono visibili subito. Puoi nascondere quelli non pertinenti e ripristinarli successivamente; gli interventi vengono registrati.</p>
+<div id="merchantAdminPosts" class="merchant-post-grid"></div>
+</section>
+</div></div></section></main></div></body></html>
