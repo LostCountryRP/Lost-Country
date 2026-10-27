@@ -26,7 +26,17 @@
   }
   async function invoke(body){
     const { data, error } = await db.functions.invoke("manage-sheriffs", { body });
-    if(error) throw error;
+    if(error){
+      let message = error.message || "Impossibile contattare il servizio account.";
+      // Le FunctionsHttpError includono spesso il motivo effettivo nel body.
+      if(error.context && typeof error.context.json === "function"){
+        try{
+          const details = await error.context.json();
+          if(details?.error) message = details.error;
+        }catch(_ignored){}
+      }
+      throw new Error(message);
+    }
     if(data?.error) throw new Error(data.error);
     return data;
   }
@@ -125,13 +135,20 @@
     db = window.supabase.createClient(window.LC_SUPABASE_URL, window.LC_SUPABASE_KEY, {
       auth:{ persistSession:true, autoRefreshToken:true }
     });
-    const { data } = await db.auth.getSession();
-    session = data.session;
-    if(!session){
+    const { data, error: sessionError } = await db.auth.getSession();
+    session = data?.session || null;
+    if(sessionError || !session){
       $("#notLoggedPanel").classList.remove("hidden");
       return;
     }
-    const user = session.user;
+    // Non basarsi soltanto su una sessione rimasta nel localStorage.
+    const { data: identity, error: identityError } = await db.auth.getUser();
+    if(identityError || !identity?.user){
+      $("#notLoggedPanel").classList.remove("hidden");
+      status("Sessione scaduta. Accedi nuovamente dalla console amministratori.", "error");
+      return;
+    }
+    const user = identity.user;
     $("#adminName").textContent = user.user_metadata?.display_name || user.email || "Admin";
     $("#createSheriffForm").addEventListener("submit", createSheriff);
     $("#generatePasswordBtn").addEventListener("click", generatePassword);
@@ -147,14 +164,10 @@
         status("Accesso riservato all'amministratore Mineko.", "error");
         return;
       }
-      await invoke({ action:"list" });
       $("#adminPanel").classList.remove("hidden");
       await loadUsers();
     }catch(err){
-      // Se RPC funziona ma Edge Function rifiuta, verificare autorizzazione
-      // dell'amministratore nella funzione manage-sheriffs.
-      $("#notAdminPanel").classList.remove("hidden");
-      status("Gestione account non disponibile: " + (err.message || String(err)), "error");
+      status("Impossibile verificare il ruolo amministratore: " + (err.message || String(err)), "error");
     }
   }
   document.addEventListener("DOMContentLoaded", init);
