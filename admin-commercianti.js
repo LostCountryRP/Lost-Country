@@ -5,6 +5,7 @@ const db=window.supabase.createClient(window.LC_SUPABASE_URL,window.LC_SUPABASE_
 let allowed=false,requests=[],businesses=[],posts=[],busy=false,version=0;
 const msg=(value,error=false)=>{$("merchantAdminMessage").textContent=value;$("merchantAdminMessage").dataset.error=String(error)};
 const date=v=>v?new Date(v).toLocaleString("it-IT"):"—";
+const safeImage=url=>{try{const u=new URL(String(url||""));return u.protocol==="https:"?u.href:""}catch{return""}};
 const business=id=>businesses.find(x=>x.id===id);
 async function check(){
  const tick=++version,auth=await db.auth.getUser();
@@ -56,6 +57,7 @@ function draw(){
   const hidden=p.moderation_status==="hidden";
   return '<article class="merchant-publication"><small>'+esc(business(p.business_id)?.business_name||"Attività")+
     ' · '+esc(date(p.created_at))+'</small><h3>'+esc(p.title)+'</h3><p>'+esc(p.body).replaceAll("\\n","<br>")+'</p>'+
+    (safeImage(p.image_url)?'<img loading="lazy" src="'+esc(safeImage(p.image_url))+'" alt="Immagine dell’annuncio">':"")+
     '<small>'+esc(hidden?"Nascosto":p.is_published?"Pubblicato":"Bozza")+'</small>'+
     '<div class="merchant-actions"><button type="button" class="btn-secondary" data-post="'+esc(p.id)+'" data-mode="'+
     (hidden?"restore":"hide")+'">'+(hidden?"Ripristina":"Nascondi")+'</button></div></article>';
