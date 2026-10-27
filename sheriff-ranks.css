@@ -1,0 +1,25 @@
+/* Lost Country RP — controllo VISIVO dei gradi RP.
+   I permessi reali sono applicati nel database con RLS. */
+body.page-sceriffi #officerRankBadge{
+ display:inline-block;margin-left:9px;padding:5px 12px;
+ border:1px solid rgba(163,122,63,.65);border-radius:999px;
+ background:rgba(20,17,15,.65);color:#e9d4ad;
+ font:600 0.85rem Georgia,serif;letter-spacing:.03em;
+}
+body.page-sceriffi[data-sheriff-rank="recruit"] :is(
+ .tab-btn[data-tab="newCaseTab"],#newCaseTab,
+ #banForm,#licenseForm,#citizenRegistryForm,#weaponRegistryForm,#evidenceForm,
+ [data-citizen-edit],[data-weapon-edit],[data-revoke],[data-revoke-license],
+ [data-proof],[data-served],[data-evading],[data-close],[data-t]
+){display:none!important}
+body.page-sceriffi[data-sheriff-rank="deputy"] :is(
+ #banForm,#licenseForm,#weaponRegistryForm,
+ [data-weapon-edit],[data-revoke],[data-revoke-license],
+ [data-proof],[data-served],[data-evading],[data-close],[data-t]
+){display:none!important}
+body.page-sceriffi[data-sheriff-rank="senior_deputy"] :is(
+ [data-revoke],[data-revoke-license],[data-proof],[data-close]
+){display:none!important}
+body.page-sceriffi[data-sheriff-rank="recruit"] #fedinaResults [data-paid],
+body.page-sceriffi[data-sheriff-rank="deputy"] #fedinaResults [data-paid]{display:none!important}
+@media(max-width:720px){body.page-sceriffi #officerRankBadge{display:block;margin:8px 0 0;width:max-content}}
