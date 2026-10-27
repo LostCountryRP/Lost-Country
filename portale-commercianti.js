@@ -123,6 +123,19 @@ async function save(e){
   is_published:$("ownerPostPublished").checked};
  busy=true;$("ownerPostSubmit").disabled=true;
  try{
+  const imageFile=$("ownerPostImageFile").files?.[0];
+  if(imageFile){
+   const types={"image/jpeg":"jpg","image/png":"png","image/webp":"webp"};
+   if(!types[imageFile.type])throw Error("Formato immagine non supportato. Usa JPG, PNG o WebP.");
+   if(imageFile.size>5*1024*1024)throw Error("Immagine troppo grande. Limite: 5 MB.");
+   tell("Caricamento dell'immagine in corso...");
+   const objectPath=business_id+"/"+user.id+"/"+crypto.randomUUID()+"."+types[imageFile.type];
+   const uploaded=await db.storage.from("merchant-media").upload(objectPath,imageFile,{
+    cacheControl:"3600",upsert:false,contentType:imageFile.type
+   });
+   if(uploaded.error)throw uploaded.error;
+   data.image_url=db.storage.from("merchant-media").getPublicUrl(objectPath).data.publicUrl;
+  }
   const result=id
    ?await db.from("business_posts").update({...data,updated_at:new Date().toISOString()}).eq("id",id).eq("author_id",user.id).select("id")
    :await db.from("business_posts").insert({...data,business_id,author_id:user.id}).select("id");
