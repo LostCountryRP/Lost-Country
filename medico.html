@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="style.css?v=20261024-cartelle-mediche-2">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="supabase-config.js"></script>
-  <script defer src="medico.js?v=20261024-cartelle-mediche-2"></script>
+  <script defer src="medico.js?v=20261027-medical-ranks-1"></script>
   <script defer src="site-enhancements.js?v=20261025-uniform-1"></script>
 
 <link rel="stylesheet" href="western-premium.css?v=20261025-approved-4">
@@ -18,6 +18,7 @@
 <link rel="stylesheet" href="lc-heritage-theme.css?v=20261025-dark-glass-2">
 <link rel="stylesheet" href="lc-ui-consistency.css?v=20261025-1">
 <link rel="stylesheet" href="lc-unified-site.css?v=20261025-expanded-8">
+<link rel="stylesheet" href="medic-ranks.css?v=20261027-medics-1">
 <script defer src="lc-unified-navbar.js?v=20261026-public-1"></script>
 </head>
 <body class="page-sceriffi page-medico">
@@ -78,7 +79,7 @@
               <section class="medical-userbar" id="medicOverview">
                 <div>
                   <span class="medical-user-label">MEDICO IN SERVIZIO</span>
-                  <strong id="medicUser"></strong>
+                  <strong id="medicUser"></strong><span id="medicRankBadge" class="medic-rank-badge" aria-live="polite"></span>
                 </div>
                 <button id="medicLogout" class="btn-secondary" type="button">Esci</button>
               </section>
@@ -102,12 +103,19 @@
                 <div class="medical-card-heading">
                   <div>
                     <p class="medical-section-kicker">REGISTRAZIONE SANITARIA</p>
-                    <h2>Nuovo referto RP</h2>
+                    <h2>Nuovo documento sanitario RP</h2>
                   </div>
                   <button id="medicClearPatient" class="btn-secondary" type="button" hidden>Cambia paziente</button>
                 </div>
 
+                <p id="medicPermissionsHint" class="medical-permissions-hint" role="status"></p>
                 <form id="medicForm" class="form-grid">
+                  <div class="full"><label for="medicRecordType">Tipo di documento</label>
+                    <select id="medicRecordType" required>
+                      <option value="clinical">Referto clinico — Medico o superiore</option>
+                      <option value="nursing">Nota assistenziale — Infermiere o superiore</option>
+                    </select>
+                  </div>
                   <div>
                     <label for="medicPatient">Paziente</label>
                     <input id="medicPatient" minlength="3" maxlength="150" required autocomplete="off" list="medicPatientOptions" placeholder="Nome e cognome del personaggio"><datalist id="medicPatientOptions"></datalist>
@@ -129,7 +137,7 @@
                     <textarea id="medicNotes" maxlength="3000" rows="3" placeholder="Annotazioni visibili solo al personale medico"></textarea>
                   </div>
                   <div class="full medical-form-actions">
-                    <button id="medicSave" class="btn-primary" type="submit">Registra nella cartella clinica</button>
+                    <button id="medicSave" class="btn-primary" type="submit">Salva il documento nella cartella clinica</button>
                   </div>
                 </form>
               </section>
