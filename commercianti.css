@@ -1,0 +1,40 @@
+/* Lost Country RP — portale dei commercianti · tema frontiera */
+.page-merchant .merchant-hero{text-align:center;margin-bottom:23px}
+.merchant-eyebrow{font-size:.78rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;opacity:.85;margin:0 0 6px}
+.merchant-notice:not(:empty){border:1px solid rgba(178,144,88,.65);background:rgba(33,27,21,.55);color:#f3dfb9;border-radius:7px;padding:13px 17px;margin:13px 0}
+.merchant-notice[data-error="true"]{border-color:#b55a50;color:#ffd3cb}
+.merchant-auth-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.merchant-pane,.merchant-section{padding:clamp(18px,3vw,27px)!important;margin-bottom:21px}
+.merchant-pane h2,.merchant-section h2{font-family:Georgia,serif;font-size:clamp(1.3rem,2vw,1.65rem);margin:0 0 12px}
+.merchant-pane p,.merchant-section p{line-height:1.5}
+.merchant-fields{display:grid;gap:13px;margin-top:18px}
+.merchant-fields>div,.merchant-form>div{min-width:0}
+.merchant-fields label,.merchant-form label{display:block;font-size:.92rem;font-weight:700;margin-bottom:5px}
+.page-merchant :is(input,select,textarea){width:100%;max-width:100%;box-sizing:border-box}
+.merchant-fields button{justify-self:start}
+.merchant-hint{font-size:.87rem;opacity:.82;margin:10px 0;line-height:1.5}
+.merchant-toolbar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.merchant-toolbar strong{font-size:1.15rem}
+.merchant-head{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-bottom:13px}
+.merchant-head h2{margin-bottom:3px}
+.merchant-requests,.merchant-post-grid{display:grid;gap:12px;margin:16px 0}
+.merchant-request,.merchant-publication{background:rgba(20,23,21,.35);border:1px solid rgba(152,117,75,.5);padding:15px 18px;border-radius:8px}
+.merchant-request strong,.merchant-request small{display:block}
+.merchant-request small,.merchant-publication small{font-size:.79rem;opacity:.83;margin:6px 0}
+.merchant-request .merchant-status{float:right;margin-top:-24px}
+.merchant-status{display:inline-block;padding:4px 10px;border-radius:25px;font-size:.77rem;font-weight:700;background:rgba(110,93,66,.3);border:1px solid rgba(177,147,92,.45)}
+.merchant-status[data-status="approved"]{border-color:#7ba37e}
+.merchant-status[data-status="rejected"],.merchant-status[data-status="revoked"]{border-color:#b06b58}
+.merchant-application{margin-top:25px;border-top:1px solid rgba(176,141,97,.45);padding-top:20px}
+.merchant-application h3{font-family:Georgia,serif;font-size:1.22rem}
+.merchant-form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin-top:17px}
+.merchant-form .full{grid-column:1/-1}
+.merchant-check label{display:flex;align-items:center;gap:8px}
+.merchant-check input{width:auto;flex:none}
+.merchant-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:13px}
+.merchant-stamp{border:1px solid rgba(159,130,80,.6);padding:5px 12px;border-radius:6px;font-size:.79rem}
+.merchant-publication h3{font-size:1.35rem;margin:9px 0}
+.merchant-publication p{white-space:normal;overflow-wrap:anywhere}
+.merchant-publication img{display:block;width:min(100%,500px);max-height:290px;object-fit:cover;border-radius:6px;margin:12px 0}
+.page-merchant [hidden]{display:none!important}
+@media(max-width:760px){.merchant-auth-grid,.merchant-form{grid-template-columns:1fr}.merchant-form .full{grid-column:1}.merchant-request .merchant-status{float:none;margin:8px 0}}
