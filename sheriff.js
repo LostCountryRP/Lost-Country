@@ -1,7 +1,7 @@
 // LOST COUNTRY RP — versione con nome sceriffo da Supabase (2026-10-22)
 (()=>{"use strict";
 const $=s=>document.querySelector(s),$$=s=>Array.from(document.querySelectorAll(s));
-const state={db:null,session:null,citizens:[],cases:[],rows:[],selectedOffenses:[],closures:[],photoUrls:{},enforcement:[],enforcementAvailable:true,officerName:null,isAdmin:false};
+const state={db:null,session:null,citizens:[],cases:[],rows:[],selectedOffenses:[],closures:[],photoUrls:{},enforcement:[],enforcementAvailable:true,officerName:null,isAdmin:false,rank:null};
 const configured=()=>window.LC_SUPABASE_URL&&window.LC_SUPABASE_KEY&&!window.LC_SUPABASE_URL.includes("INSERISCI")&&!window.LC_SUPABASE_KEY.includes("INSERISCI");
 const money=n=>"$"+Number(n||0).toLocaleString("it-IT",{maximumFractionDigits:0});
 const fmtDate=v=>v?new Date(v).toLocaleString("it-IT"):"—";
@@ -12,6 +12,23 @@ function esc(v){return String(v??"").replaceAll("&","&amp;").replaceAll("<","&lt
 let verifiedUserId=null;
 let pendingVerification=null;
 let loadedUserId=null;
+const RANK_LEVEL={recruit:0,deputy:1,senior_deputy:2,vice_sheriff:3,sheriff:4};
+const RANK_LABEL={recruit:"Recluta",deputy:"Deputy",senior_deputy:"Deputy Senior",vice_sheriff:"Vice Sceriffo",sheriff:"Sceriffo"};
+function canSheriff(level){return (RANK_LEVEL[state.rank]??-1)>=level;}
+function refreshRankUI(){
+  if(state.rank){
+    document.body.dataset.sheriffRank=state.rank;
+    const badge=$("#officerRankBadge");
+    if(badge)badge.textContent="Grado: "+(RANK_LABEL[state.rank]||state.rank);
+    if(!canSheriff(1)&&$("#newCaseTab")&&!$("#newCaseTab").classList.contains("hidden")){
+      $('.tab-btn[data-tab="fedinaTab"]')[0]?.click();
+    }
+  }else{
+    delete document.body.dataset.sheriffRank;
+    const badge=$("#officerRankBadge");if(badge)badge.textContent="";
+  }
+  window.dispatchEvent(new CustomEvent("lc-sheriff-rank",{detail:{rank:state.rank}}));
+}
 function loginFeedback(message,type="error"){
  let el=$("#loginFeedback");
  if(!el){
@@ -37,6 +54,8 @@ function resetOfficer(){
  verifiedUserId=null;
  state.officerName=null;
  state.isAdmin=false;
+ state.rank=null;
+ refreshRankUI();
  loadedUserId=null;
 }
 async function loadOfficerName(){
@@ -53,11 +72,22 @@ async function loadOfficerName(){
    loginFeedback("Accesso autenticato, ma l'abilitazione sceriffo non è stata verificata. "+(error?.message||"Nome RP non disponibile. Contatta un amministratore.") );
    return false;
   }
-  const adminCheck=await state.db.rpc("is_sheriff_admin");
+  const [adminCheck,rankResult]=await Promise.all([
+    state.db.rpc("is_sheriff_admin"),
+    state.db.rpc("current_sheriff_rank")
+  ]);
   if(state.session?.user?.id!==userId)return false;
+  const rank=rankResult.data;
+  if(rankResult.error||!(rank in RANK_LEVEL)){
+    resetOfficer();showAuth(false);
+    loginFeedback("Impossibile verificare il grado: "+(rankResult.error?.message||"grado non configurato")+".");
+    return false;
+  }
   state.officerName=data.trim();
   state.isAdmin=!adminCheck.error&&adminCheck.data===true;
+  state.rank=rank;
   verifiedUserId=userId;
+  refreshRankUI();
   showAuth(true);
   loginFeedback("");
   return true;
@@ -182,7 +212,7 @@ function renderSelected(){const tb=$("#selectedOffensesBody");tb.innerHTML="";le
 async function loadAll(){notice("Aggiornamento archivio...");const[a,b,c,d,k]=await Promise.all([state.db.from("citizens").select("*").order("full_name"),state.db.from("cases").select("*").order("occurred_at",{ascending:false}),state.db.from("case_offenses").select("*").order("created_at",{ascending:false}),state.db.from("wanted_closures").select("*").order("closed_at",{ascending:false}),state.db.from("case_enforcement").select("*")]);const km=k.error?.message||"";const missingEnforcement=!!k.error&&/case_enforcement/i.test(km)&&(/schema cache/i.test(km)||/could not find/i.test(km));const e=a.error||b.error||c.error||d.error||(missingEnforcement?null:k.error);if(e){notice("Errore database: "+e.message,"error");return}state.citizens=a.data||[];state.cases=b.data||[];state.rows=c.data||[];state.closures=d.data||[];state.enforcementAvailable=!missingEnforcement;state.enforcement=missingEnforcement?[]:(k.data||[]);await loadPhotoUrls();populateCitizens();renderWanted();renderFedinaFromSearch();notice(missingEnforcement?"Archivio caricato. Configurazione incompleta: manca la tabella case_enforcement in Supabase. Esegui sql/case-enforcement.sql per attivare pena scontata e irreperibilità.":"",missingEnforcement?"error":"")}
 function populateCitizens(){const dl=$("#citizensList");dl.innerHTML="";state.citizens.forEach(c=>{const o=document.createElement("option");o.value=c.full_name;o.label=c.registry_code?`${c.full_name} (${c.registry_code})`:c.full_name;dl.appendChild(o)});const s=$("#fedinaCitizen"),cur=s.value;s.innerHTML='<option value="">Seleziona un cittadino...</option>';state.citizens.forEach(c=>{const o=document.createElement("option");o.value=c.id;o.textContent=c.registry_code?`${c.full_name} — ${c.registry_code}`:c.full_name;s.appendChild(o)});if([...s.options].some(o=>o.value===cur))s.value=cur}
 async function getCitizen(){const name=$("#citizenName").value.trim();if(!name)throw Error("Inserisci il nome del cittadino.");const ex=state.citizens.find(c=>c.full_name.toLocaleLowerCase("it")===name.toLocaleLowerCase("it"));if(ex)return ex;const{data,error}=await state.db.from("citizens").insert({full_name:name,registry_code:$("#registryCode").value.trim()||null,alias:$("#citizenAlias").value.trim()||null}).select().single();if(error)throw error;return data}
-async function saveCase(){try{notice("");if(!state.selectedOffenses.length)throw Error("Aggiungi almeno un reato.");const officer=state.officerName;if(!state.session||!officer)throw Error("Identità dello sceriffo non verificata. Effettua nuovamente l’accesso.");const {adj,rows:finalRows,baseFine,baseJail,finalFine,finalJail}=adjustedRows();
+async function saveCase(){try{notice("");if(!canSheriff(1))throw Error("Grado insufficiente per registrare verbali.");if(!state.selectedOffenses.length)throw Error("Aggiungi almeno un reato.");const officer=state.officerName;if(!state.session||!officer)throw Error("Identità dello sceriffo non verificata. Effettua nuovamente l’accesso.");const {adj,rows:finalRows,baseFine,baseJail,finalFine,finalJail}=adjustedRows();
  const adjustmentActive=!!(adj.discount||adj.increase||adj.extra);
  const audit=adjustmentActive?"[ADEGUAMENTO SANZIONI — Sceriffo: "+officer+" | Multa base: "+money(baseFine)+" | Sconto: "+adj.discount+"% | Maggiorazione: "+adj.increase+"% | Multa finale: "+money(finalFine)+" | Detenzione base: "+baseJail+" min | Aumento: "+adj.extra+" min | Detenzione finale: "+finalJail+" min | Motivazione: "+adj.reason+"]":"";
  const citizen=await getCitizen();const when=$("#occurredAt").value?new Date($("#occurredAt").value).toISOString():new Date().toISOString();const{data:cas,error}=await state.db.from("cases").insert({citizen_id:citizen.id,officer_name:officer,occurred_at:when,notes:[$("#caseNotes").value.trim(),audit].filter(Boolean).join("\n\n")||null}).select().single();if(error)throw error;const rows=finalRows.map(o=>({case_id:cas.id,offense_code:o.code,offense_name:o.name,category:o.category,description:o.description,fine:o.fine,jail_minutes:o.jail_minutes,capital_punishment:o.capital_punishment,is_paid:false}));const r=await state.db.from("case_offenses").insert(rows);if(r.error)throw r.error;const img=$("#casePhoto")?.files?.[0];if(img){try{await uploadCasePhoto(cas.id,citizen.id,img)}catch(photoError){await loadAll();notice("Verbale salvato, ma fotografia NON caricata: "+photoError.message,"error");return}}state.selectedOffenses=[];["fineDiscount","fineIncrease","jailIncrease"].forEach(id=>$("#"+id).value="0");$("#sanctionReason").value="";renderSelected();["citizenName","registryCode","citizenAlias","caseNotes"].forEach(id=>$("#"+id).value="");$("#offenseSelect").value="";if($("#casePhoto"))$("#casePhoto").value="";await loadAll();notice("Verbale registrato correttamente.","success")}catch(e){notice(e.message||String(e),"error")}}
@@ -214,6 +244,7 @@ function pendingCase(id){
 function activeBounty(id){return citizenCases(id).filter(c=>pendingCase(c.id).evading).reduce((n,c)=>n+pendingCase(c.id).fine,0)}
 function isWantedActive(id){return citizenCases(id).some(c=>{const p=pendingCase(c.id);return p.evading&&(p.fine>0||p.jailPending)})}
 async function updateCaseEnforcement(caseId,kind){
+ if(!canSheriff(2)){notice("Grado insufficiente per modificare una pena.","error");return;}
  if(!state.enforcementAvailable){notice("Funzione non disponibile: crea prima la tabella case_enforcement in Supabase eseguendo sql/case-enforcement.sql.","error");return}
  const e=enforcementFor(caseId)||{},p=pendingCase(caseId);
  const value={case_id:caseId,jail_served:!!e.jail_served,jail_served_at:e.jail_served_at||null,evading:!!e.evading,evading_reason:e.evading_reason||null,updated_at:new Date().toISOString(),updated_by:state.session.user.id};
@@ -228,6 +259,7 @@ async function updateCaseEnforcement(caseId,kind){
  await loadAll();notice("Stato pena aggiornato.","success");
 }
 async function closeWanted(id){
+ if(!canSheriff(3)){notice("Solo Vice Sceriffo e Sceriffo possono chiudere una ricerca.","error");return;}
  if(!state.enforcementAvailable){notice("Funzione non disponibile: crea prima la tabella case_enforcement in Supabase eseguendo sql/case-enforcement.sql.","error");return}
  const c=state.citizens.find(x=>x.id===id);if(!c)return;
  const reason=prompt("Motivo della chiusura della ricerca per "+c.full_name+":");
@@ -307,7 +339,7 @@ async function deleteCitizenRecord(id){
   else notice(`Fedina di ${citizen.full_name} eliminata. ${paths.length} fotografie da Storage gestite; operazione registrata.`,"success");
  }catch(e){if(btn)btn.disabled=false;notice("Eliminazione NON completata: "+(e.message||String(e)),"error")}
 }
-async function togglePaid(id,paid){const payload=paid?{is_paid:false,paid_at:null,paid_by:null}:{is_paid:true,paid_at:new Date().toISOString(),paid_by:state.session.user.id};const{error}=await state.db.from("case_offenses").update(payload).eq("id",id);if(error){notice("Errore aggiornamento: "+error.message,"error");return}await loadAll()}
-async function payAll(id){const st=stats(id),ids=st.rows.filter(r=>!r.is_paid&&Number(r.fine)>0).map(r=>r.id);if(!ids.length||!confirm(`Segnare come pagate tutte le multe pendenti (${money(st.pendingFine)})?`))return;const{error}=await state.db.from("case_offenses").update({is_paid:true,paid_at:new Date().toISOString(),paid_by:state.session.user.id}).in("id",ids);if(error){notice("Errore pagamento: "+error.message,"error");return}await loadAll();notice("Multe segnate come pagate.","success")}
+async function togglePaid(id,paid){if(!canSheriff(2)){notice("Grado insufficiente per registrare pagamenti.","error");return;}const payload=paid?{is_paid:false,paid_at:null,paid_by:null}:{is_paid:true,paid_at:new Date().toISOString(),paid_by:state.session.user.id};const{error}=await state.db.from("case_offenses").update(payload).eq("id",id);if(error){notice("Errore aggiornamento: "+error.message,"error");return}await loadAll()}
+async function payAll(id){if(!canSheriff(2)){notice("Grado insufficiente per registrare pagamenti.","error");return;}const st=stats(id),ids=st.rows.filter(r=>!r.is_paid&&Number(r.fine)>0).map(r=>r.id);if(!ids.length||!confirm(`Segnare come pagate tutte le multe pendenti (${money(st.pendingFine)})?`))return;const{error}=await state.db.from("case_offenses").update({is_paid:true,paid_at:new Date().toISOString(),paid_by:state.session.user.id}).in("id",ids);if(error){notice("Errore pagamento: "+error.message,"error");return}await loadAll();notice("Multe segnate come pagate.","success")}
 document.addEventListener("DOMContentLoaded",()=>{const d=new Date();d.setMinutes(d.getMinutes()-d.getTimezoneOffset());$("#occurredAt").value=d.toISOString().slice(0,16);renderSelected();init()});
 })();
