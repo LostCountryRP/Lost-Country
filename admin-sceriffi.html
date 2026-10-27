@@ -7,7 +7,7 @@
 <link rel="stylesheet" href="style.css?v=20261024-console-admin">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="supabase-config.js"></script>
-<script defer src="admin-sceriffi.js?v=20261027-accounts-fix"></script>
+<script defer src="admin-sceriffi.js?v=20261027-ranks-1"></script>
 <script defer src="delete-sheriff-ui.js?v=1"></script>
 <script defer src="site-enhancements.js?v=20261025-uniform-1"></script>
 
@@ -61,6 +61,16 @@
 <input id="newEmail" placeholder="sceriffo@email.com" required="" type="email"/>
 </div>
 <div>
+<label for="newRank">Grado iniziale</label>
+<select id="newRank" required>
+<option value="recruit" selected>Recluta</option>
+<option value="deputy">Deputy</option>
+<option value="senior_deputy">Deputy Senior</option>
+<option value="vice_sheriff">Vice Sceriffo</option>
+<option value="sheriff">Sceriffo</option>
+</select>
+</div>
+<div>
 <label for="newPassword">Password iniziale</label>
 <input id="newPassword" minlength="8" placeholder="Minimo 8 caratteri" required="" type="password"/>
 </div>
@@ -73,7 +83,7 @@
 <button class="btn-secondary" id="generatePasswordBtn" type="button">Genera password</button>
 </div>
 </form>
-<p class="admin-note">Il nuovo account viene creato già con <strong>display_name</strong> e ruolo applicativo <strong>sheriff</strong>. La password iniziale può essere cambiata dal normale recupero password del gestionale.</p>
+<p class="admin-note">Il nuovo account viene creato già con <strong>display_name</strong> e ruolo applicativo <strong>sheriff</strong>. Il grado determina le operazioni autorizzate. Per sicurezza i nuovi account iniziano come <strong>Recluta</strong>, salvo scelta diversa dell’amministratore. La password iniziale può essere cambiata dal normale recupero password del gestionale.</p>
 </div>
 <div class="admin-card" id="accounts-list">
 <h2>Account esistenti</h2>
@@ -83,7 +93,8 @@
 <tr>
 <th>Nome RP</th>
 <th>Email</th>
-<th>Ruolo</th>
+<th>Ruolo account</th>
+<th>Grado operativo</th>
 <th>Creato</th>
 <th>Ultimo accesso</th>
 <th>Azioni</th>
@@ -92,6 +103,11 @@
 <tbody id="usersBody"></tbody>
 </table>
 </div>
+</div>
+<div class="admin-card">
+<h2>Storico promozioni e retrocessioni</h2>
+<p class="admin-note">Ogni variazione richiede una motivazione ed è registrata nel database.</p>
+<div id="rankHistory" class="admin-table-wrap" aria-live="polite"></div>
 </div>
 </section>
 </div>
