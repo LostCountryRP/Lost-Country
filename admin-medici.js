@@ -22,7 +22,6 @@ async function invoke(action,fields={}){
  return data;
 }
 async function refresh(){
- if(busy)return;
  try{
   const response=await invoke("list"),body=$("#medAccountsBody");
   const staff=response.users||[];
