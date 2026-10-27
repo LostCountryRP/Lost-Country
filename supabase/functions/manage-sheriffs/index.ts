@@ -1,14 +1,17 @@
 import { withSupabase } from "npm:@supabase/server@^1";
 
 type Body = {
-  action?: "list" | "create" | "update_name" | "set_password";
+  action?: "list" | "create" | "update_name" | "set_password" | "set_rank" | "rank_history";
   userId?: string;
   displayName?: string;
   email?: string;
   password?: string;
+  rank?: string;
+  reason?: string;
 };
 
 const clean = (v: unknown) => String(v ?? "").trim();
+const validRanks = new Set(["recruit","deputy","senior_deputy","vice_sheriff","sheriff"]);
 
 export default {
   fetch: withSupabase({ auth: "user" }, async (req, ctx) => {
@@ -42,7 +45,7 @@ export default {
       const manageable = (u) => u && u.id !== caller.id &&
         u.app_metadata?.role === "sheriff" && !protectedIds.has(u.id);
 
-      if (action === "update_name" || action === "set_password") {
+      if (action === "update_name" || action === "set_password" || action === "set_rank") {
         const userId = clean(body.userId);
         if (!userId) return Response.json({ error: "ID utente obbligatorio." }, { status: 400 });
         const { data: target, error: targetError } = await admin.auth.admin.getUserById(userId);
@@ -55,11 +58,16 @@ export default {
         const { data, error } = await admin.auth.admin.listUsers({ page: 1, perPage: 200 });
         if (error) throw error;
 
+        const { data: ranks, error: ranksError } = await admin.from("sheriff_members").select("user_id,rank");
+        if (ranksError) throw ranksError;
+        const rankById = new Map((ranks || []).map((m) => [m.user_id, m.rank]));
+
         const users = (data.users || []).filter(manageable).map((u) => ({
           id: u.id,
           email: u.email,
           display_name: u.user_metadata?.display_name || "",
           role: u.app_metadata?.role || "",
+          rank: rankById.get(u.id) || null,
           created_at: u.created_at,
           last_sign_in_at: u.last_sign_in_at,
         }));
@@ -71,6 +79,8 @@ export default {
         const displayName = clean(body.displayName);
         const email = clean(body.email).toLowerCase();
         const password = String(body.password ?? "");
+        const rank = clean(body.rank) || "recruit";
+        if(!validRanks.has(rank)) return Response.json({ error:"Grado non valido." },{status:400});
 
         if (!displayName) return Response.json({ error: "Nome RP obbligatorio." }, { status: 400 });
         if (!email || !email.includes("@")) return Response.json({ error: "Email non valida." }, { status: 400 });
@@ -90,6 +100,7 @@ export default {
         const { error: membershipError } = await admin.from("sheriff_members").insert({
           user_id: data.user.id,
           officer_name: displayName,
+          rank,
         });
         if (membershipError) {
           // Evita di lasciare nuovi account di autenticazione senza abilitazione.
@@ -111,8 +122,36 @@ export default {
             email: data.user.email,
             display_name: data.user.user_metadata?.display_name || displayName,
             role: data.user.app_metadata?.role || "sheriff",
+            rank,
           },
         });
+      }
+
+
+      if (action === "set_rank") {
+        const userId = clean(body.userId);
+        const rank = clean(body.rank);
+        const reason = clean(body.reason);
+        if (!userId || !validRanks.has(rank)) {
+          return Response.json({ error:"Utente o grado non valido." },{status:400});
+        }
+        if(reason.length < 5){
+          return Response.json({ error:"Motivazione obbligatoria di almeno 5 caratteri." },{status:400});
+        }
+        // RPC atomica: aggiorna il grado e registra promozione/retrocessione in una transazione.
+        const {data,error}=await admin.rpc("lc_assign_sheriff_rank",{
+          p_user_id:userId,p_rank:rank,p_actor:caller.id,p_reason:reason
+        });
+        if(error) throw error;
+        return Response.json({ok:true,change:data?.[0] || null});
+      }
+
+      if (action === "rank_history") {
+        const {data,error}=await admin.from("sheriff_rank_history")
+          .select("user_id,previous_rank,new_rank,changed_at,changed_by,reason")
+          .order("changed_at",{ascending:false}).limit(40);
+        if(error)throw error;
+        return Response.json({history:data || []});
       }
 
       if (action === "update_name") {
