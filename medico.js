@@ -11,6 +11,7 @@ const client=window.supabase.createClient(
 );
 
 let records=[];
+let reviewEvents=[];
 let folders=[];
 let activeFolderKey=null;
 let currentMedic=null;
@@ -23,6 +24,8 @@ function refreshPermissionUI(){
  if(badge)badge.textContent=rank?"Grado: "+(MEDICAL_LABELS[rank]||rank):"";
  const editor=$("#medicNewReport");
  if(editor)editor.hidden=!allowRecord;
+ const newForFolder=$("#medicFolderNewReport");
+ if(newForFolder)newForFolder.hidden=!allowRecord;
  const kind=$("#medicRecordType");
  if(kind){
   const clinical=kind.querySelector('option[value="clinical"]');
@@ -184,6 +187,11 @@ function recordTemplate(record,index){
   const treatment=String(record.treatment||"").trim();
   const notes=String(record.notes||"").trim();
   const nursing=record.record_type==="nursing";
+  const log=reviewEvents.filter(e=>e.record_id===record.id);
+  const historyHtml=log.length?
+    '<details class="medical-review-history"><summary>Storico convalide ('+log.length+')</summary><ol>'+
+    log.map(e=>'<li>'+escapeHtml(dateTime(e.reviewed_at))+' — '+escapeHtml(e.new_status==="validated"?"Convalidato":"Riaperto")+
+      ' · '+escapeHtml(e.reason)+'</li>').join("")+'</ol></details>':"";
   const status=record.review_status==="validated"?"Convalidato":record.review_status==="reopened"?"Riaperto":"Da convalidare";
   const reviewAction=level()>=4&&record.review_status==="validated"
     ?'<button class="btn-secondary btn-small" data-med-review="reopen" data-record-id="'+escapeHtml(record.id)+'" type="button">Riapri documento</button>'
@@ -203,8 +211,9 @@ function recordTemplate(record,index){
           <div class="medical-review-summary"><strong>${nursing?"Nota assistenziale":"Referto clinico"}</strong> · ${escapeHtml(status)}
           ${record.review_note?'<small>Ultima decisione: '+escapeHtml(record.review_note)+'</small>':""}
           ${reviewAction}</div>
+          ${historyHtml}
           <section>
-            <h4>Referto</h4>
+            <h4>${nursing?"Nota assistenziale":"Referto clinico"}</h4>
             <p>${escapeHtml(record.findings).replaceAll("\n","<br>")}</p>
           </section>
           <section>
@@ -268,15 +277,16 @@ async function refresh({keepFolder=true}={}){
     $("#medicUser").textContent=currentMedic.name;
     refreshPermissionUI();
 
-    const result=await client
-      .from("medical_records")
-      .select("*")
-      .order("visit_at",{ascending:false})
-      .limit(1000);
-
+    const [result,historical]=await Promise.all([
+      client.from("medical_records").select("*").order("visit_at",{ascending:false}).limit(1000),
+      client.from("medical_review_history")
+        .select("record_id,old_status,new_status,reviewed_at,reason")
+        .order("reviewed_at",{ascending:false}).limit(2000)
+    ]);
     if(result.error)throw result.error;
-
+    if(historical.error)throw historical.error;
     records=result.data||[];
+    reviewEvents=historical.data||[];
     buildFolders();
     drawPatientOptions();
     drawStats();
@@ -290,6 +300,7 @@ async function refresh({keepFolder=true}={}){
     }
   }catch(error){
     currentMedic=null;
+    reviewEvents=[];
     refreshPermissionUI();
     $("#medicPanel").hidden=true;
     $("#medicAuth").hidden=false;
@@ -382,6 +393,7 @@ document.addEventListener("DOMContentLoaded",()=>{
   $("#medicLogout").addEventListener("click",async()=>{
     await client.auth.signOut();
     records=[];
+    reviewEvents=[];
     folders=[];
     activeFolderKey=null;
     await refresh({keepFolder:false});
