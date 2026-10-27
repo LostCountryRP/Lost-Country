@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Gestione Account Medici — Lost Country RP</title>
+<link rel="stylesheet" href="style.css?v=20261024-console-admin">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-config.js"></script>
+<script defer src="admin-medici.js?v=20261027-medics-1"></script>
+<script defer src="site-enhancements.js?v=20261025-uniform-1"></script>
+<link rel="stylesheet" href="western-premium.css?v=20261025-approved-4">
+<link rel="stylesheet" href="western-layout-fixes.css?v=20261025-layout-fix-6">
+<link rel="stylesheet" href="western-site-wide.css?v=20261025-leather-1">
+<link rel="stylesheet" href="lc-heritage-theme.css?v=20261025-dark-glass-2">
+<link rel="stylesheet" href="lc-ui-consistency.css?v=20261025-1">
+<link rel="stylesheet" href="lc-unified-site.css?v=20261025-expanded-8">
+<link rel="stylesheet" href="medic-ranks.css?v=20261027-medics-1">
+<script defer src="western-premium.js?v=20261025-uniform-1"></script>
+<script defer src="lc-unified-navbar.js?v=20261026-public-1"></script>
+</head>
+<body class="page-admin page-admin-medici">
+<div class="site-shell">
+<aside class="western-sidebar">
+<a class="sidebar-brand" href="index.html"><img src="lc-logo-official.png" alt="Lost Country RP"><span>Lost Country RP</span></a>
+<nav class="side-nav" aria-label="Gestione medici">
+<a href="amministrazione.html">← Console amministratori</a>
+<a href="#medical-hierarchy">Gerarchia sanitaria</a>
+<a href="#medical-create">Crea account medico</a>
+<a href="#medical-accounts">Personale sanitario</a>
+<a href="#medical-audit">Storico dei gradi</a>
+<a href="medico.html">Registro medico</a>
+</nav></aside>
+<main class="site-main">
+<nav class="top-nav"><a href="index.html">Home</a><a href="medico.html">Registro Medico</a><a href="amministrazione.html">Amministrazione</a></nav>
+<section class="parchment-page"><div class="parchment-content">
+<div class="admin-shell">
+<header class="lc-office-masthead"><img src="lc-logo-official.png" alt="Emblema Lost Country RP" width="86" height="86"><div><p class="lc-office-brand">Lost Country RP</p><p class="lc-office-subtitle">Direzione del Servizio Sanitario</p></div></header>
+<h1 class="app-title">✚ GESTIONE ACCOUNT MEDICI</h1>
+<p class="app-subtitle">Abilitazioni, incarichi sanitari e storico delle promozioni.</p>
+<div id="medAdminStatus" role="status" aria-live="polite"></div>
+<section id="medAdminLoginRequired" class="admin-card" hidden>
+<h2>Accesso richiesto</h2><p>Accedi con un account amministratore dalla console.</p>
+<a class="btn-primary" href="amministrazione.html">Apri amministrazione</a></section>
+<section id="medAdminPanel" hidden>
+<div class="admin-card" id="medical-hierarchy">
+<h2>Gradi e autorizzazioni</h2>
+<p class="admin-note">I gradi sanitari sono distinti dalle autorizzazioni degli amministratori del sito. I livelli superiori ereditano quelli inferiori.</p>
+<div class="admin-table-wrap"><table class="admin-table"><thead><tr><th>Grado</th><th>Responsabilità</th></tr></thead><tbody>
+<tr><td><strong>Direttore Sanitario</strong></td><td>Tutti i permessi, compresa la riapertura di referti convalidati</td></tr>
+<tr><td><strong>Primario</strong></td><td>Referti, note assistenziali e convalida dei documenti</td></tr>
+<tr><td><strong>Medico</strong></td><td>Referti clinici e note assistenziali</td></tr>
+<tr><td><strong>Infermiere</strong></td><td>Note assistenziali e consultazione cartelle</td></tr>
+<tr><td><strong>Tirocinante</strong></td><td>Consultazione delle cartelle, senza scrittura</td></tr>
+</tbody></table></div></div>
+<div class="admin-card" id="medical-create">
+<h2>Crea un account medico</h2>
+<form class="admin-grid" id="medCreateForm">
+<div><label for="medNewName">Nome RP</label><input id="medNewName" maxlength="120" required placeholder="Es. Dott. Thomas Hayes"></div>
+<div><label for="medNewEmail">Email</label><input id="medNewEmail" type="email" required placeholder="medico@email.com"></div>
+<div><label for="medNewRank">Grado iniziale</label><select id="medNewRank" required>
+<option value="trainee" selected>Tirocinante</option>
+<option value="nurse">Infermiere</option>
+<option value="doctor">Medico</option>
+<option value="chief_physician">Primario</option>
+<option value="medical_director">Direttore Sanitario</option>
+</select></div>
+<div><label for="medNewPassword">Password iniziale</label><input id="medNewPassword" type="password" minlength="8" autocomplete="new-password" required></div>
+<div><label for="medNewPasswordConfirm">Conferma password</label><input id="medNewPasswordConfirm" type="password" minlength="8" autocomplete="new-password" required></div>
+<div class="full admin-actions"><button class="btn-primary" type="submit" id="medCreateSubmit">Crea account</button>
+<button class="btn-secondary" type="button" id="medGeneratePassword">Genera password</button></div>
+</form>
+<p class="admin-note">L’account viene creato già attivo e con email confermata. Le credenziali devono essere consegnate privatamente.</p>
+</div>
+<div class="admin-card" id="medical-accounts">
+<div class="toolbar"><h2>Personale sanitario</h2><button type="button" class="btn-secondary btn-small" id="medRefresh">Aggiorna elenco</button></div>
+<div class="admin-table-wrap"><table class="admin-table"><thead><tr><th>Nome RP</th><th>Email</th><th>Grado</th><th>Stato</th><th>Ultimo accesso</th><th>Azioni</th></tr></thead><tbody id="medAccountsBody"><tr><td colspan="6">Caricamento...</td></tr></tbody></table></div>
+<p class="admin-note">Gli account amministratore o non creati come “medic” sono protetti: eventuali modifiche vanno gestite dalla console principale.</p>
+</div>
+<div class="admin-card" id="medical-audit"><h2>Storico promozioni e retrocessioni</h2>
+<div id="medRankHistory" class="admin-table-wrap" aria-live="polite">Caricamento...</div></div>
+</section>
+</div></div></section></main></div>
+</body></html>
