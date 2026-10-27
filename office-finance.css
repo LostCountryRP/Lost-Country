@@ -1,0 +1,47 @@
+/* Lost Country RP · Contabilità di ufficio · 1885 */
+.office-finance{color:inherit;max-width:1160px;margin:0 auto;font-family:inherit}
+.of-head{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;margin-bottom:18px}
+.of-head h2{font-family:Georgia,serif;font-size:clamp(1.4rem,2vw,2rem);margin:5px 0 10px}
+.of-head p{margin:0;line-height:1.55}
+.of-kicker{letter-spacing:.14em;font-size:.73rem;font-weight:700;opacity:.84}
+.of-message:not(:empty),.of-locked,.of-readonly{padding:12px 16px;border:1px solid rgba(157,122,76,.55);background:rgba(45,34,24,.23);border-radius:7px;margin:14px 0}
+.of-error{border-color:#b55443!important;color:#f3a39a}
+.of-summary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:22px 0}
+.of-stat{background:rgba(33,28,24,.55);border:1px solid rgba(171,136,86,.48);border-radius:9px;padding:17px;min-height:99px;display:flex;flex-direction:column;justify-content:space-between;gap:8px}
+.of-stat span{font-size:.82rem;line-height:1.4}
+.of-stat strong{font-family:Georgia,serif;font-size:clamp(1.1rem,2.05vw,1.8rem);white-space:nowrap;letter-spacing:.01em}
+.of-stat small{font-size:.72rem;opacity:.7}
+.of-stat .of-negative,.of-negative{color:#e69c91}
+.of-balance{border-color:rgba(213,172,105,.76);background:rgba(67,47,29,.64)}
+.of-controls{display:flex;align-items:end;flex-wrap:wrap;gap:12px;margin:18px 0 23px}
+.of-controls>div{display:flex;flex-direction:column;gap:6px;min-width:165px;flex:1}
+.office-finance label{font-weight:600;display:block;font-size:.88rem;margin-bottom:6px}
+.office-finance :is(input,select,textarea){width:100%;box-sizing:border-box;max-width:100%}
+.of-entry-card,.of-ledger{background:rgba(28,26,23,.36);border:1px solid rgba(157,128,89,.38);border-radius:10px;padding:clamp(14px,2.3vw,24px);margin:18px 0}
+.of-entry-card h3,.of-ledger h3{font-family:Georgia,serif;font-size:1.25rem;margin:0 0 10px}
+.of-entry-card p{opacity:.86;line-height:1.5;margin:0 0 18px}
+.of-form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}
+.of-form>div{min-width:0}
+.of-form .of-wide{grid-column:1/-1}
+.of-submit{grid-column:1/-1}
+.of-submit button{min-width:180px}
+.of-ledger-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 0 17px;flex-wrap:wrap}
+.of-ledger-head h3{margin:0}
+.of-ledger-head span{opacity:.8}
+.of-table-wrap{overflow:auto;max-width:100%;border-radius:7px}
+.of-table{width:100%;border-collapse:collapse;min-width:670px;font-size:.88rem}
+.of-table thead{background:rgba(96,70,42,.45)}
+.of-table th,.of-table td{text-align:left;vertical-align:top;padding:13px 11px;border-bottom:1px solid rgba(165,139,108,.27)}
+.of-table th:last-child,.of-table td:last-child{text-align:right;white-space:nowrap}
+.of-table td strong,.of-table td span,.of-table td small{display:block}
+.of-table td span{margin-top:5px;line-height:1.45}
+.of-table td small{opacity:.72;margin-top:4px;font-size:.77rem}
+.of-amount{font-weight:700;font-variant-numeric:tabular-nums}
+.of-income .of-amount{color:#b6d5b6}
+.of-expense .of-amount{color:#dfaea3}
+.of-empty{text-align:center!important;opacity:.77}
+.of-pagination{display:flex;align-items:center;justify-content:center;gap:15px;margin:20px 0 0}
+.of-disclaimer{font-size:.85rem;opacity:.8;line-height:1.6;margin:15px 0}
+.office-finance [hidden]{display:none!important}
+@media(max-width:1000px){.of-summary{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:560px){.of-summary,.of-form{grid-template-columns:1fr}.of-controls>div{flex-basis:100%}.of-head{align-items:flex-start}.of-stat strong{white-space:normal}.of-submit{grid-column:1}.of-ledger{padding:12px}}
