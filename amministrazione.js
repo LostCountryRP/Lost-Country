@@ -92,6 +92,7 @@
       if(sectionNode)sectionNode.hidden=!visible;
       document.querySelectorAll('.side-nav a[href="#'+id+'"]').forEach(a=>a.hidden=!visible);
     });
+    document.querySelectorAll("[data-business-only]").forEach(node=>node.hidden=!can("business")&&!rights.legacy_sheriff_admin);
     const sheriffOnly=document.querySelectorAll('[data-legacy-admin]');
     sheriffOnly.forEach(node=>node.hidden=!rights.legacy_sheriff_admin);
     section=moderation[0]||'news';
