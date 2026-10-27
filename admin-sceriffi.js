@@ -110,8 +110,8 @@
       await loadRankHistory();
       status("Grado aggiornato: "+gradeLabel(result.change?.assigned_rank||rank)+". Variazione registrata.");
     }catch(err){
-      status(err.message||String(err),"error");
       await loadUsers();
+      status(err.message||String(err),"error");
     }
   }
   async function loadRankHistory(){
